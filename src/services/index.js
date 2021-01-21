@@ -5,11 +5,18 @@ const base_url = 'https://api.rawg.io/api/';
 export const popularGamesUrl = () => {
 	return `${base_url}games?dates=${lastDate},${currentDate}&ordering=-metacritic&page_size=20`;
 }
-export const uncomingGamesUrl = () => {
+export const upcomingGamesUrl = () => {
 	return `${base_url}games?dates=${currentDate},${nextDate}&ordering=-added&page_size=20`
 }
 export const newGamesUrl = () => {
 	return `${base_url}games?dates=${lastDate},${currentDate}&ordering=-released&page_size=20`
+}
+
+export const gameDetailsUrl = (gameId) => {
+	return `${base_url}games/${gameId}`;
+}
+export const gameScreenshotsUrl = (gameId) => {
+	return `${base_url}games/${gameId}/screenshots`;
 }
 
 
