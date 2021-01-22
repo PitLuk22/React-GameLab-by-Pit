@@ -65,7 +65,9 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 				</S.LineDetails>
 				<h3 className="descr__name">{name}</h3>
 
-				<S.ExtraList>
+			</div>
+			<S.ExtraList>
+				<ul className='descr__list'>
 					<li>
 						<div className='grey'>Release data: </div>
 						<div>{setGameCartDate(released)}</div>
@@ -80,12 +82,14 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 						<div className='grey'>Ratings count: </div>
 						<div>{ratings_count}</div>
 					</li>
-				</S.ExtraList>
-				<S.Btn className='descr__btn'>
-					<span>Show more details</span>
-					<FontAwesomeIcon icon={faChevronRight} size='sm' />
-				</S.Btn>
-			</div>
+					<li>
+						<S.Btn className='descr__btn'>
+							<span>Show more details</span>
+							<FontAwesomeIcon icon={faChevronRight} size='sm' />
+						</S.Btn>
+					</li>
+				</ul>
+			</S.ExtraList>
 		</S.Game>
 	)
 }
@@ -104,15 +108,24 @@ S.Game = styled.div`
 	transition: all .15s ease;
 	&:hover {
 		transform: scale(1.03);
+		overflow: visible;
+		.descr__list {
+			height: auto;
+		}
 	}
 	img{
 		width: 100%;
 		height: 180px;
 		object-fit: cover;
+		border-top-left-radius: .8rem;
+		border-top-right-radius: .8rem;
 	}
 	.descr {
-		padding: .5rem 1rem;
+		padding: .5rem 1rem 1rem 1rem;
 		font-size: 1.5rem;
+		&__name {
+			word-wrap: break-word;
+		}
 	}
 `;
 
@@ -120,7 +133,7 @@ S.LineDetails = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 1rem 0;
+	padding: .5rem 0;
 	font-size: 12px;
 	font-size: 1rem;
 	svg {
@@ -134,29 +147,40 @@ S.LineDetails = styled.div`
 	}
 `;
 
-S.ExtraList = styled.ul`
-	li {
-		position: relative;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 1rem 0;
-		font-size: 12px;
-		border-bottom: 1px solid #313131;
-		&:last-child {
-			border-bottom: none;
-		}
-		.genre {
-		text-align: end;
-		}
-		.grey {
-			color: #999;
+S.ExtraList = styled.div`
+	position: relative;
+	ul{
+		position: absolute;
+		width: 100%;
+		background-color: #202020;
+		padding: .5rem 1rem;
+		top:-15px;
+		height: 0;
+		border-bottom-left-radius: .8rem;
+		border-bottom-right-radius: .8rem;
+		z-index: 10;
+		li {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: .7rem 0;
+			font-size: 12px;
+			border-bottom: 1px solid #313131;
+			&:last-child, &:nth-child(3){
+				border-bottom: none;
+			}
+			.genre {
+			text-align: end;
+			}
+			.grey {
+				color: #999;
+			}
 		}
 	}
 `;
 S.Btn = styled.button`
-	padding: 1rem;
-	font-size:1rem;
+	padding: .7rem 1rem;
+	font-size: .9rem;
 	width: 100%;
 	background-color: #313131;
 	color: #fff;
