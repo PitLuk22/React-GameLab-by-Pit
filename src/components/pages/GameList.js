@@ -9,7 +9,7 @@ const GameList = ({ games, title }) => {
 		<>
 			<ResponsiveMasonry
 				as={motion.div}
-				columnsCountBreakPoints={{ 350: 1, 500: 2, 750: 3, 900: 4, 1200: 5 }}
+				columnsCountBreakPoints={{ 350: 1, 500: 2, 750: 3, 900: 4, }}
 				style={styledContainer}>
 				<Masonry as={motion.div} gutter='1.5rem'>
 					<h2>{title}</h2>
@@ -24,6 +24,6 @@ const GameList = ({ games, title }) => {
 export default GameList;
 
 const styledContainer = {
-	padding: '0 5rem',
+	padding: '2rem 5rem',
 }
 

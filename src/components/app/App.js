@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import GameList from '../pages';
 import { loadAllGames } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
+import Nav from '../nav';
 
 function App() {
 
@@ -13,8 +14,8 @@ function App() {
 
 	return (
 		<div className="App">
-			<h1>Pit's GameLab</h1>
-			<GameList games={popular} title={'Popular games'} />
+			<Nav />
+			<GameList games={popular} title={'Popular games in 2020'} />
 			<GameList games={upcoming} title={'Upcoming games'} />
 			<GameList games={newGames} title={'New games'} />
 		</div>

@@ -18,11 +18,10 @@ const GlobalStyles = createGlobalStyle`
 		background-color:#151515 ;
 		font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Open Sans,Helvetica Neue,sans-serif;
 		color: #fff;
-		font-family: 'Overlock', cursive;
 		h1 {
 			text-align: center;
 			font-family: 'Audiowide', cursive;
-			font-size: 2rem;
+			font-size: 2.5rem;
 			padding: 2rem;
 		}
 		h2 {
@@ -30,6 +29,9 @@ const GlobalStyles = createGlobalStyle`
 			font-family: 'Audiowide', cursive;
 			font-size: 2.5rem;
 			padding: 1rem;
+		}
+		h3 {
+			font-weight: bold;
 		}
 		p {
 			font-size: 1.2rem;
