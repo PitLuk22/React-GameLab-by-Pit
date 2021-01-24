@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { getGameDetails } from '../../actions';
 import { setGameCartDate } from '../../services/gameCardDate';
 import platformIcons from '../../services/gameCardIcons';
+import metacriticColor from '../../services/gameMetascore';
 // Images
 import notFoundImg from '../../img/notFound.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,20 +18,8 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 		dispatch(getGameDetails(id))
 	}
 
-	const metacriticColor = (rating) => {
-		if (rating >= 80) {
-			return { color: '#6dc849', border: '1px solid rgba(109,200,73,.4)' }
-		} else if (rating < 80 && rating > 45) {
-			return { color: '#fdca52', border: '1px solid rgba(253,202,82,.4)' }
-		} else if (!rating) {
-			return;
-		} else {
-			return { color: '#E20338', border: '1px solid #930324' }
-		}
-	}
-
 	return (
-		<S.Game onClick={() => gameDetailsHandler(id)}>
+		<S.Game>
 			<img src={background_image || notFoundImg} alt={name} />
 			<div className="descr">
 
@@ -40,7 +29,8 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 					</div>
 					<div className="metacritic" style={metacriticColor(metacritic)}>{metacritic}</div>
 				</S.LineDetails>
-				<h3 className="descr__name">{name}</h3>
+				<h3 onClick={() => gameDetailsHandler(id)}
+					className="descr__name">{name}</h3>
 
 			</div>
 			<S.ExtraList>
@@ -60,7 +50,7 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 						<div>{ratings_count}</div>
 					</li>
 					<li>
-						<S.Btn className='descr__btn'>
+						<S.Btn className='descr__btn' onClick={() => gameDetailsHandler(id)}>
 							<span>Show more details</span>
 							<FontAwesomeIcon icon={faChevronRight} size='sm' />
 						</S.Btn>

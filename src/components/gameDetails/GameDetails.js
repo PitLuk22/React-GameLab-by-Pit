@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Services
 import { setGameCartDate } from '../../services/gameCardDate';
 import platformIcons from '../../services/gameCardIcons';
+import metacriticColor from '../../services/gameMetascore';
 // Components
 import Carousel from '../carousel';
 
@@ -27,54 +28,53 @@ const GameDetails = () => {
 					<div className="title">
 						<h3 className="name">{game.name}</h3>
 						<div className="main-details">
-							<div className="paltform-icons">
+							<div className="paltform-icons">Available on:
 								{platformIcons(game.platforms).map((item, index) => <FontAwesomeIcon key={index} icon={item} />)}
 							</div>
 							<div className="date" dangerouslySetInnerHTML={{ __html: setGameCartDate(game.released) }}></div>
 						</div>
 					</div>
 
-					<Carousel screenshots={screenshots} />
+					<Carousel game={game} screenshots={screenshots} />
+
 					<S.About >
 						<h4>About</h4>
 						<div dangerouslySetInnerHTML={{ __html: game.description }}></div>
 					</S.About>
 					<S.Info>
 						<div className="details-block">
-							<div className="platforms">
-								<S.Subtitle>Platforms</S.Subtitle>
-								<S.Data>{game.platforms.map(item => item.platform.name).join(', ')}</S.Data>
-							</div>
-							<div className="metascore">
-								<S.Subtitle>Metascore</S.Subtitle>
-								<S.Data>{game.rating}</S.Data>
-							</div>
+							<S.Subtitle>Platforms</S.Subtitle>
+							<S.Data>{game.platforms.map(item => item.platform.name).join(', ')}</S.Data>
 						</div>
 						<div className="details-block">
-							<div className="genre">
-								<S.Subtitle>Genre</S.Subtitle>
-								<S.Data>{game.genres.map(genre => genre.name).join(', ')}</S.Data>
-							</div>
-							<div className="release">
-								<S.Subtitle>Released date</S.Subtitle>
-								<S.Data dangerouslySetInnerHTML={{ __html: setGameCartDate(game.released) }}>{ }</S.Data>
-							</div>
+							<S.Subtitle>Rating</S.Subtitle>
+							<S.Data>{game.rating}</S.Data>
 						</div>
 						<div className="details-block">
-							<div className="developer">
-								<S.Subtitle>Developer</S.Subtitle>
-								<S.Data>{game.developers.map(item => item.name).join(', ')}</S.Data>
-							</div>
-							<div className="publisher">
-								<S.Subtitle>Publisher</S.Subtitle>
-								<S.Data>{game.publishers.map(item => item.name).join(', ')}</S.Data>
-							</div>
+							<S.Subtitle>Metascore</S.Subtitle>
+							<S.Data >
+								<div className='metacritic' style={metacriticColor(game.metacritic)}>{game.metacritic}</div>
+							</S.Data>
+						</div>
+						<div className="details-block">
+							<S.Subtitle>Genre</S.Subtitle>
+							<S.Data>{game.genres.map(genre => genre.name).join(', ')}</S.Data>
+						</div>
+						<div className="details-block">
+							<S.Subtitle>Released date</S.Subtitle>
+							<S.Data dangerouslySetInnerHTML={{ __html: setGameCartDate(game.released) }}></S.Data>
+						</div>
+						<div className="details-block">
+							<S.Subtitle>Developer</S.Subtitle>
+							<S.Data>{game.developers.map(item => item.name).join(', ')}</S.Data>
+						</div>
+						<div className="details-block">
+							<S.Subtitle>Publisher</S.Subtitle>
+							<S.Data>{game.publishers.map(item => item.name).join(', ')}</S.Data>
 						</div>
 						<div className="details-block website">
-							<div>
-								<S.Subtitle>Website</S.Subtitle>
-								<a href={game.website} target='_blank' className="website">{game.website}</a>
-							</div>
+							<S.Subtitle>Website</S.Subtitle>
+							<a href={game.website} target='_blank' rel="noopener noreferrer" className="website">{game.website}</a>
 						</div>
 					</S.Info>
 				</S.Wrapper>
@@ -112,10 +112,11 @@ S.Info = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: flex-start;
-	align-items: center;
+	align-items: flex-start;
 	.details-block {
 		font-size: 1rem;
 		width: 33%;
+		padding: 0 1rem;
 		.website {
 			width: 100%;
 			color: #fff;
@@ -127,8 +128,16 @@ S.Subtitle = styled.div`
 	padding: 1rem 0;
 `;
 S.Data = styled.div`
-	font-size: 1.2rem;
+	font-size: 1rem;
 	margin-bottom: 1rem;
+	display: flex;
+	justify-content: flex-start;
+	.metacritic {
+		padding: .2rem .5rem;
+		font-size: 1rem;
+		border-radius: .4rem;
+		font-weight: bold;
+	}
 `;
 S.Window = styled.div`
 	position: relative;
