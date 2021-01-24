@@ -2,12 +2,13 @@ import React from 'react'
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { getGameDetails } from '../../actions';
-import { setGameCartDate } from '../../services/gameCartDate';
+import { setGameCartDate } from '../../services/gameCardDate';
+import platformIcons from '../../services/gameCardIcons';
 // Images
 import notFoundImg from '../../img/notFound.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faMobileAlt, faGlobe, faDesktop, faGamepad } from '@fortawesome/free-solid-svg-icons';
-import { faXbox, faPlaystation, faLinux, faApple, faAndroid } from '@fortawesome/free-brands-svg-icons';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+
 
 const Game = ({ id, name, background_image, platforms, metacritic, released, genres, ratings_count }) => {
 
@@ -28,30 +29,6 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 		}
 	}
 
-	const setPlatformIcon = (name) => {
-		if (name.includes('xbox')) {
-			return faXbox;
-		} else if (name.includes('playstation')) {
-			return faPlaystation;
-		} else if (name.includes('pc')) {
-			return faDesktop;
-		} else if (name.includes('nintendo')) {
-			return faGamepad;
-		} else if (name.includes('linux')) {
-			return faLinux;
-		} else if (name.includes('macos')) {
-			return faApple;
-		} else if (name.includes('web')) {
-			return faGlobe;
-		} else if (name.includes('ios')) {
-			return faMobileAlt;
-		} else if (name.includes('android')) {
-			return faAndroid;
-		}
-	}
-
-	const uniqPlatforms = [...new Set(platforms.map(item => setPlatformIcon(item.platform.slug)))];
-
 	return (
 		<S.Game onClick={() => gameDetailsHandler(id)}>
 			<img src={background_image || notFoundImg} alt={name} />
@@ -59,7 +36,7 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 
 				<S.LineDetails>
 					<div className="platforms">
-						{uniqPlatforms.map((item, index) => <FontAwesomeIcon key={index} icon={item} />)}
+						{platformIcons(platforms).map((item, index) => <FontAwesomeIcon key={index} icon={item} />)}
 					</div>
 					<div className="metacritic" style={metacriticColor(metacritic)}>{metacritic}</div>
 				</S.LineDetails>
@@ -70,7 +47,7 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 				<ul className='descr__list'>
 					<li>
 						<div className='grey'>Release data: </div>
-						<div>{setGameCartDate(released)}</div>
+						<div dangerouslySetInnerHTML={{ __html: setGameCartDate(released) }}></div>
 					</li>
 					<li>
 						<div className='grey'>Genres:</div>
@@ -125,6 +102,11 @@ S.Game = styled.div`
 		font-size: 1.5rem;
 		&__name {
 			word-wrap: break-word;
+			cursor: pointer;
+			transition: all .3s ease;
+			&:hover {
+				color: #ababab;
+			}
 		}
 	}
 `;
@@ -158,7 +140,8 @@ S.ExtraList = styled.div`
 		height: 0;
 		border-bottom-left-radius: .8rem;
 		border-bottom-right-radius: .8rem;
-		z-index: 10;
+		box-shadow: 0 12px 5px 5px rgba(0,0,0, .2);
+		z-index: 2;
 		li {
 			display: flex;
 			justify-content: space-between;

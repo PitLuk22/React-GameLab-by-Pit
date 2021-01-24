@@ -1,7 +1,7 @@
 
 export const setGameCartDate = (date) => {
 	const arr = date.split('-');
-	return `${defineMonth(arr[1])} ${arr[2]}, ${arr[0]}`;
+	return `<span class='month'>${defineMonth(arr[1])}</span> ${arr[2]}, ${arr[0]}`;
 }
 
 const defineMonth = (month) => {
