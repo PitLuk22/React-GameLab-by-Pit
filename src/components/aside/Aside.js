@@ -3,7 +3,8 @@ import styled from 'styled-components';
 
 const Aside = ({ game }) => {
 	return (
-		<S.Aside style={{ filter: `blur(${Object.keys(game).length ? '10px' : '0px'})` }}>
+		// <S.Aside style={{ filter: `blur(${Object.keys(game).length ? '10px' : '0px'})` }}>
+		<S.Aside>
 			<div className='title'>
 				<h1>Pit's GameLab</h1>
 			</div>

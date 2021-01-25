@@ -3,7 +3,8 @@ import styled from 'styled-components';
 
 const Nav = ({ game }) => {
 	return (
-		<S.Navigation style={{ filter: `blur(${Object.keys(game).length ? '10px' : '0px'})` }}>
+		// <S.Navigation style={{ filter: `blur(${Object.keys(game).length ? '10px' : '0px'})` }}>
+		<S.Navigation >
 			<form>
 				<S.Input type="text" name="search" placeholder='Search games' />
 				<S.Btn name="search" >Search</S.Btn>

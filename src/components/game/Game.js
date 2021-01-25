@@ -5,6 +5,8 @@ import { getGameDetails } from '../../actions';
 import { setGameCartDate } from '../../services/gameCardDate';
 import platformIcons from '../../services/gameCardIcons';
 import metacriticColor from '../../services/gameMetascore';
+import { Link } from 'react-router-dom';
+
 // Images
 import notFoundImg from '../../img/notFound.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,6 +18,8 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 	const dispatch = useDispatch();
 	const gameDetailsHandler = (id) => {
 		dispatch(getGameDetails(id))
+		// canceling scroll
+		document.body.style.overflow = 'hidden';
 	}
 
 	return (
@@ -29,8 +33,8 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 					</div>
 					<div className="metacritic" style={metacriticColor(metacritic)}>{metacritic}</div>
 				</S.LineDetails>
-				<h3 onClick={() => gameDetailsHandler(id)}
-					className="descr__name">{name}</h3>
+				<Link to={`/game/${id}`} onClick={() => gameDetailsHandler(id)}
+					className="descr__name">{name}</Link>
 
 			</div>
 			<S.ExtraList>
@@ -50,10 +54,10 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 						<div>{ratings_count}</div>
 					</li>
 					<li>
-						<S.Btn className='descr__btn' onClick={() => gameDetailsHandler(id)}>
+						<S.Link to={`/game/${id}`} className='descr__btn' onClick={() => gameDetailsHandler(id)}>
 							<span>Show more details</span>
 							<FontAwesomeIcon icon={faChevronRight} size='sm' />
-						</S.Btn>
+						</S.Link>
 					</li>
 				</ul>
 			</S.ExtraList>
@@ -91,6 +95,9 @@ S.Game = styled.div`
 		padding: .5rem 1rem 1rem 1rem;
 		font-size: 1.5rem;
 		&__name {
+			font-weight: bold;
+			text-decoration: none;
+			color: #fff;
 			word-wrap: break-word;
 			cursor: pointer;
 			transition: all .3s ease;
@@ -151,7 +158,7 @@ S.ExtraList = styled.div`
 		}
 	}
 `;
-S.Btn = styled.button`
+S.Link = styled(Link)`
 	padding: .7rem 1rem;
 	font-size: .9rem;
 	width: 100%;
@@ -163,6 +170,7 @@ S.Btn = styled.button`
 	border: none;
 	outline: none;
 	border-radius: .5rem;
+	text-decoration: none;
 	cursor: pointer;
 	&:hover span{
 		color: #fad860;

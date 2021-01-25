@@ -6,14 +6,6 @@ const GlobalStyles = createGlobalStyle`
 		padding: 0;
 		box-sizing: border-box;
 	}
-	html {
-		&::-webkit-scrollbar {
-			width: .5rem;
-		}
-		&::-webkit-scrollbar-thumb{
-			background-color: darkgrey;
-		}
-	}
 	body {
 		background-color:#151515 ;
 		font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Open Sans,Helvetica Neue,sans-serif;

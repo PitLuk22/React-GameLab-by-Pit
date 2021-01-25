@@ -21,17 +21,6 @@ const loadAllGames = () => async (dispatch) => {
 			newGames: newGamesData.data.results
 		}
 	})
-
-	const gameData = await axios.get(gameDetailsUrl(339958));
-	const screenshotsData = await axios.get(gameScreenshotsUrl(339958));
-
-	dispatch({
-		type: 'GET_DETAILS',
-		payload: {
-			game: gameData.data,
-			screenshots: screenshotsData.data.results
-		}
-	})
 }
 
 const getGameDetails = (id) => async (dispatch) => {

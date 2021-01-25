@@ -1,34 +1,46 @@
 import React, { useEffect } from 'react'
-import { loadAllGames } from '../../actions';
+import { loadAllGames, getGameDetails } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import GameList from '../pages';
 import Aside from '../aside';
 import GameDetails from '../gameDetails';
 import Nav from '../nav';
+import { useLocation } from 'react-router-dom';
 
 import styled from 'styled-components';
 
 const Home = () => {
 
+	const location = useLocation();
+	const pathID = location.pathname.split('/')[2];
+
 	const dispatch = useDispatch();
+
 	useEffect(() => {
 		dispatch(loadAllGames())
 	}, [])
 	const { popular, upcoming, newGames } = useSelector(state => state.games)
 	const game = useSelector(state => state.details.game)
 
-	// canceling scroll
-	document.body.style.overflow = Object.keys(game).length ? 'hidden' : 'auto';
+	// if gameDetails should be shown after refresh 
+	if (!Object.keys(game).length && pathID) {
+		dispatch(getGameDetails(pathID))
+		document.body.style.overflow = 'hidden';
+	}
+	if (!pathID) {
+		document.body.style.overflow = 'auto';
+	}
+
 	return (
 		<>
-			<Nav game={game} />
+			<Nav />
 			<S.Main >
-				<Aside game={game} />
+				<Aside />
 				<S.Content>
-					{Object.keys(game).length ? <GameDetails /> : null}
-					<GameList games={popular} game={game} title={'Popular games in 2020'} />
+					{Object.keys(game).length && pathID ? <GameDetails /> : null}
+					<GameList games={popular} title={'Popular games in 2020'} />
 					{/* <GameList games={upcoming} title={'Upcoming games'} />
-				<GameList games={newGames} title={'New games'} /> */}
+						<GameList games={newGames} title={'New games'} /> */}
 				</S.Content>
 			</S.Main>
 		</>

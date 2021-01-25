@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteDetails } from '../../actions';
+import { useHistory } from 'react-router-dom';
 // Style
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
@@ -13,17 +14,22 @@ import metacriticColor from '../../services/gameMetascore';
 import Carousel from '../carousel';
 
 const GameDetails = () => {
-
+	const history = useHistory();
 	// Redux
 	const dispatch = useDispatch();
 	const { game, screenshots } = useSelector(state => state.details);
-	const closeCardDetails = (e) => e.target.dataset.close ? dispatch({ type: 'DELETE_DETAILS' }) : false;
+	const closeCardDetails = (e) => {
+		if (e.target.dataset.close) {
+			dispatch({ type: 'DELETE_DETAILS' });
+			history.push('/')
+			document.body.style.overflow = 'auto';
+		}
+	};
 
 	return (
 		<S.Overlay onClick={(e) => closeCardDetails(e)} data-close>
 			<S.Window
-				background_image={game.background_image}
-				style={{ filter: 'blur(0px)' }} >
+				background_image={game.background_image} >
 				<S.Wrapper>
 					<div className="title">
 						<h3 className="name">{game.name}</h3>
@@ -42,40 +48,40 @@ const GameDetails = () => {
 						<div dangerouslySetInnerHTML={{ __html: game.description }}></div>
 					</S.About>
 					<S.Info>
-						<div className="details-block">
+						{game.platforms && <div className="details-block">
 							<S.Subtitle>Platforms</S.Subtitle>
 							<S.Data>{game.platforms.map(item => item.platform.name).join(', ')}</S.Data>
-						</div>
-						<div className="details-block">
+						</div>}
+						{game.rating && <div className="details-block">
 							<S.Subtitle>Rating</S.Subtitle>
 							<S.Data>{game.rating}</S.Data>
-						</div>
-						<div className="details-block">
+						</div>}
+						{game.metacritic && <div className="details-block">
 							<S.Subtitle>Metascore</S.Subtitle>
 							<S.Data >
 								<div className='metacritic' style={metacriticColor(game.metacritic)}>{game.metacritic}</div>
 							</S.Data>
-						</div>
-						<div className="details-block">
+						</div>}
+						{game.genres && <div className="details-block">
 							<S.Subtitle>Genre</S.Subtitle>
 							<S.Data>{game.genres.map(genre => genre.name).join(', ')}</S.Data>
-						</div>
-						<div className="details-block">
+						</div>}
+						{game.released && <div className="details-block">
 							<S.Subtitle>Released date</S.Subtitle>
 							<S.Data dangerouslySetInnerHTML={{ __html: setGameCartDate(game.released) }}></S.Data>
-						</div>
-						<div className="details-block">
+						</div>}
+						{game.developers && <div className="details-block">
 							<S.Subtitle>Developer</S.Subtitle>
 							<S.Data>{game.developers.map(item => item.name).join(', ')}</S.Data>
-						</div>
-						<div className="details-block">
+						</div>}
+						{game.publishers && <div className="details-block">
 							<S.Subtitle>Publisher</S.Subtitle>
 							<S.Data>{game.publishers.map(item => item.name).join(', ')}</S.Data>
-						</div>
-						<div className="details-block website">
+						</div>}
+						{game.website && <div className="details-block website">
 							<S.Subtitle>Website</S.Subtitle>
 							<a href={game.website} target='_blank' rel="noopener noreferrer" className="website">{game.website}</a>
-						</div>
+						</div>}
 					</S.Info>
 				</S.Wrapper>
 			</S.Window>
@@ -90,12 +96,15 @@ S.Overlay = styled(motion.div)`
 	position: fixed;
 	top: 0;
 	left: 0;
+	display: flex;
+	justify-content: center;
 	width: 100%;
 	min-height: 100vh;
 	background-color: rgba(0,0,0, .5);
-	padding: 2rem 10rem;
+	padding: 2rem 0;
 	overflow-y: scroll;
 	z-index: 5;
+	cursor: pointer;
 `;
 S.Wrapper = styled.div`
 	position: relative;
@@ -116,7 +125,10 @@ S.Info = styled.div`
 	.details-block {
 		font-size: 1rem;
 		width: 33%;
-		padding: 0 1rem;
+		padding: 0 1rem 0 0;
+		.month {
+			padding: 0 .5rem 0 0;
+		}
 		.website {
 			width: 100%;
 			color: #fff;
@@ -142,7 +154,7 @@ S.Data = styled.div`
 S.Window = styled.div`
 	position: relative;
 	background: url(${props => props.background_image}) no-repeat;
-	background-size: contain;
+	background-size: 100% 40rem;
 	width: 80%;
 	min-height: 100%;
 	padding: 2rem 0;
@@ -150,11 +162,12 @@ S.Window = styled.div`
 	border-radius: 1rem;
 	margin-bottom: 2rem;
 	overflow:hidden;
+	cursor: auto;
 	&::after {
 		content:'';
 		position: absolute;
 		display: block;
-		top: 40rem;
+		top: 25rem;
 		left: 0;
 		bottom:0;
 		width:100%;
@@ -201,7 +214,7 @@ S.Window = styled.div`
 				}
 			}
 			svg {
-				margin: 0 .3rem;
+				margin: 0 .5rem;
 			}
 		}
 	}

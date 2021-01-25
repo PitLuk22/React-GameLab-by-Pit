@@ -9,7 +9,7 @@ const GameList = ({ games, game, title }) => {
 
 	const styledContainer = {
 		paddingTop: '2rem',
-		filter: `blur(${Object.keys(game).length ? '10px' : '0px'})`
+		// filter: `blur(${Object.keys(game).length ? '10px' : '0px'})`
 	}
 	return (
 		<div >
