@@ -7,21 +7,26 @@ import platformIcons from '../../services/gameCardIcons';
 import metacriticColor from '../../services/gameMetascore';
 import { Link, useLocation } from 'react-router-dom';
 import Spinner from '../spinner';
+import resizeImage from '../../services/resizeImage';
 
 // Images
 import notFoundImg from '../../img/notFound.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+// Animation 
+import { motion } from 'framer-motion';
+import { fadeUp } from '../../animations';
 
 
 const Game = ({ id, name, background_image, platforms, metacritic, released, genres, ratings_count }) => {
+
 	const location = useLocation()
-	const { game, loading } = useSelector(state => state.details);
+	const { loading } = useSelector(state => state.details);
 	const dispatch = useDispatch();
+
 	const gameDetailsHandler = (id) => {
 		dispatch(isLoading());
 		dispatch(getGameDetails(id))
-		// canceling scroll
 		document.body.style.overflow = 'hidden';
 	}
 
@@ -30,9 +35,9 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 	}
 
 	return (
-		<S.Game>
+		<S.Game variants={fadeUp} initial="hidden" animate='show'>
 			{ checkLoadingItem(location, loading) && <Spinner />}
-			<img src={background_image || notFoundImg} alt={name} />
+			<img src={resizeImage(background_image, 640) || resizeImage(notFoundImg, 640)} alt={name} />
 			<div className="descr">
 
 				<S.LineDetails>
@@ -76,7 +81,8 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 export default Game;
 
 const S = {};
-S.Game = styled.div`
+S.Game = styled(motion.div)`
+	position: relative;
 	width: 100%;
 	display: block;
 	border-radius: .8rem;

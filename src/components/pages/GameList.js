@@ -4,20 +4,20 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import Game from '../game';
 
 import styled from 'styled-components';
+import { fadeUp } from '../../animations';
 
-const GameList = ({ games, game, title }) => {
+const GameList = ({ games, title }) => {
 
 	const styledContainer = {
-		paddingTop: '2rem',
-		filter: `blur(${Object.keys(game).length ? '10px' : '0px'})`
+		paddingTop: '2rem'
 	}
 	return (
 		<ResponsiveMasonry
 			as={motion.div}
 			columnsCountBreakPoints={{ 350: 1, 600: 1, 800: 2, 1000: 3, 1300: 4 }}
 			style={styledContainer}>
-			<Masonry as={motion.div} gutter='1.5rem'>
-				<S.Title>{title}</S.Title>
+			<Masonry gutter='1.5rem'>
+				<S.Title variants={fadeUp} initial="hidden" animate='show' exit='exit'>{title}</S.Title>
 				{games.map(game => {
 					return <Game key={game.id} {...game} />
 				})}
@@ -28,7 +28,7 @@ const GameList = ({ games, game, title }) => {
 export default GameList;
 
 const S = {};
-S.Title = styled.h2`
+S.Title = styled(motion.h2)`
 	color: #FFAD32;
 	border: 4px solid #FFAD32;
 	border-radius: 30px;

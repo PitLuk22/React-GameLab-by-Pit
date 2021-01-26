@@ -5,17 +5,22 @@ import { useHistory } from 'react-router-dom';
 // Style
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import { fadeUp } from '../../animations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar as fullStar, faStarHalfAlt as halfStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar as emptyStar } from '@fortawesome/free-regular-svg-icons';
 // Services
 import { setGameCartDate } from '../../services/gameCardDate';
 import platformIcons from '../../services/gameCardIcons';
 import metacriticColor from '../../services/gameMetascore';
+import resizeImage from '../../services/resizeImage';
 // Components
 import Carousel from '../carousel';
 
-const GameDetails = () => {
+
+const GameDetails = ({ pathId }) => {
 	const history = useHistory();
-	// Redux
+
 	const dispatch = useDispatch();
 	const { game, screenshots } = useSelector(state => state.details);
 	const closeCardDetails = (e) => {
@@ -26,66 +31,86 @@ const GameDetails = () => {
 		}
 	};
 
+	// Stars
+	const getStars = () => {
+		const stars = [];
+		const rating = game.rating;
+		const integer = Math.floor(game.rating);
+		const rest = rating % integer;
+
+		for (let i = 1; i <= integer; i++) {
+			stars.push(fullStar);
+		}
+		rest >= 0.5 ? stars.push(halfStar) : stars.push(emptyStar);
+		while (stars.length < 5) stars.push(emptyStar);
+		return stars;
+	}
+
 	return (
-		<S.Overlay onClick={(e) => closeCardDetails(e)} data-close>
-			<S.Window
-				background_image={game.background_image} >
-				<S.Wrapper>
-					<div className="title">
-						<h3 className="name">{game.name}</h3>
-						<div className="main-details">
-							<div className="paltform-icons">Available on:
-								{platformIcons(game.platforms).map((item, index) => <FontAwesomeIcon key={index} icon={item} />)}
+		<>
+			<S.Overlay variants={fadeUp} initial="hidden" animate='show' exit='exit' onClick={(e) => closeCardDetails(e)} data-close>
+				<S.Window background_image={resizeImage(game.background_image, 1280)} >
+					<S.Wrapper>
+						<div className="title">
+							<h3 className="name">{game.name}</h3>
+							<div className="main-details">
+
+								<div className="paltform-icons">Available on:
+										{platformIcons(game.platforms).map((item, index) => <FontAwesomeIcon key={index} icon={item} />)}
+								</div>
+								<S.Flex>
+									<div className="stars">{getStars().map((star, i) => <FontAwesomeIcon icon={star} key={i} />)}</div>
+									<div className="date" dangerouslySetInnerHTML={{ __html: setGameCartDate(game.released) }}></div>
+								</S.Flex>
 							</div>
-							<div className="date" dangerouslySetInnerHTML={{ __html: setGameCartDate(game.released) }}></div>
 						</div>
-					</div>
 
-					<Carousel game={game} screenshots={screenshots} />
+						<Carousel game={game} screenshots={screenshots} />
 
-					<S.About >
-						<h4>About</h4>
-						<div dangerouslySetInnerHTML={{ __html: game.description }}></div>
-					</S.About>
-					<S.Info>
-						{game.platforms && <div className="details-block">
-							<S.Subtitle>Platforms</S.Subtitle>
-							<S.Data>{game.platforms.map(item => item.platform.name).join(', ')}</S.Data>
-						</div>}
-						{game.rating && <div className="details-block">
-							<S.Subtitle>Rating</S.Subtitle>
-							<S.Data>{game.rating}</S.Data>
-						</div>}
-						{game.metacritic && <div className="details-block">
-							<S.Subtitle>Metascore</S.Subtitle>
-							<S.Data >
-								<div className='metacritic' style={metacriticColor(game.metacritic)}>{game.metacritic}</div>
-							</S.Data>
-						</div>}
-						{game.genres && <div className="details-block">
-							<S.Subtitle>Genre</S.Subtitle>
-							<S.Data>{game.genres.map(genre => genre.name).join(', ')}</S.Data>
-						</div>}
-						{game.released && <div className="details-block">
-							<S.Subtitle>Released date</S.Subtitle>
-							<S.Data dangerouslySetInnerHTML={{ __html: setGameCartDate(game.released) }}></S.Data>
-						</div>}
-						{game.developers && <div className="details-block">
-							<S.Subtitle>Developer</S.Subtitle>
-							<S.Data>{game.developers.map(item => item.name).join(', ')}</S.Data>
-						</div>}
-						{game.publishers && <div className="details-block">
-							<S.Subtitle>Publisher</S.Subtitle>
-							<S.Data>{game.publishers.map(item => item.name).join(', ')}</S.Data>
-						</div>}
-						{game.website && <div className="details-block website">
-							<S.Subtitle>Website</S.Subtitle>
-							<a href={game.website} target='_blank' rel="noopener noreferrer" className="website">{game.website}</a>
-						</div>}
-					</S.Info>
-				</S.Wrapper>
-			</S.Window>
-		</S.Overlay >
+						<S.About >
+							<h4>About</h4>
+							<div dangerouslySetInnerHTML={{ __html: game.description }}></div>
+						</S.About>
+						<S.Info>
+							{game.platforms && <div className="details-block">
+								<S.Subtitle>Platforms</S.Subtitle>
+								<S.Data>{game.platforms.map(item => item.platform.name).join(', ')}</S.Data>
+							</div>}
+							{game.rating && <div className="details-block">
+								<S.Subtitle>Rating</S.Subtitle>
+								<S.Data>{game.rating}</S.Data>
+							</div>}
+							{game.metacritic && <div className="details-block">
+								<S.Subtitle>Metascore</S.Subtitle>
+								<S.Data >
+									<div className='metacritic' style={metacriticColor(game.metacritic)}>{game.metacritic}</div>
+								</S.Data>
+							</div>}
+							{game.genres && <div className="details-block">
+								<S.Subtitle>Genre</S.Subtitle>
+								<S.Data>{game.genres.map(genre => genre.name).join(', ')}</S.Data>
+							</div>}
+							{game.released && <div className="details-block">
+								<S.Subtitle>Released date</S.Subtitle>
+								<S.Data dangerouslySetInnerHTML={{ __html: setGameCartDate(game.released) }}></S.Data>
+							</div>}
+							{game.developers && <div className="details-block">
+								<S.Subtitle>Developer</S.Subtitle>
+								<S.Data>{game.developers.map(item => item.name).join(', ')}</S.Data>
+							</div>}
+							{game.publishers && <div className="details-block">
+								<S.Subtitle>Publisher</S.Subtitle>
+								<S.Data>{game.publishers.map(item => item.name).join(', ')}</S.Data>
+							</div>}
+							{game.website && <div className="details-block website">
+								<S.Subtitle>Website</S.Subtitle>
+								<a href={game.website} target='_blank' rel="noopener noreferrer" className="website">{game.website}</a>
+							</div>}
+						</S.Info>
+					</S.Wrapper>
+				</S.Window>
+			</S.Overlay >
+		</>
 	)
 }
 
@@ -105,6 +130,27 @@ S.Overlay = styled(motion.div)`
 	overflow-y: scroll;
 	z-index: 5;
 	cursor: pointer;
+	box-shadow: 0px -100px 50px 50px rgba(0,0,0, .5) ;
+	backdrop-filter: blur(10px);
+`;
+S.Flex = styled.div`
+	display: flex;
+	flex-direction: column;
+	.stars {
+		color: gold;
+	}
+	.date {
+		display: flex;
+		margin-top: 1rem;
+		.month {
+			background-color: #fff;
+			display: block;
+			color: black;
+			border-radius: .6rem;
+			padding: 0 1rem;
+			margin: 0 .5rem;
+		}
+	}
 `;
 S.Wrapper = styled.div`
 	position: relative;
@@ -151,7 +197,7 @@ S.Data = styled.div`
 		font-weight: bold;
 	}
 `;
-S.Window = styled.div`
+S.Window = styled(motion.div)`
 	position: relative;
 	background: url(${props => props.background_image}) no-repeat;
 	background-size: 100% 40rem;
@@ -191,7 +237,7 @@ S.Window = styled.div`
 		flex-direction: column;
 		text-align: center;
 		padding: 2rem 0;
-		margin: 0 7rem 2rem 7rem;
+		margin: 0 7rem;
 		font-size: 2rem;
 		.name {
 			margin-bottom: 2rem;
@@ -202,17 +248,6 @@ S.Window = styled.div`
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			.date {
-				display: flex;
-				.month {
-					background-color: #fff;
-					display: block;
-					color: black;
-					border-radius: .6rem;
-					padding: 0 1rem;
-					margin: 0 .5rem;
-				}
-			}
 			svg {
 				margin: 0 .5rem;
 			}

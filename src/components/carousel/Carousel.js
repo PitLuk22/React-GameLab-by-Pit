@@ -6,11 +6,14 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper.scss';
 import 'swiper/components/navigation/navigation.scss';
 import 'swiper/components/pagination/pagination.scss';
+// Style
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle, faPauseCircle } from '@fortawesome/free-regular-svg-icons';
 import { faExpand } from '@fortawesome/free-solid-svg-icons';
+// Util
 import { v4 as uuidv4 } from 'uuid';
+import resizeImage from '../../services/resizeImage';
 
 const Carousel = ({ game, screenshots }) => {
 
@@ -60,10 +63,10 @@ const Carousel = ({ game, screenshots }) => {
 	// Images
 	const images = screenshots
 		.filter(img => img.width / img.height > 1.6 && img.width / img.height < 1.8)
-		.map(img => <SwiperSlide key={img.id}><img width={'100%'} src={img.image} alt={`screenshot ${img.id}`} /></SwiperSlide>)
+		.map(img => <SwiperSlide key={img.id}><img width={'100%'} src={resizeImage(img.image, 1280)} alt={`screenshot ${img.id}`} /></SwiperSlide>)
 	const thumbs = screenshots
 		.filter(img => img.width / img.height > 1.6 && img.width / img.height < 1.8)
-		.map((img, i) => <SwiperSlide key={i}><img width={'100%'} src={img.image} alt={`screenshot ${img.id}-${'small'}`} /></SwiperSlide>);
+		.map((img, i) => <SwiperSlide key={i}><img width={'100%'} src={resizeImage(img.image, 420)} alt={`screenshot ${img.id}-${'small'}`} /></SwiperSlide>);
 
 	return (
 		<S.Slider isPlaying={isPlaying}>
@@ -103,9 +106,9 @@ S.PlayerIcon = styled(FontAwesomeIcon)`
 	transition: all .3s ease;
 	color: rgba(0,0,0, .6);
 	cursor: pointer;
+	z-index: 2;
 	&:hover {
 		color: #ffffff;
-		/* color: #FFAD32; */
 	}
 `;
 S.FullScreen = styled.div`
@@ -121,6 +124,7 @@ S.FullScreen = styled.div`
 	align-items: center;
 	border: 1px solid rgba(0,0,0, .8);
 	cursor: pointer;
+	z-index: 2;
 	&:hover {
 		border: 1px solid #fff;
 	}

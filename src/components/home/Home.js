@@ -6,8 +6,9 @@ import Aside from '../aside';
 import GameDetails from '../gameDetails';
 import Nav from '../nav';
 import { useLocation } from 'react-router-dom';
-
+//Styles
 import styled from 'styled-components';
+import { AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 
 const Home = () => {
 
@@ -21,7 +22,7 @@ const Home = () => {
 		dispatch(loadAllGames())
 		// responsible for pressing the back button
 		if (!location.pathname.includes('game') && game.name) {
-			dispatch(deleteDetails());
+			dispatch(deleteDetails())
 		}
 		// if gameDetails should be shown after refresh 
 		if (!Object.keys(game).length && pathID) {
@@ -37,12 +38,12 @@ const Home = () => {
 
 	return (
 		<>
-			<Nav game={game} />
+			<Nav />
 			<S.Main >
-				<Aside game={game} />
+				<Aside />
 				<S.Content>
-					{Object.keys(game).length && pathID ? <GameDetails /> : null}
-					<GameList games={popular} game={game} title={'Popular games in 2020'} />
+					{Object.keys(game).length && pathID ? <GameDetails pathID={pathID} /> : null}
+					{popular.length ? <GameList games={popular} title={'Popular games in 2020'} /> : null}
 					{/* <GameList games={upcoming} title={'Upcoming games'} />
 						<GameList games={newGames} title={'New games'} /> */}
 				</S.Content>
