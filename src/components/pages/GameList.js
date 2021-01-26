@@ -9,22 +9,20 @@ const GameList = ({ games, game, title }) => {
 
 	const styledContainer = {
 		paddingTop: '2rem',
-		// filter: `blur(${Object.keys(game).length ? '10px' : '0px'})`
+		filter: `blur(${Object.keys(game).length ? '10px' : '0px'})`
 	}
 	return (
-		<div >
-			<ResponsiveMasonry
-				as={motion.div}
-				columnsCountBreakPoints={{ 350: 1, 600: 1, 800: 2, 1000: 3, 1300: 4 }}
-				style={styledContainer}>
-				<Masonry as={motion.div} gutter='1.5rem'>
-					<S.Title>{title}</S.Title>
-					{games.map(game => {
-						return <Game key={game.id} {...game} />
-					})}
-				</Masonry>
-			</ResponsiveMasonry>
-		</div>
+		<ResponsiveMasonry
+			as={motion.div}
+			columnsCountBreakPoints={{ 350: 1, 600: 1, 800: 2, 1000: 3, 1300: 4 }}
+			style={styledContainer}>
+			<Masonry as={motion.div} gutter='1.5rem'>
+				<S.Title>{title}</S.Title>
+				{games.map(game => {
+					return <Game key={game.id} {...game} />
+				})}
+			</Masonry>
+		</ResponsiveMasonry>
 	)
 }
 export default GameList;

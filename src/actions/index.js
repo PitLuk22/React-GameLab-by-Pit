@@ -24,31 +24,40 @@ const loadAllGames = () => async (dispatch) => {
 }
 
 const getGameDetails = (id) => async (dispatch) => {
+
 	const gameData = await axios.get(gameDetailsUrl(id));
 	const screenshotsData = await axios.get(gameScreenshotsUrl(id));
+
 
 	dispatch({
 		type: 'GET_DETAILS',
 		payload: {
 			game: gameData.data,
-			screenshots: screenshotsData.data.results
+			screenshots: screenshotsData.data.results,
+			loading: false
 		}
 	})
 }
 
-const deleteDetails = () => async (dispatch) => {
-	dispatch({
-		type: 'DELETE_DETAILS',
+const isLoading = () => {
+	return {
+		type: 'LOADING',
 		payload: {
-			game: {},
-			screenshots: {}
+			loading: true
 		}
-	})
+	}
+}
+
+const deleteDetails = () => {
+	return {
+		type: 'DELETE_DETAILS'
+	}
 }
 
 
 export {
 	loadAllGames,
 	getGameDetails,
-	deleteDetails
+	isLoading,
+	deleteDetails,
 };

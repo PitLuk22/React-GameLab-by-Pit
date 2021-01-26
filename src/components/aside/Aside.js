@@ -2,9 +2,9 @@ import React from 'react'
 import styled from 'styled-components';
 
 const Aside = ({ game }) => {
+
 	return (
-		// <S.Aside style={{ filter: `blur(${Object.keys(game).length ? '10px' : '0px'})` }}>
-		<S.Aside>
+		<S.Aside blur={game}>
 			<div className='title'>
 				<h1>Pit's GameLab</h1>
 			</div>
@@ -30,6 +30,7 @@ S.Aside = styled.aside`
 	width: 15rem;
 	height: 100vh;
 	padding-top: 1rem;
+	filter: ${props => props.blur.name ? 'blur(10px)' : 'blur(0px)'};
 `;
 S.Links = styled.ul`
 	padding: 0 3rem;

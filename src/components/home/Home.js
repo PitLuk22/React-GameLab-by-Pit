@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { loadAllGames, getGameDetails } from '../../actions';
+import { loadAllGames, getGameDetails, deleteDetails } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import GameList from '../pages';
 import Aside from '../aside';
@@ -17,28 +17,32 @@ const Home = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
+		// get all kind of games
 		dispatch(loadAllGames())
-	}, [])
-	const { popular, upcoming, newGames } = useSelector(state => state.games)
-	const game = useSelector(state => state.details.game)
+		// responsible for pressing the back button
+		if (!location.pathname.includes('game') && game.name) {
+			dispatch(deleteDetails());
+		}
+		// if gameDetails should be shown after refresh 
+		if (!Object.keys(game).length && pathID) {
+			dispatch(getGameDetails(pathID))
+			document.body.style.overflow = 'hidden';
+		}
+		if (!pathID) {
+			document.body.style.overflow = 'auto';
+		}
+	}, [location])
 
-	// if gameDetails should be shown after refresh 
-	if (!Object.keys(game).length && pathID) {
-		dispatch(getGameDetails(pathID))
-		document.body.style.overflow = 'hidden';
-	}
-	if (!pathID) {
-		document.body.style.overflow = 'auto';
-	}
+	const { games: { popular, upcoming, newGames }, details: { game } } = useSelector(state => state)
 
 	return (
 		<>
-			<Nav />
+			<Nav game={game} />
 			<S.Main >
-				<Aside />
+				<Aside game={game} />
 				<S.Content>
 					{Object.keys(game).length && pathID ? <GameDetails /> : null}
-					<GameList games={popular} title={'Popular games in 2020'} />
+					<GameList games={popular} game={game} title={'Popular games in 2020'} />
 					{/* <GameList games={upcoming} title={'Upcoming games'} />
 						<GameList games={newGames} title={'New games'} /> */}
 				</S.Content>

@@ -20,7 +20,7 @@ const GameDetails = () => {
 	const { game, screenshots } = useSelector(state => state.details);
 	const closeCardDetails = (e) => {
 		if (e.target.dataset.close) {
-			dispatch({ type: 'DELETE_DETAILS' });
+			dispatch(deleteDetails())
 			history.push('/')
 			document.body.style.overflow = 'auto';
 		}

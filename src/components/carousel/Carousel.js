@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 // Slider
 import SwiperCore, { Navigation, Pagination, Thumbs } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle, faPauseCircle } from '@fortawesome/free-regular-svg-icons';
 import { faExpand } from '@fortawesome/free-solid-svg-icons';
+import { v4 as uuidv4 } from 'uuid';
 
 const Carousel = ({ game, screenshots }) => {
 
@@ -18,13 +19,15 @@ const Carousel = ({ game, screenshots }) => {
 	const [thumbsSwiper, setThumbsSwiper] = useState(null);
 	SwiperCore.use([Navigation, Pagination, Thumbs]);
 
+	useEffect(() => {
+		isPlaying ? videoRef.current.play() : videoRef.current.pause();
+	}, [isPlaying])
+
 	const onVideoHandler = () => {
 		if (isPlaying) {
 			setIsPlaying(false)
-			videoRef.current.pause();
 		} else {
 			setIsPlaying(true)
-			videoRef.current.play();
 		}
 	}
 
@@ -35,11 +38,10 @@ const Carousel = ({ game, screenshots }) => {
 			videoRef.current.webkitRequestFullScreen();
 		}
 		setIsPlaying(true)
-		videoRef.current.play();
 	}
 
 	const video = (
-		<SwiperSlide className='video-slide'>
+		<SwiperSlide className='video-slide' key={uuidv4}>
 			<S.PlayerIcon onClick={() => onVideoHandler()} className='player-icon' icon={isPlaying ? faPauseCircle : faPlayCircle} size='4x' />
 			<S.FullScreen onClick={() => fullscreen()}>
 				<FontAwesomeIcon icon={faExpand} size='1x' />
@@ -68,13 +70,14 @@ const Carousel = ({ game, screenshots }) => {
 			<Swiper
 				id='slider'
 				autoHeight={true}
-				// lazy={true}
+				lazy={true}
 				thumbs={{ swiper: thumbsSwiper }}
 				spaceBetween={100}
 				slidesPerView={1}
 				mousewheel={true}
 				navigation
-				pagination={{ clickable: true }}>
+				pagination={{ clickable: true }}
+				onActiveIndexChange={({ activeIndex }) => activeIndex !== 0 && setIsPlaying(false)}>
 				{[video, ...images]}
 			</Swiper>
 			<Swiper
@@ -98,14 +101,16 @@ S.PlayerIcon = styled(FontAwesomeIcon)`
 	left:50%;
 	transform: translate(-50%,-50%);
 	transition: all .3s ease;
+	color: rgba(0,0,0, .6);
 	cursor: pointer;
 	&:hover {
-		color: #FFAD32;
+		color: #ffffff;
+		/* color: #FFAD32; */
 	}
 `;
 S.FullScreen = styled.div`
 	position: absolute;
-	bottom: 1rem;
+	top: 1rem;
 	right: 1rem;
 	padding: .5rem 1rem;
 	background-color: rgba(0,0,0, .8);

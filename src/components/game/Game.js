@@ -1,11 +1,12 @@
 import React from 'react'
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { getGameDetails } from '../../actions';
+import { useSelector, useDispatch } from 'react-redux';
+import { getGameDetails, isLoading } from '../../actions';
 import { setGameCartDate } from '../../services/gameCardDate';
 import platformIcons from '../../services/gameCardIcons';
 import metacriticColor from '../../services/gameMetascore';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import Spinner from '../spinner';
 
 // Images
 import notFoundImg from '../../img/notFound.jpg';
@@ -14,16 +15,23 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 
 const Game = ({ id, name, background_image, platforms, metacritic, released, genres, ratings_count }) => {
-
+	const location = useLocation()
+	const { game, loading } = useSelector(state => state.details);
 	const dispatch = useDispatch();
 	const gameDetailsHandler = (id) => {
+		dispatch(isLoading());
 		dispatch(getGameDetails(id))
 		// canceling scroll
 		document.body.style.overflow = 'hidden';
 	}
 
+	const checkLoadingItem = (location, loading) => {
+		return +location.pathname.split('/')[2] === id && loading;
+	}
+
 	return (
 		<S.Game>
+			{ checkLoadingItem(location, loading) && <Spinner />}
 			<img src={background_image || notFoundImg} alt={name} />
 			<div className="descr">
 
