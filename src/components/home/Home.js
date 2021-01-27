@@ -18,8 +18,7 @@ const Home = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		// get all kind of games
-		dispatch(loadAllGames())
+
 		// responsible for pressing the back button
 		if (!location.pathname.includes('game') && game.name) {
 			dispatch(deleteDetails())
@@ -33,6 +32,11 @@ const Home = () => {
 			document.body.style.overflow = 'auto';
 		}
 	}, [location])
+
+	useEffect(() => {
+		// get all kind of games
+		dispatch(loadAllGames())
+	}, [])
 
 	const { games: { popular, upcoming, newGames }, details: { game } } = useSelector(state => state)
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { getGameDetails, isLoading } from '../../actions';
@@ -18,11 +18,23 @@ import { motion } from 'framer-motion';
 import { fadeUp } from '../../animations';
 
 
-const Game = ({ id, name, background_image, platforms, metacritic, released, genres, ratings_count }) => {
+const Game = ({ id, name, background_image, platforms, metacritic, released, genres, ratings_count, clip }) => {
+
+	const [video, setVideo] = useState(null);
+	const [imgOpacity, setImgOpacity] = useState(1);
+	const [isPlaying, setIsPlaying] = useState(false);
+	const videoRef = useRef(null);
 
 	const location = useLocation()
 	const { loading } = useSelector(state => state.details);
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		if (videoRef.current) {
+			isPlaying ? videoRef.current.play() : videoRef.current.pause();
+		}
+	}, [isPlaying])
+
 
 	const gameDetailsHandler = (id) => {
 		dispatch(isLoading());
@@ -34,10 +46,41 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 		return +location.pathname.split('/')[2] === id && loading;
 	}
 
+	const showVideo = () => {
+		setImgOpacity(0);
+		setVideo(<video
+			style={{ opacity: `${!imgOpacity}` }}
+			loop
+			muted="muted"
+			className='video'
+			ref={videoRef}
+			// onEnded={() => setIsPlaying(false)}
+			src={clip.clip} />)
+		onVideoHandler();
+	}
+	const hideVideo = () => {
+		setImgOpacity(1);
+		setVideo(null);
+		onVideoHandler();
+	}
+
+
+	const onVideoHandler = () => {
+		if (isPlaying) {
+			setIsPlaying(false)
+		} else {
+			setIsPlaying(true)
+		}
+	}
+
 	return (
 		<S.Game variants={fadeUp} initial="hidden" animate='show'>
-			{ checkLoadingItem(location, loading) && <Spinner />}
-			<img src={resizeImage(background_image, 640) || resizeImage(notFoundImg, 640)} alt={name} />
+			<S.Media onMouseEnter={() => showVideo()} onMouseLeave={() => hideVideo()}>
+				{checkLoadingItem(location, loading) && <Spinner />}
+				{video}
+				<img style={{ opacity: `${imgOpacity}` }} src={resizeImage(background_image, 640) || resizeImage(notFoundImg, 640)} alt={name} />
+			</S.Media>
+
 			<div className="descr">
 
 				<S.LineDetails>
@@ -82,7 +125,6 @@ export default Game;
 
 const S = {};
 S.Game = styled(motion.div)`
-	position: relative;
 	width: 100%;
 	display: block;
 	border-radius: .8rem;
@@ -98,13 +140,6 @@ S.Game = styled(motion.div)`
 			height: auto;
 		}
 	}
-	img{
-		width: 100%;
-		height: 180px;
-		object-fit: cover;
-		border-top-left-radius: .8rem;
-		border-top-right-radius: .8rem;
-	}
 	.descr {
 		padding: .5rem 1rem 1rem 1rem;
 		font-size: 1.5rem;
@@ -119,6 +154,32 @@ S.Game = styled(motion.div)`
 				color: #ababab;
 			}
 		}
+	}
+`;
+
+S.Media = styled.div`
+	position: relative;
+	width: 100%;
+	height: 180px;
+	img{
+		opacity: 1;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-top-left-radius: .8rem;
+		border-top-right-radius: .8rem;
+		transition: all .7s ease;
+	}
+	video {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top:0;
+		left: 0;
+		object-fit: cover;
+		border-top-left-radius: .8rem;
+		border-top-right-radius: .8rem;
+		transition: all .7s ease;
 	}
 `;
 

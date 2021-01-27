@@ -33,6 +33,7 @@ S.Spinner = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	z-index: 5;
 	.spinner {
 		width: 200px;
 		height: 200px;
