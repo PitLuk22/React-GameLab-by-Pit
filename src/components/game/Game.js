@@ -5,10 +5,9 @@ import { getGameDetails, isLoading } from '../../actions';
 import { setGameCartDate } from '../../services/gameCardDate';
 import platformIcons from '../../services/gameCardIcons';
 import metacriticColor from '../../services/gameMetascore';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import Spinner from '../spinner';
 import resizeImage from '../../services/resizeImage';
-
 // Images
 import notFoundImg from '../../img/notFound.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,27 +23,41 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 	const [isPlaying, setIsPlaying] = useState(false);
 	const videoRef = useRef(null);
 
-	const location = useLocation()
+	const location = useLocation();
+	const history = useHistory();
+
 	const { loading } = useSelector(state => state.details);
 	const dispatch = useDispatch();
 
+	// Play or pasuse video when hover
 	useEffect(() => {
 		if (videoRef.current) {
 			isPlaying ? videoRef.current.play() : videoRef.current.pause();
 		}
 	}, [isPlaying])
 
+	// Set overflow for body
+	useEffect(() => {
+		if (location.pathname === '/') {
+			document.body.style.overflow = 'auto'
+		} else {
+			document.body.style.overflow = 'hidden'
+		}
+	}, [location])
 
+	// Get selected game 
 	const gameDetailsHandler = (id) => {
+		history.push(`/game/${id}`);
 		dispatch(isLoading());
 		dispatch(getGameDetails(id))
-		document.body.style.overflow = 'hidden';
 	}
 
+	// Set loader if it necessary 
 	const checkLoadingItem = (location, loading) => {
 		return +location.pathname.split('/')[2] === id && loading;
 	}
 
+	// Create and show video component
 	const showVideo = () => {
 		setVideo(<video
 			loop
@@ -54,13 +67,15 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 			src={clip.clip} />)
 		setIsPlaying(true)
 	}
+
+	// Hide video component
 	const hideVideo = () => {
 		setVideo(null);
 		setIsPlaying(false)
 	}
 
 	return (
-		<S.Game variants={fadeUp} initial="hidden" animate='show'>
+		<S.Game layoutId={id}>
 			<S.Media onMouseEnter={() => showVideo()} onMouseLeave={() => hideVideo()}>
 				{checkLoadingItem(location, loading) && <Spinner />}
 				<motion.div
@@ -68,19 +83,23 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 					whileHover={{ opacity: 1, transition: { duration: .3, ease: 'linear' } }}>
 					{video}
 				</motion.div>
-				<img src={resizeImage(background_image, 640) || resizeImage(notFoundImg, 640)} alt={name} />
+				<motion.img layoutId={`image ${id}`} src={resizeImage(background_image, 640) || resizeImage(notFoundImg, 640)} alt={name} />
 			</S.Media>
 
 			<div className="descr">
 
 				<S.LineDetails>
-					<div className="platforms">
+					<motion.div layoutId={`platforms ${id}`} className="platforms">
 						{platformIcons(platforms).map((item, index) => <FontAwesomeIcon key={index} icon={item} />)}
-					</div>
+					</motion.div>
 					<div className="metacritic" style={metacriticColor(metacritic)}>{metacritic}</div>
 				</S.LineDetails>
-				<Link to={`/game/${id}`} onClick={() => gameDetailsHandler(id)}
-					className="descr__name">{name}</Link>
+				<motion.a
+					layoutId={`title ${id}`}
+					onClick={() => gameDetailsHandler(id)}
+					className="descr__name">
+					{name}
+				</motion.a>
 
 			</div>
 			<S.ExtraList>
@@ -100,7 +119,7 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 						<div>{ratings_count}</div>
 					</li>
 					<li>
-						<S.Link to={`/game/${id}`} className='descr__btn' onClick={() => gameDetailsHandler(id)}>
+						<S.Link className='descr__btn' onClick={() => gameDetailsHandler(id)}>
 							<span>Show more details</span>
 							<FontAwesomeIcon icon={faChevronRight} size='sm' />
 						</S.Link>
@@ -122,9 +141,7 @@ S.Game = styled(motion.div)`
 	background-color: #202020; 
 	color:#fff;
 	box-shadow: 0 0 5px 5px rgba(0,0,0, .2);
-	transition: all .15s ease;
 	&:hover {
-		transform: scale(1.03);
 		overflow: visible;
 		.descr__list {
 			height: auto;
@@ -229,7 +246,7 @@ S.ExtraList = styled.div`
 		}
 	}
 `;
-S.Link = styled(Link)`
+S.Link = styled(motion.a)`
 	padding: .7rem 1rem;
 	font-size: .9rem;
 	width: 100%;

@@ -1,7 +1,7 @@
 const initialState = {
-	game: {},
-	screenshots: {},
-	loading: false
+	game: { platforms: [] },
+	screenshots: { results: [] },
+	loading: true
 }
 
 const gameDetailsReducer = (state = initialState, action) => {
@@ -11,7 +11,7 @@ const gameDetailsReducer = (state = initialState, action) => {
 				...state,
 				game: action.payload.game,
 				screenshots: action.payload.screenshots,
-				loading: action.payload.loading
+				loading: false
 			};
 		case 'DELETE_DETAILS':
 			return {
@@ -20,7 +20,7 @@ const gameDetailsReducer = (state = initialState, action) => {
 		case 'LOADING':
 			return {
 				...state,
-				loading: action.payload.loading
+				loading: true
 			}
 		default:
 			return { ...state }

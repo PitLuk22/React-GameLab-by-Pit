@@ -12,17 +12,19 @@ const GameList = ({ games, title }) => {
 		paddingTop: '2rem'
 	}
 	return (
-		<ResponsiveMasonry
-			as={motion.div}
-			columnsCountBreakPoints={{ 350: 1, 600: 1, 800: 2, 1000: 3, 1300: 4 }}
-			style={styledContainer}>
-			<Masonry gutter='1.5rem'>
-				<S.Title variants={fadeUp} initial="hidden" animate='show' exit='exit'>{title}</S.Title>
-				{games.map(game => {
-					return <Game key={game.id} {...game} />
-				})}
-			</Masonry>
-		</ResponsiveMasonry>
+		<motion.div>
+			<ResponsiveMasonry
+				as={motion.div}
+				columnsCountBreakPoints={{ 350: 1, 600: 1, 800: 2, 1000: 3, 1300: 4 }}
+				style={styledContainer}>
+				<Masonry gutter='1.5rem'>
+					<S.Title variants={fadeUp} initial="hidden" animate='show' exit='exit'>{title}</S.Title>
+					{games.map(game => {
+						return <Game key={game.id} {...game} />
+					})}
+				</Masonry>
+			</ResponsiveMasonry>
+		</motion.div>
 	)
 }
 export default GameList;

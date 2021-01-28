@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { loadAllGames, getGameDetails, deleteDetails } from '../../actions';
+import { loadAllGames, getGameDetails } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import GameList from '../pages';
 import Aside from '../aside';
@@ -8,33 +8,24 @@ import Nav from '../nav';
 import { useLocation } from 'react-router-dom';
 //Styles
 import styled from 'styled-components';
+import { AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 
 const Home = () => {
 
 	const location = useLocation();
-	const pathID = location.pathname.split('/')[2];
+	const pathId = +location.pathname.split('/')[2];
 
 	const dispatch = useDispatch();
 
 	useEffect(() => {
 
-		// responsible for pressing the back button
-		if (!location.pathname.includes('game') && game.name) {
-			dispatch(deleteDetails())
-		}
-		// if gameDetails should be shown after refresh 
-		if (!Object.keys(game).length && pathID) {
-			dispatch(getGameDetails(pathID))
-			document.body.style.overflow = 'hidden';
-		}
-		if (!pathID) {
-			document.body.style.overflow = 'auto';
-		}
-	}, [location])
-
-	useEffect(() => {
 		// get all kind of games
 		dispatch(loadAllGames())
+
+		// if gameDetails should be shown after refresh 
+		if (game.platforms.length === 0 && pathId) {
+			dispatch(getGameDetails(pathId))
+		}
 	}, [])
 
 	const { games: { popular, upcoming, newGames }, details: { game } } = useSelector(state => state)
@@ -45,10 +36,14 @@ const Home = () => {
 			<S.Main >
 				<Aside />
 				<S.Content>
-					{Object.keys(game).length && pathID ? <GameDetails pathID={pathID} /> : null}
-					{popular.length ? <GameList games={popular} title={'Popular games in 2020'} /> : null}
-					{/* <GameList games={upcoming} title={'Upcoming games'} />
+					<AnimateSharedLayout type='crossfade'>
+						<AnimatePresence>
+							{pathId && <GameDetails id={pathId} />}
+						</AnimatePresence>
+						{popular.length ? <GameList games={popular} title={'Popular games in 2020'} /> : null}
+						{/* <GameList games={upcoming} title={'Upcoming games'} />
 						<GameList games={newGames} title={'New games'} /> */}
+					</AnimateSharedLayout>
 				</S.Content>
 			</S.Main>
 		</>

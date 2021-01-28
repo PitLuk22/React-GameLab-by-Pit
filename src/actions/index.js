@@ -34,7 +34,6 @@ const getGameDetails = (id) => async (dispatch) => {
 		payload: {
 			game: gameData.data,
 			screenshots: screenshotsData.data.results,
-			loading: false
 		}
 	})
 }
@@ -42,22 +41,11 @@ const getGameDetails = (id) => async (dispatch) => {
 const isLoading = () => {
 	return {
 		type: 'LOADING',
-		payload: {
-			loading: true
-		}
 	}
 }
-
-const deleteDetails = () => {
-	return {
-		type: 'DELETE_DETAILS'
-	}
-}
-
 
 export {
 	loadAllGames,
 	getGameDetails,
 	isLoading,
-	deleteDetails,
 };
