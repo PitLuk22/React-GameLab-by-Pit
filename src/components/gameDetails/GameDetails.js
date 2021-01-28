@@ -4,8 +4,8 @@ import { deleteDetails } from '../../actions';
 import { useHistory } from 'react-router-dom';
 // Style
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
-import { fadeUp } from '../../animations';
+import { AnimatePresence, motion } from 'framer-motion';
+import { fadeUp, fadeIn } from '../../animations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as fullStar, faStarHalfAlt as halfStar } from '@fortawesome/free-solid-svg-icons';
 import { faStar as emptyStar } from '@fortawesome/free-regular-svg-icons';
@@ -17,6 +17,8 @@ import resizeImage from '../../services/resizeImage';
 // Components
 import Carousel from '../carousel';
 
+import { pageAnimation } from '../../animations';
+
 
 const GameDetails = ({ pathId }) => {
 	const history = useHistory();
@@ -25,7 +27,9 @@ const GameDetails = ({ pathId }) => {
 	const { game, screenshots } = useSelector(state => state.details);
 	const closeCardDetails = (e) => {
 		if (e.target.dataset.close) {
+
 			dispatch(deleteDetails())
+
 			history.push('/')
 			document.body.style.overflow = 'auto';
 		}
@@ -47,10 +51,10 @@ const GameDetails = ({ pathId }) => {
 	}
 
 	return (
-		<>
-			<S.Overlay variants={fadeUp} initial="hidden" animate='show' exit='exit' onClick={(e) => closeCardDetails(e)} data-close>
-				<S.Window background_image={resizeImage(game.background_image, 1280)} >
-					<S.Wrapper>
+		<motion.div variant={pageAnimation} initial='hidden' animate='show'>
+			<S.Overlay variants={fadeIn} onClick={(e) => closeCardDetails(e)} data-close>
+				<S.Window variants={fadeUp} background_image={resizeImage(game.background_image, 1280)} >
+					<S.Wrapper >
 						<div className="title">
 							<h3 className="name">{game.name}</h3>
 							<div className="main-details">
@@ -110,7 +114,7 @@ const GameDetails = ({ pathId }) => {
 					</S.Wrapper>
 				</S.Window>
 			</S.Overlay >
-		</>
+		</motion.div>
 	)
 }
 
@@ -152,7 +156,7 @@ S.Flex = styled.div`
 		}
 	}
 `;
-S.Wrapper = styled.div`
+S.Wrapper = styled(motion.div)`
 	position: relative;
 	z-index: 10;
 `;

@@ -8,7 +8,6 @@ import Nav from '../nav';
 import { useLocation } from 'react-router-dom';
 //Styles
 import styled from 'styled-components';
-import { AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 
 const Home = () => {
 

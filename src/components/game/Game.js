@@ -46,7 +46,6 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 	}
 
 	const showVideo = () => {
-
 		setVideo(<video
 			loop
 			muted="muted"
@@ -56,7 +55,6 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 		setIsPlaying(true)
 	}
 	const hideVideo = () => {
-
 		setVideo(null);
 		setIsPlaying(false)
 	}
