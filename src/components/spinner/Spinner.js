@@ -1,11 +1,11 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
-const Spinner = () => {
+const Spinner = ({ color }) => {
 	return (
-		<S.Spinner>
+		<S.Spinner color={color}>
 			<div className="spinner">
-				<div className="ldio-1u0s2wy7zxz">
+				<div className="circle">
 					<div>
 					</div>
 				</div>
@@ -41,20 +41,20 @@ S.Spinner = styled.div`
 		overflow: hidden;
 		background: rgba(NaN, NaN, NaN, 0);
 	}
-	.ldio-1u0s2wy7zxz div {
+	.circle div {
 	position: absolute;
 	width: 60px;
 	height: 60px;
-	border: 10px solid rgba(0, 0, 0, 0.7020967741935484);
+	border: 10px solid ${props => props.color};
 	border-top-color: transparent;
 	border-radius: 50%;
 	}
-	.ldio-1u0s2wy7zxz div {
+	.circle div {
 	animation: ${animation} 1s linear infinite;
 	top: 100px;
 	left: 100px
 	}
-	.ldio-1u0s2wy7zxz {
+	.circle {
 	width: 100%;
 	height: 100%;
 	position: relative;
@@ -62,7 +62,7 @@ S.Spinner = styled.div`
 	backface-visibility: hidden;
 	transform-origin: 0 0;
 	}
-	.ldio-1u0s2wy7zxz div { 
+	.circle div { 
 		box-sizing: content-box; 
 	}	
 `;

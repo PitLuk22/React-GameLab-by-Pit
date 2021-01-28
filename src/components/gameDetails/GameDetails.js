@@ -48,19 +48,22 @@ const GameDetails = ({ id }) => {
 		<>
 			{ !loading && <motion.div>
 				<S.Overlay onClick={(e) => closeCardDetails(e)} data-close>
-					<S.Window layoutId={id}
+					<S.Window
+						layoutId={id}
 						background_image={resizeImage(game.background_image, 1280)}>
 						<S.FieldForImage layoutId={`image ${id}`} />
 						<S.Wrapper>
 							<div className="title">
 								<motion.h3 layoutId={`title ${id}`} className="name" >{game.name}</motion.h3>
-								<div className="main-details">
 
+								<div className="main-details">
 									<motion.div layoutId={`platforms ${id}`} className="paltform-icons">Available on:
 										{platformIcons(game.platforms).map((item, index) => <FontAwesomeIcon key={index} icon={item} />)}
 									</motion.div>
-									<S.Flex>
-										<div className="stars">{getStars().map((star, i) => <FontAwesomeIcon icon={star} key={i} />)}</div>
+									<S.Flex layoutId={`stars ${id}`}>
+										<div className="stars">
+											{getStars().map((star, i) => <FontAwesomeIcon icon={star} key={i} />)}
+										</div>
 										<div className="date" dangerouslySetInnerHTML={{ __html: setGameCartDate(game.released) }}></div>
 									</S.Flex>
 								</div>
@@ -84,7 +87,9 @@ const GameDetails = ({ id }) => {
 								{game.metacritic && <div className="details-block">
 									<S.Subtitle>Metascore</S.Subtitle>
 									<S.Data >
-										<div className='metacritic' style={metacriticColor(game.metacritic)}>{game.metacritic}</div>
+										<div className='metacritic' style={metacriticColor(game.metacritic)}>
+											{game.metacritic}
+										</div>
 									</S.Data>
 								</div>}
 								{game.genres && <div className="details-block">
@@ -105,7 +110,13 @@ const GameDetails = ({ id }) => {
 								</div>}
 								{game.website && <div className="details-block website">
 									<S.Subtitle>Website</S.Subtitle>
-									<a href={game.website} target='_blank' rel="noopener noreferrer" className="website">{game.website}</a>
+									<a
+										href={game.website}
+										target='_blank'
+										rel="noopener noreferrer"
+										className="website">
+										{game.website}
+									</a>
 								</div>}
 							</S.Info>
 						</S.Wrapper>
@@ -142,7 +153,7 @@ S.FieldForImage = styled(motion.div)`
 	width: 100%;
 	height: 40rem;
 `;
-S.Flex = styled.div`
+S.Flex = styled(motion.div)`
 	display: flex;
 	flex-direction: column;
 	.stars {

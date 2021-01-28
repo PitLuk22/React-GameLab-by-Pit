@@ -1,9 +1,6 @@
-export const pageAnimation = {
+export const gameCardAnimation = {
 	hidden: { opacity: 0 },
-	show: {
-		opacity: 1,
-		transition: { duration: .5, staggerChildren: 2, staggerDirection: -1 },
-	},
+	show: { opacity: 1, transition: { staggerChildren: 1 } },
 }
 
 export const fadeUp = {
@@ -13,5 +10,5 @@ export const fadeUp = {
 
 export const fadeIn = {
 	hidden: { opacity: 0 },
-	show: { opacity: 1, transition: { duration: 1 } },
+	show: { opacity: 1, transition: { duration: .3 } },
 }

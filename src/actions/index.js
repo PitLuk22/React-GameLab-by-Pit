@@ -38,14 +38,20 @@ const getGameDetails = (id) => async (dispatch) => {
 	})
 }
 
-const isLoading = () => {
+const isLoadingGameDetails = () => {
 	return {
-		type: 'LOADING',
+		type: 'LOADING'
+	}
+}
+const isLoadingAllGames = () => {
+	return {
+		type: 'FETCH_GAMES_LOADING'
 	}
 }
 
 export {
 	loadAllGames,
 	getGameDetails,
-	isLoading,
+	isLoadingGameDetails,
+	isLoadingAllGames
 };

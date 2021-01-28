@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
-import { loadAllGames, getGameDetails } from '../../actions';
+import { loadAllGames, getGameDetails, isLoadingAllGames } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import GameList from '../pages';
 import Aside from '../aside';
 import GameDetails from '../gameDetails';
 import Nav from '../nav';
 import { useLocation } from 'react-router-dom';
+import Spinner from '../spinner';
 //Styles
 import styled from 'styled-components';
 import { AnimatePresence, AnimateSharedLayout } from 'framer-motion';
@@ -18,7 +19,7 @@ const Home = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-
+		dispatch(isLoadingAllGames());
 		// get all kind of games
 		dispatch(loadAllGames())
 
@@ -28,7 +29,7 @@ const Home = () => {
 		}
 	}, [])
 
-	const { games: { popular, upcoming, newGames }, details: { game } } = useSelector(state => state)
+	const { games: { popular, upcoming, newGames, loading }, details: { game } } = useSelector(state => state)
 
 	return (
 		<>
@@ -36,14 +37,18 @@ const Home = () => {
 			<S.Main >
 				<Aside />
 				<S.Content>
-					<AnimateSharedLayout type='crossfade'>
-						<AnimatePresence>
-							{pathId && <GameDetails id={pathId} />}
-						</AnimatePresence>
-						{popular.length ? <GameList games={popular} title={'Popular games in 2020'} /> : null}
-						{/* <GameList games={upcoming} title={'Upcoming games'} />
-						<GameList games={newGames} title={'New games'} /> */}
-					</AnimateSharedLayout>
+					{loading
+						? <Spinner color='rgba(255,255,255, .4)' />
+						: <AnimateSharedLayout type='crossfade'>
+
+							<AnimatePresence>
+								{pathId && <GameDetails id={pathId} />}
+							</AnimatePresence>
+							{popular.length ? <GameList games={popular} title={'Popular games in 2020'} /> : null}
+							{/* <GameList games={upcoming} title={'Upcoming games'} />
+							<GameList games={newGames} title={'New games'} /> */}
+
+						</AnimateSharedLayout>}
 				</S.Content>
 			</S.Main>
 		</>

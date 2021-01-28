@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { getGameDetails, isLoading } from '../../actions';
+import { getGameDetails, isLoadingGameDetails } from '../../actions';
 import { setGameCartDate } from '../../services/gameCardDate';
 import platformIcons from '../../services/gameCardIcons';
 import metacriticColor from '../../services/gameMetascore';
@@ -12,13 +12,19 @@ import resizeImage from '../../services/resizeImage';
 import notFoundImg from '../../img/notFound.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faYoutube } from '@fortawesome/free-brands-svg-icons';
 // Animation 
-import { motion } from 'framer-motion';
-import { fadeUp } from '../../animations';
-
+import { motion, useAnimation } from 'framer-motion';
+import { fadeIn, gameCardAnimation } from '../../animations';
+// Modal Youtube
+import '../../../node_modules/react-modal-video/scss/modal-video.scss';
+import ModalVideo from 'react-modal-video';
 
 const Game = ({ id, name, background_image, platforms, metacritic, released, genres, ratings_count, clip }) => {
 
+	const controls = useAnimation()
+
+	const [isOpen, setOpen] = useState(false)
 	const [video, setVideo] = useState(null);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const videoRef = useRef(null);
@@ -48,7 +54,7 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 	// Get selected game 
 	const gameDetailsHandler = (id) => {
 		history.push(`/game/${id}`);
-		dispatch(isLoading());
+		dispatch(isLoadingGameDetails());
 		dispatch(getGameDetails(id))
 	}
 
@@ -59,6 +65,7 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 
 	// Create and show video component
 	const showVideo = () => {
+		controls.start('show')
 		setVideo(<video
 			loop
 			muted="muted"
@@ -70,63 +77,85 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 
 	// Hide video component
 	const hideVideo = () => {
+		controls.start('hidden')
 		setVideo(null);
 		setIsPlaying(false)
 	}
 
 	return (
-		<S.Game layoutId={id}>
-			<S.Media onMouseEnter={() => showVideo()} onMouseLeave={() => hideVideo()}>
-				{checkLoadingItem(location, loading) && <Spinner />}
-				<motion.div
-					className='video-block'
-					whileHover={{ opacity: 1, transition: { duration: .3, ease: 'linear' } }}>
-					{video}
-				</motion.div>
-				<motion.img layoutId={`image ${id}`} src={resizeImage(background_image, 640) || resizeImage(notFoundImg, 640)} alt={name} />
-			</S.Media>
-
-			<div className="descr">
-
-				<S.LineDetails>
-					<motion.div layoutId={`platforms ${id}`} className="platforms">
-						{platformIcons(platforms).map((item, index) => <FontAwesomeIcon key={index} icon={item} />)}
+		<>
+			<S.Game layoutId={id} >
+				{/* variants={fadeIn} initial="hidden" animate='show'> */}
+				<ModalVideo
+					channel='youtube'
+					autoplay
+					isOpen={isOpen}
+					videoId={clip.video}
+					onClose={() => setOpen(false)} />
+				<S.Media
+					onMouseEnter={showVideo}
+					onMouseLeave={hideVideo}>
+					{checkLoadingItem(location, loading) && <Spinner color='rgba(0, 0, 0, 0.7)' />}
+					<motion.div
+						variants={gameCardAnimation}
+						animate={controls}
+						className='video__block'>
+						{video}
+						<motion.button variants={fadeIn} className='video__btn' onClick={() => setOpen(true)}>
+							<FontAwesomeIcon icon={faYoutube} size='1x' />
+							Play full video
+						</motion.button>
 					</motion.div>
-					<div className="metacritic" style={metacriticColor(metacritic)}>{metacritic}</div>
-				</S.LineDetails>
-				<motion.a
-					layoutId={`title ${id}`}
-					onClick={() => gameDetailsHandler(id)}
-					className="descr__name">
-					{name}
-				</motion.a>
+					<motion.img
+						layoutId={`image ${id}`}
+						src={resizeImage(background_image, 640) || resizeImage(notFoundImg, 640)} alt={name} />
+				</S.Media>
 
-			</div>
-			<S.ExtraList>
-				<ul className='descr__list'>
-					<li>
-						<div className='grey'>Release data: </div>
-						<div dangerouslySetInnerHTML={{ __html: setGameCartDate(released) }}></div>
-					</li>
-					<li>
-						<div className='grey'>Genres:</div>
-						<div className='genre'>
-							{genres.map(genre => genre.name).join(', ')}
-						</div>
-					</li>
-					<li>
-						<div className='grey'>Ratings count: </div>
-						<div>{ratings_count}</div>
-					</li>
-					<li>
-						<S.Link className='descr__btn' onClick={() => gameDetailsHandler(id)}>
-							<span>Show more details</span>
-							<FontAwesomeIcon icon={faChevronRight} size='sm' />
-						</S.Link>
-					</li>
-				</ul>
-			</S.ExtraList>
-		</S.Game>
+				<div className="descr">
+
+					<S.LineDetails>
+						<motion.div layoutId={`platforms ${id}`} className="platforms">
+							{platformIcons(platforms).map((item, index) => <FontAwesomeIcon key={index} icon={item} />)}
+						</motion.div>
+						<motion.div
+							layoutId={`stars ${id}`}
+							className="metacritic"
+							style={metacriticColor(metacritic)}>{metacritic}</motion.div>
+					</S.LineDetails>
+					<motion.a
+						layoutId={`title ${id}`}
+						onClick={() => gameDetailsHandler(id)}
+						className="descr__name">
+						{name}
+					</motion.a>
+
+				</div>
+				<S.ExtraList>
+					<ul className='descr__list'>
+						<li>
+							<div className='grey'>Release data: </div>
+							<div dangerouslySetInnerHTML={{ __html: setGameCartDate(released) }}></div>
+						</li>
+						<li>
+							<div className='grey'>Genres:</div>
+							<div className='genre'>
+								{genres.map(genre => genre.name).join(', ')}
+							</div>
+						</li>
+						<li>
+							<div className='grey'>Ratings count: </div>
+							<div>{ratings_count}</div>
+						</li>
+						<li>
+							<S.Link className='descr__btn' onClick={() => gameDetailsHandler(id)}>
+								<span>Show more details</span>
+								<FontAwesomeIcon icon={faChevronRight} size='sm' />
+							</S.Link>
+						</li>
+					</ul>
+				</S.ExtraList>
+			</S.Game>
+		</>
 	)
 }
 
@@ -162,13 +191,17 @@ S.Game = styled(motion.div)`
 			}
 		}
 	}
+	.modal-video-close-btn {
+		cursor: pointer;
+	}
 `;
 
-S.Media = styled.div`
+S.Media = styled(motion.div)`
 	position: relative;
 	width: 100%;
 	height: 180px;
-	.video-block {
+	overflow: hidden;
+	.video__block {
 		position: absolute;
 		width: 100%;
 		height: 100%;
@@ -176,6 +209,24 @@ S.Media = styled.div`
 		left: 0;
 		transition: all 1s ease;
 		opacity: 0;
+	}
+	.video__btn {
+		position: absolute;
+		bottom:.5rem;
+		right: .5rem;
+		padding: .5rem .7rem;
+		font-size: .8rem;
+		border-radius: .3rem;
+		background-color: rgba(0,0,0, .4);
+		border: 1px solid #000;
+		color: rgba(255,255,255, .9); 
+		cursor: pointer;
+		svg {
+			margin-right: .5rem;
+		}
+		&:hover {
+			border: 1px solid rgba(255,255,255, .7);
+		}
 	}
 	img{
 		width: 100%;

@@ -13,14 +13,14 @@ const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOO
 const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)));
 
 ReactDOM.render(
-	<React.StrictMode>
+	<React.Fragment>
 		<Provider store={store}>
 			<Router>
 				<GlobalStyles />
 				<App />
 			</Router>
 		</Provider>
-	</React.StrictMode>,
+	</React.Fragment>,
 	document.getElementById('root')
 );
 
