@@ -21,7 +21,6 @@ import { fadeUp } from '../../animations';
 const Game = ({ id, name, background_image, platforms, metacritic, released, genres, ratings_count, clip }) => {
 
 	const [video, setVideo] = useState(null);
-	const [imgOpacity, setImgOpacity] = useState(1);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const videoRef = useRef(null);
 
@@ -47,38 +46,31 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 	}
 
 	const showVideo = () => {
-		setImgOpacity(0);
+
 		setVideo(<video
-			style={{ opacity: `${!imgOpacity}` }}
 			loop
 			muted="muted"
 			className='video'
 			ref={videoRef}
-			// onEnded={() => setIsPlaying(false)}
 			src={clip.clip} />)
-		onVideoHandler();
+		setIsPlaying(true)
 	}
 	const hideVideo = () => {
-		setImgOpacity(1);
+
 		setVideo(null);
-		onVideoHandler();
-	}
-
-
-	const onVideoHandler = () => {
-		if (isPlaying) {
-			setIsPlaying(false)
-		} else {
-			setIsPlaying(true)
-		}
+		setIsPlaying(false)
 	}
 
 	return (
 		<S.Game variants={fadeUp} initial="hidden" animate='show'>
 			<S.Media onMouseEnter={() => showVideo()} onMouseLeave={() => hideVideo()}>
 				{checkLoadingItem(location, loading) && <Spinner />}
-				{video}
-				<img style={{ opacity: `${imgOpacity}` }} src={resizeImage(background_image, 640) || resizeImage(notFoundImg, 640)} alt={name} />
+				<motion.div
+					className='video-block'
+					whileHover={{ opacity: 1, transition: { duration: .3, ease: 'linear' } }}>
+					{video}
+				</motion.div>
+				<img src={resizeImage(background_image, 640) || resizeImage(notFoundImg, 640)} alt={name} />
 			</S.Media>
 
 			<div className="descr">
@@ -161,14 +153,21 @@ S.Media = styled.div`
 	position: relative;
 	width: 100%;
 	height: 180px;
+	.video-block {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top:0;
+		left: 0;
+		transition: all 1s ease;
+		opacity: 0;
+	}
 	img{
-		opacity: 1;
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		border-top-left-radius: .8rem;
 		border-top-right-radius: .8rem;
-		transition: all .7s ease;
 	}
 	video {
 		position: absolute;
@@ -179,7 +178,6 @@ S.Media = styled.div`
 		object-fit: cover;
 		border-top-left-radius: .8rem;
 		border-top-right-radius: .8rem;
-		transition: all .7s ease;
 	}
 `;
 
