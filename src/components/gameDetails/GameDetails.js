@@ -179,6 +179,9 @@ S.Wrapper = styled(motion.div)`
 S.About = styled.div`
 	padding: 1rem 7rem;
 	text-align: left;
+	p {
+		margin-bottom: 1rem;
+	}
 `;
 S.Info = styled.div`
 	background-color:#151515;

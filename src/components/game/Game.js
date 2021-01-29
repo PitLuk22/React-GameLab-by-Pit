@@ -84,8 +84,7 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 
 	return (
 		<>
-			<S.Game layoutId={id} >
-				{/* variants={fadeIn} initial="hidden" animate='show'> */}
+			<S.Game layoutId={id}>
 				<ModalVideo
 					channel='youtube'
 					autoplay
@@ -171,7 +170,7 @@ S.Game = styled(motion.div)`
 	color:#fff;
 	box-shadow: 0 0 5px 5px rgba(0,0,0, .2);
 	&:hover {
-		overflow: visible;
+		overflow: visible; 
 		.descr__list {
 			height: auto;
 		}
@@ -273,7 +272,7 @@ S.ExtraList = styled.div`
 		background-color: #202020;
 		padding: .5rem 1rem;
 		top:-15px;
-		height: 0;
+		height: 0px;
 		border-bottom-left-radius: .8rem;
 		border-bottom-right-radius: .8rem;
 		box-shadow: 0 12px 5px 5px rgba(0,0,0, .2);
