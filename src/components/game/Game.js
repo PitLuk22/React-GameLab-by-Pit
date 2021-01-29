@@ -25,7 +25,6 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 	const controls = useAnimation()
 
 	const [isOpen, setOpen] = useState(false)
-	const [video, setVideo] = useState(null);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const videoRef = useRef(null);
 
@@ -66,48 +65,46 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 	// Create and show video component
 	const showVideo = () => {
 		controls.start('show')
-		setVideo(<video
-			loop
-			muted="muted"
-			className='video'
-			ref={videoRef}
-			src={clip.clip} />)
 		setIsPlaying(true)
 	}
 
 	// Hide video component
 	const hideVideo = () => {
 		controls.start('hidden')
-		setVideo(null);
 		setIsPlaying(false)
 	}
 
 	return (
 		<>
 			<S.Game layoutId={id}>
-				<ModalVideo
+				{clip && clip.video && <ModalVideo
 					channel='youtube'
 					autoplay
 					isOpen={isOpen}
 					videoId={clip.video}
-					onClose={() => setOpen(false)} />
+					onClose={() => setOpen(false)} />}
 				<S.Media
 					onMouseEnter={showVideo}
 					onMouseLeave={hideVideo}>
 					{checkLoadingItem(location, loading) && <Spinner color='rgba(0, 0, 0, 0.7)' />}
-					<motion.div
+					{clip && <motion.div
 						variants={gameCardAnimation}
 						animate={controls}
 						className='video__block'>
-						{video}
+						<video
+							loop
+							muted="muted"
+							className='video'
+							ref={videoRef}
+							src={clip.clip} />
 						<motion.button variants={fadeIn} className='video__btn' onClick={() => setOpen(true)}>
 							<FontAwesomeIcon icon={faYoutube} size='1x' />
 							Play full video
 						</motion.button>
-					</motion.div>
+					</motion.div>}
 					<motion.img
 						layoutId={`image ${id}`}
-						src={resizeImage(background_image, 640) || resizeImage(notFoundImg, 640)} alt={name} />
+						src={background_image ? resizeImage(background_image, 640) : resizeImage(notFoundImg, 640)} alt={name} />
 				</S.Media>
 
 				<div className="descr">

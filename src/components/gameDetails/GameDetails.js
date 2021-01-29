@@ -4,10 +4,10 @@ import { useHistory } from 'react-router-dom';
 // Style
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { fadeUp, fadeIn } from '../../animations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as fullStar, faStarHalfAlt as halfStar } from '@fortawesome/free-solid-svg-icons';
 import { faStar as emptyStar } from '@fortawesome/free-regular-svg-icons';
+import notFoundImg from '../../img/notFound.jpg';
 // Services
 import { setGameCartDate } from '../../services/gameCardDate';
 import platformIcons from '../../services/gameCardIcons';
@@ -50,7 +50,7 @@ const GameDetails = ({ id }) => {
 				<S.Overlay onClick={(e) => closeCardDetails(e)} data-close>
 					<S.Window
 						layoutId={id}
-						background_image={resizeImage(game.background_image, 1280)}>
+						background_image={game.background_image ? resizeImage(game.background_image, 1280) : resizeImage(notFoundImg, 1280)}>
 						<S.FieldForImage layoutId={`image ${id}`} />
 						<S.Wrapper>
 							<div className="title">
@@ -64,23 +64,23 @@ const GameDetails = ({ id }) => {
 										<div className="stars">
 											{getStars().map((star, i) => <FontAwesomeIcon icon={star} key={i} />)}
 										</div>
-										<div className="date" dangerouslySetInnerHTML={{ __html: setGameCartDate(game.released) }}></div>
+										{game.released && <div className="date" dangerouslySetInnerHTML={{ __html: setGameCartDate(game.released) }}></div>}
 									</S.Flex>
 								</div>
 							</div>
 
-							<Carousel game={game} screenshots={screenshots} />
+							{screenshots.length > 0 && <Carousel game={game} screenshots={screenshots} />}
 
 							<S.About >
 								<h4>About</h4>
 								<div dangerouslySetInnerHTML={{ __html: game.description }}></div>
 							</S.About>
 							<S.Info>
-								{game.platforms && <div className="details-block">
+								{game.platforms.length > 0 && <div className="details-block">
 									<S.Subtitle>Platforms</S.Subtitle>
 									<S.Data>{game.platforms.map(item => item.platform.name).join(', ')}</S.Data>
 								</div>}
-								{game.rating && <div className="details-block">
+								{game.rating !== 0 && <div className="details-block">
 									<S.Subtitle>Rating</S.Subtitle>
 									<S.Data>{game.rating}</S.Data>
 								</div>}
@@ -92,7 +92,7 @@ const GameDetails = ({ id }) => {
 										</div>
 									</S.Data>
 								</div>}
-								{game.genres && <div className="details-block">
+								{game.genres.length > 0 && <div className="details-block">
 									<S.Subtitle>Genre</S.Subtitle>
 									<S.Data>{game.genres.map(genre => genre.name).join(', ')}</S.Data>
 								</div>}
@@ -100,15 +100,15 @@ const GameDetails = ({ id }) => {
 									<S.Subtitle>Released date</S.Subtitle>
 									<S.Data dangerouslySetInnerHTML={{ __html: setGameCartDate(game.released) }}></S.Data>
 								</div>}
-								{game.developers && <div className="details-block">
+								{game.developers.length > 0 && <div className="details-block">
 									<S.Subtitle>Developer</S.Subtitle>
 									<S.Data>{game.developers.map(item => item.name).join(', ')}</S.Data>
 								</div>}
-								{game.publishers && <div className="details-block">
+								{game.publishers.length > 0 && <div className="details-block">
 									<S.Subtitle>Publisher</S.Subtitle>
 									<S.Data>{game.publishers.map(item => item.name).join(', ')}</S.Data>
 								</div>}
-								{game.website && <div className="details-block website">
+								{game.website.length > 0 && <div className="details-block website">
 									<S.Subtitle>Website</S.Subtitle>
 									<a
 										href={game.website}
@@ -213,6 +213,7 @@ S.Data = styled.div`
 	margin-bottom: 1rem;
 	display: flex;
 	justify-content: flex-start;
+	line-height: 1.7rem;
 	.metacritic {
 		padding: .2rem .5rem;
 		font-size: 1rem;

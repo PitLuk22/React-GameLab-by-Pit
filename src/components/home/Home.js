@@ -44,9 +44,9 @@ const Home = () => {
 							<AnimatePresence>
 								{pathId && <GameDetails id={pathId} />}
 							</AnimatePresence>
-							{popular.length ? <GameList games={popular} title={'Popular games in 2020'} /> : null}
-							{/* <GameList games={upcoming} title={'Upcoming games'} />
-							<GameList games={newGames} title={'New games'} /> */}
+							{/* {popular.length ? <GameList games={popular} title={'Popular games in 2020'} /> : null} */}
+							{/* {upcoming.length ? <GameList games={upcoming} title={'Upcoming games'} /> : null} */}
+							{newGames.length ? <GameList games={newGames} title={'New games'} /> : null}
 
 						</AnimateSharedLayout>}
 				</S.Content>
