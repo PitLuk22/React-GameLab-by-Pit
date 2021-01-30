@@ -25,7 +25,9 @@ const GameDetails = ({ id }) => {
 	// CLose gameDetails card
 	const closeCardDetails = (e) => {
 		if (e.target.dataset.close) {
-			history.push('/')
+			const arrFromLocation = history.location.pathname.split('/');
+			const currentSection = arrFromLocation[1] === 'game' ? '/' : `/${arrFromLocation[1]}/`;
+			history.push(`${currentSection}`)
 		}
 	};
 
@@ -108,7 +110,7 @@ const GameDetails = ({ id }) => {
 									<S.Subtitle>Publisher</S.Subtitle>
 									<S.Data>{game.publishers.map(item => item.name).join(', ')}</S.Data>
 								</div>}
-								{game.website.length && <div className="details-block website">
+								{game.website && <div className="details-block website">
 									<S.Subtitle>Website</S.Subtitle>
 									<a
 										href={game.website}

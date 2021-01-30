@@ -1,4 +1,6 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom';
+// Style
 import styled from 'styled-components';
 
 const Aside = () => {
@@ -7,11 +9,15 @@ const Aside = () => {
 		<S.Aside>
 
 			<S.Links>
-				<li>Some text</li>
-				<li>Some text</li>
-				<li>Some text</li>
-				<li>Some text</li>
-				<li>Some text</li>
+				<li>
+					<Link to={`/popular/`}>Popular games</Link>
+				</li>
+				<li>
+					<Link to={`/upcoming/`}>Upcoming games</Link>
+				</li>
+				<li>
+					<Link to={`/newGames/`}>New games</Link>
+				</li>
 			</S.Links>
 
 		</S.Aside>

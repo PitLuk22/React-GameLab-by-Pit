@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { loadAllGames, getGameDetails, isLoadingAllGames } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import GameList from '../pages';
 import Aside from '../aside';
 import GameDetails from '../gameDetails';
 import Nav from '../nav';
-import { useLocation } from 'react-router-dom';
+import { Route, useLocation } from 'react-router-dom';
 import Spinner from '../spinner';
 //Styles
 import styled from 'styled-components';
@@ -13,8 +13,13 @@ import { AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 
 const Home = () => {
 
+	const [searchRequest, setSearchRequest] = useState('');
+
 	const location = useLocation();
-	const pathId = +location.pathname.split('/')[2];
+	const arrFromLocation = location.pathname.split('/');
+	const pathId = +arrFromLocation[arrFromLocation.length - 1];
+	const currentSection = arrFromLocation[1] === 'game' ? null : arrFromLocation[1];
+
 
 	const dispatch = useDispatch();
 
@@ -29,11 +34,13 @@ const Home = () => {
 		}
 	}, [])
 
+
+
 	const { games: { popular, upcoming, newGames, searched, loading }, details: { game } } = useSelector(state => state)
 
 	return (
 		<>
-			<Nav />
+			<Nav setSearchRequest={setSearchRequest} />
 			<S.Main >
 				<Aside />
 				<S.Content>
@@ -44,12 +51,21 @@ const Home = () => {
 							<AnimatePresence>
 								{pathId && <GameDetails id={pathId} />}
 							</AnimatePresence>
-
-							{searched.length ? <GameList games={searched} title={'Searched'} /> : null}
-
-							{popular.length ? <GameList games={popular} title={'Popular games in 2020'} /> : null}
-							{upcoming.length ? <GameList games={upcoming} title={'Upcoming games'} /> : null}
-							{newGames.length ? <GameList games={newGames} title={'New games'} /> : null}
+							<Route exact path='/'>
+								<div>Start page</div>
+							</Route>
+							<Route path='/searched/'>
+								{searched.length ? <GameList games={searched} title={`Searched:`} searchedName={searchRequest} /> : <div>Nothing has been found</div>}
+							</Route>
+							<Route path='/popular/'>
+								{popular.length ? <GameList games={popular} title={'Popular games in 2020'} /> : null}
+							</Route>
+							<Route path='/upcoming/'>
+								{upcoming.length ? <GameList games={upcoming} title={'Upcoming games'} /> : null}
+							</Route>
+							<Route path='/newGames/'>
+								{newGames.length ? <GameList games={newGames} title={'New games'} /> : null}
+							</Route>
 
 
 						</AnimateSharedLayout>}

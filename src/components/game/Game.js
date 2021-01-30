@@ -43,23 +43,25 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 
 	// Set overflow for body
 	useEffect(() => {
-		if (location.pathname === '/') {
-			document.body.style.overflow = 'auto'
-		} else {
+		if (location.pathname.includes('game')) {
 			document.body.style.overflow = 'hidden'
+		} else {
+			document.body.style.overflow = 'auto'
 		}
 	}, [location])
 
 	// Get selected game 
 	const gameDetailsHandler = (id) => {
-		history.push(`/game/${id}`);
+		history.push(`game/${id}`);
 		dispatch(isLoadingGameDetails());
 		dispatch(getGameDetails(id))
 	}
 
 	// Set loader if it necessary 
 	const checkLoadingItem = (location, loading) => {
-		return +location.pathname.split('/')[2] === id && loading;
+		const arr = location.pathname.split('/');
+		const gameId = arr[arr.length - 1];
+		return +gameId === id && loading;
 	}
 
 	// Create and show video component

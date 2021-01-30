@@ -30,29 +30,33 @@ const Carousel = ({ game, screenshots }) => {
 
 	// Video and its cover
 	const video = () => {
-		return (
-			<>
-				{game.clip && game.clip.video ? <SwiperSlide className='video-slide' key={0}>
+		if (game.clip && game.clip.video) {
+			return (
+				<SwiperSlide className='video-slide' key={1488}>
 					<YouTube
 						videoId={game.clip.video}
 						onPlay={() => setIsPlaying(true)}
 						onPause={() => setIsPlaying(false)}
 						onEnd={() => setIsPlaying(false)}
 						onReady={(event) => setPlayer(event)} />
-				</SwiperSlide> : null}
-			</>
-		)
+				</SwiperSlide>
+			)
+		} else {
+			return null;
+		}
 	};
 
 	const videoCover = () => {
-		return (
-			<>
-				{game.clip && game.clip.video ? <SwiperSlide key={uuidv4()} className='youtube-thumb'>
+		if (game.clip && game.clip.video) {
+			return (
+				<SwiperSlide className='youtube-thumb' key={uuidv4()}>
 					<FontAwesomeIcon icon={faYoutube} size='3x' color='#f00c' />
 					<img width={'100%'} src={resizeImage(`https://img.youtube.com/vi/${game.clip.video}/mqdefault.jpg`, 420)} alt={`screenshot ${1}-${'small'}`} />
-				</SwiperSlide> : null}
-			</>
-		)
+				</SwiperSlide>
+			)
+		} else {
+			return null;
+		}
 	};
 
 	// Images for main Slider
