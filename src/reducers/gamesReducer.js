@@ -16,10 +16,21 @@ const gamesReducer = (state = initState, action) => {
 				newGames: action.payload.newGames,
 				loading: false
 			};
+		case 'FETCH_SEARCH_GAMES':
+			return {
+				...state,
+				searched: action.payload.searchedGames,
+				loading: false
+			}
 		case 'FETCH_GAMES_LOADING':
 			return {
 				...state,
 				loading: true
+			}
+		case 'DELETE_SEARCH':
+			return {
+				...state,
+				searched: []
 			}
 		default:
 			return { ...state }

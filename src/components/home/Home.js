@@ -29,7 +29,7 @@ const Home = () => {
 		}
 	}, [])
 
-	const { games: { popular, upcoming, newGames, loading }, details: { game } } = useSelector(state => state)
+	const { games: { popular, upcoming, newGames, searched, loading }, details: { game } } = useSelector(state => state)
 
 	return (
 		<>
@@ -44,9 +44,13 @@ const Home = () => {
 							<AnimatePresence>
 								{pathId && <GameDetails id={pathId} />}
 							</AnimatePresence>
-							{/* {popular.length ? <GameList games={popular} title={'Popular games in 2020'} /> : null} */}
-							{/* {upcoming.length ? <GameList games={upcoming} title={'Upcoming games'} /> : null} */}
+
+							{searched.length ? <GameList games={searched} title={'Searched'} /> : null}
+
+							{popular.length ? <GameList games={popular} title={'Popular games in 2020'} /> : null}
+							{upcoming.length ? <GameList games={upcoming} title={'Upcoming games'} /> : null}
 							{newGames.length ? <GameList games={newGames} title={'New games'} /> : null}
+
 
 						</AnimateSharedLayout>}
 				</S.Content>
@@ -63,6 +67,6 @@ S.Main = styled.main`
 `;
 S.Content = styled.main`
 	position: relative;
-	flex:1;
+	flex: 1;
 	padding: 0 2rem 0 2rem;
 `;

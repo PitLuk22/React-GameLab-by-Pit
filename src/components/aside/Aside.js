@@ -5,9 +5,7 @@ const Aside = () => {
 
 	return (
 		<S.Aside>
-			<div className='title'>
-				<h1>Pit's GameLab</h1>
-			</div>
+
 			<S.Links>
 				<li>Some text</li>
 				<li>Some text</li>

@@ -17,7 +17,7 @@ const GlobalStyles = createGlobalStyle`
 			text-align: center;
 			font-family: 'Audiowide', cursive;
 			font-size: 2.5rem;
-			padding-bottom: 2rem;
+			cursor: pointer;
 		}
 		h2 {
 			text-align: center;

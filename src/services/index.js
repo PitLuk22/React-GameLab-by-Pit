@@ -18,6 +18,10 @@ export const gameScreenshotsUrl = (gameId) => {
 	return `${base_url}games/${gameId}/screenshots`;
 }
 
+export const searchGamesUrl = (gameName) => {
+	return `${base_url}games?search=${gameName}&page_size=10`;
+}
+
 
 // Day
 const getCurrentDay = () => {

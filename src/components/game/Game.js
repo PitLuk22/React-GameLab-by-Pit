@@ -11,7 +11,7 @@ import resizeImage from '../../services/resizeImage';
 // Images
 import notFoundImg from '../../img/notFound.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
 // Animation 
 import { motion, useAnimation } from 'framer-motion';
@@ -104,7 +104,12 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 					</motion.div>}
 					<motion.img
 						layoutId={`image ${id}`}
-						src={background_image ? resizeImage(background_image, 640) : resizeImage(notFoundImg, 640)} alt={name} />
+						src={background_image ? resizeImage(background_image, 640) : resizeImage(notFoundImg, 640)}
+						alt={name}>
+					</motion.img>
+					{clip && <S.isPlayable className='play-icon'>
+						<FontAwesomeIcon icon={faPlay} size='1x' />
+					</S.isPlayable>}
 				</S.Media>
 
 				<div className="descr">
@@ -130,13 +135,14 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 					<ul className='descr__list'>
 						<li>
 							<div className='grey'>Release data: </div>
-							<div dangerouslySetInnerHTML={{ __html: setGameCartDate(released) }}></div>
+							{released ? <div dangerouslySetInnerHTML={{ __html: setGameCartDate(released) }}></div>
+								: <div>--/--/--</div>}
 						</li>
 						<li>
 							<div className='grey'>Genres:</div>
-							<div className='genre'>
+							{genres.length ? <div className='genre'>
 								{genres.map(genre => genre.name).join(', ')}
-							</div>
+							</div> : <div>-</div>}
 						</li>
 						<li>
 							<div className='grey'>Ratings count: </div>
@@ -197,6 +203,9 @@ S.Media = styled(motion.div)`
 	width: 100%;
 	height: 180px;
 	overflow: hidden;
+	&:hover .play-icon {
+		opacity: 0;
+	}
 	.video__block {
 		position: absolute;
 		width: 100%;
@@ -224,7 +233,7 @@ S.Media = styled(motion.div)`
 			border: 1px solid rgba(255,255,255, .7);
 		}
 	}
-	img{
+	img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
@@ -241,6 +250,21 @@ S.Media = styled(motion.div)`
 		border-top-left-radius: .8rem;
 		border-top-right-radius: .8rem;
 	}
+`;
+
+S.isPlayable = styled.div`
+	position: absolute;
+	bottom: 1rem;
+	left: 1rem;
+	width: 2.8rem; 
+	height: 2.8rem;
+	border-radius: 50%;
+	background-color: rgba(0,0,0, .5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	opacity: 1;
+	transition: all .5s ease;
 `;
 
 S.LineDetails = styled.div`

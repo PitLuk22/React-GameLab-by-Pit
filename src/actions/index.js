@@ -4,7 +4,8 @@ import {
 	upcomingGamesUrl,
 	newGamesUrl,
 	gameDetailsUrl,
-	gameScreenshotsUrl
+	gameScreenshotsUrl,
+	searchGamesUrl
 } from '../services';
 
 const loadAllGames = () => async (dispatch) => {
@@ -38,6 +39,24 @@ const getGameDetails = (id) => async (dispatch) => {
 	})
 }
 
+const getSearchedGames = (gameName) => async (dispatch) => {
+
+	const serchedGamesData = await axios.get(searchGamesUrl(gameName));
+
+	dispatch({
+		type: 'FETCH_SEARCH_GAMES',
+		payload: {
+			searchedGames: serchedGamesData.data.results
+		}
+	})
+}
+
+const deleteSearched = () => {
+	return {
+		type: 'DELETE_SEARCH'
+	}
+}
+
 const isLoadingGameDetails = () => {
 	return {
 		type: 'LOADING'
@@ -53,5 +72,7 @@ export {
 	loadAllGames,
 	getGameDetails,
 	isLoadingGameDetails,
-	isLoadingAllGames
+	isLoadingAllGames,
+	getSearchedGames,
+	deleteSearched
 };

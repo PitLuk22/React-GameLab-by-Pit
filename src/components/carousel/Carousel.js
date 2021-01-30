@@ -11,7 +11,6 @@ import 'swiper/components/pagination/pagination.scss';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
-import notFoundImg from '../../img/notFound.jpg';
 // Util
 import { v4 as uuidv4 } from 'uuid';
 import resizeImage from '../../services/resizeImage';
@@ -33,13 +32,13 @@ const Carousel = ({ game, screenshots }) => {
 	const video = () => {
 		return (
 			<>
-				{game.clip.video ? <SwiperSlide className='video-slide' key={0}>
+				{game.clip && game.clip.video ? <SwiperSlide className='video-slide' key={0}>
 					<YouTube
 						videoId={game.clip.video}
 						onPlay={() => setIsPlaying(true)}
 						onPause={() => setIsPlaying(false)}
 						onEnd={() => setIsPlaying(false)}
-						onReady={(event) => setPlayer(event)} /> : <img src={notFoundImg} alt='404 not found' />
+						onReady={(event) => setPlayer(event)} />
 				</SwiperSlide> : null}
 			</>
 		)
@@ -48,7 +47,7 @@ const Carousel = ({ game, screenshots }) => {
 	const videoCover = () => {
 		return (
 			<>
-				{ game.clip.video ? <SwiperSlide key={uuidv4()} className='youtube-thumb'>
+				{game.clip && game.clip.video ? <SwiperSlide key={uuidv4()} className='youtube-thumb'>
 					<FontAwesomeIcon icon={faYoutube} size='3x' color='#f00c' />
 					<img width={'100%'} src={resizeImage(`https://img.youtube.com/vi/${game.clip.video}/mqdefault.jpg`, 420)} alt={`screenshot ${1}-${'small'}`} />
 				</SwiperSlide> : null}
@@ -79,7 +78,7 @@ const Carousel = ({ game, screenshots }) => {
 				navigation
 				pagination={{ clickable: true }}
 				onActiveIndexChange={({ activeIndex }) => activeIndex && setIsPlaying(false)}>
-				{[video, ...images]}
+				{[video(), ...images]}
 			</Swiper>
 			<Swiper
 				id='thumbs'
@@ -87,7 +86,7 @@ const Carousel = ({ game, screenshots }) => {
 				spaceBetween={15}
 				slidesPerView={3}
 				onSwiper={setThumbsSwiper}>
-				{[videoCover, ...thumbs]}
+				{[videoCover(), ...thumbs]}
 			</Swiper>
 		</S.Slider>
 	)

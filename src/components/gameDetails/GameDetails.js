@@ -69,14 +69,14 @@ const GameDetails = ({ id }) => {
 								</div>
 							</div>
 
-							{screenshots.length > 0 && <Carousel game={game} screenshots={screenshots} />}
+							{screenshots.length && <Carousel game={game} screenshots={screenshots} />}
 
 							<S.About >
 								<h4>About</h4>
-								<div dangerouslySetInnerHTML={{ __html: game.description }}></div>
+								<p>{game.description_raw}</p>
 							</S.About>
 							<S.Info>
-								{game.platforms.length > 0 && <div className="details-block">
+								{game.platforms.length && <div className="details-block">
 									<S.Subtitle>Platforms</S.Subtitle>
 									<S.Data>{game.platforms.map(item => item.platform.name).join(', ')}</S.Data>
 								</div>}
@@ -92,7 +92,7 @@ const GameDetails = ({ id }) => {
 										</div>
 									</S.Data>
 								</div>}
-								{game.genres.length > 0 && <div className="details-block">
+								{game.genres.length && <div className="details-block">
 									<S.Subtitle>Genre</S.Subtitle>
 									<S.Data>{game.genres.map(genre => genre.name).join(', ')}</S.Data>
 								</div>}
@@ -100,15 +100,15 @@ const GameDetails = ({ id }) => {
 									<S.Subtitle>Released date</S.Subtitle>
 									<S.Data dangerouslySetInnerHTML={{ __html: setGameCartDate(game.released) }}></S.Data>
 								</div>}
-								{game.developers.length > 0 && <div className="details-block">
+								{game.developers.length && <div className="details-block">
 									<S.Subtitle>Developer</S.Subtitle>
 									<S.Data>{game.developers.map(item => item.name).join(', ')}</S.Data>
 								</div>}
-								{game.publishers.length > 0 && <div className="details-block">
+								{game.publishers.length && <div className="details-block">
 									<S.Subtitle>Publisher</S.Subtitle>
 									<S.Data>{game.publishers.map(item => item.name).join(', ')}</S.Data>
 								</div>}
-								{game.website.length > 0 && <div className="details-block website">
+								{game.website.length && <div className="details-block website">
 									<S.Subtitle>Website</S.Subtitle>
 									<a
 										href={game.website}
@@ -118,7 +118,12 @@ const GameDetails = ({ id }) => {
 										{game.website}
 									</a>
 								</div>}
+								{game.tags.length && <div className="details-block details-block__tags">
+									<S.Subtitle>Tags</S.Subtitle>
+									<S.Data>{game.tags.map(item => item.name.slice(0, 1).toUpperCase() + item.name.slice(1)).join(', ')}</S.Data>
+								</div>}
 							</S.Info>
+
 						</S.Wrapper>
 					</S.Window>
 				</S.Overlay >
@@ -181,6 +186,7 @@ S.About = styled.div`
 	text-align: left;
 	p {
 		margin-bottom: 1rem;
+		line-height: 2rem;
 	}
 `;
 S.Info = styled.div`
@@ -193,8 +199,11 @@ S.Info = styled.div`
 	align-items: flex-start;
 	.details-block {
 		font-size: 1rem;
-		width: 33%;
-		padding: 0 1rem 0 0;
+		width: 30%;
+		padding: 0 2rem 0 0;
+		&__tags {
+			width: 100%;
+		}
 		.month {
 			padding: 0 .5rem 0 0;
 		}
