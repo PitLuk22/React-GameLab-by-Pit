@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { isLoadingAllGames, getSearchedGames, deleteSearched } from '../../actions';
+import { isLoadingGames, getSearchedGames, deleteSearched } from '../../actions';
 import { useHistory } from 'react-router-dom';
 //Redux
 import { useDispatch } from 'react-redux';
@@ -19,13 +19,13 @@ const Nav = ({ setSearchRequest }) => {
 
 	const searchHandler = (e) => {
 		setSearch(e.target.value)
-		setSearchRequest(e.target.value)
 	}
 	const sendRequest = (e) => {
 		e.preventDefault();
 		history.push('/searched/');
-		dispatch(isLoadingAllGames());
+		dispatch(isLoadingGames());
 		dispatch(getSearchedGames(search));
+		setSearchRequest(search)
 		setSearch('')
 	}
 	const deleteSearchedGames = () => {

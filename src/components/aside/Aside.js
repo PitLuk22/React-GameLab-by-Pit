@@ -1,16 +1,33 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import {
+	popularGames,
+	upcomingGames,
+	newGames,
+	allTimeGames,
+	last30daysGames,
+	thisWeekGames,
+	nextWeekGames,
+	isLoadingGames
+} from '../../actions';
 import { Link, useLocation } from 'react-router-dom';
 // Style
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFire, faMeteor, faChartLine, faTrophy, faStar, faFastForward } from '@fortawesome/free-solid-svg-icons';
+import { faFire, faMeteor, faChartLine, faTrophy, faStar, faFastForward, faCrown } from '@fortawesome/free-solid-svg-icons';
 
 const Aside = () => {
 	const location = useLocation();
+	const dispatch = useDispatch();
 
 	const setActiveClass = (section) => {
 		const path = location.pathname.split('/')[1];
 		return section === path ? 'active' : '';
+	}
+
+	const dispatchHandler = (action) => {
+		dispatch(isLoadingGames())
+		dispatch(action)
 	}
 
 	return (
@@ -20,7 +37,9 @@ const Aside = () => {
 				<span className='title'>Top games</span>
 				<S.Links>
 					<li>
-						<Link to={`/popular/`} className={setActiveClass('popular')}>
+						<Link to={`/popular/`}
+							className={setActiveClass('popular')}
+							onClick={() => dispatchHandler(popularGames())}>
 							<span className='icon'>
 								<FontAwesomeIcon icon={faTrophy} size='sm' />
 							</span>
@@ -28,15 +47,19 @@ const Aside = () => {
 						</Link>
 					</li>
 					<li>
-						<Link to={`/upcoming/`} className={setActiveClass('upcoming')}>
+						<Link to={`/allTime/`}
+							className={setActiveClass('allTime')}
+							onClick={() => dispatchHandler(allTimeGames())}>
 							<span className='icon'>
-								<FontAwesomeIcon icon={faMeteor} size='sm' />
+								<FontAwesomeIcon icon={faCrown} size='sm' />
 							</span>
-							<span className='label'>Upcoming</span>
+							<span className='label'>All time top</span>
 						</Link>
 					</li>
 					<li>
-						<Link to={`/newGames/`} className={setActiveClass('newGames')}>
+						<Link to={`/newGames/`}
+							className={setActiveClass('newGames')}
+							onClick={() => dispatchHandler(newGames())}>
 							<span className='icon'>
 								<FontAwesomeIcon icon={faChartLine} size='sm' />
 							</span>
@@ -50,7 +73,19 @@ const Aside = () => {
 				<span className='title'>New Releases</span>
 				<S.Links>
 					<li>
-						<Link to={`/last30days/`} className={setActiveClass('last30days')}>
+						<Link to={`/upcoming/`}
+							className={setActiveClass('upcoming')}
+							onClick={() => dispatchHandler(upcomingGames())}>
+							<span className='icon'>
+								<FontAwesomeIcon icon={faMeteor} size='sm' />
+							</span>
+							<span className='label'>Upcoming</span>
+						</Link>
+					</li>
+					<li>
+						<Link to={`/last30days/`}
+							className={setActiveClass('last30days')}
+							onClick={() => dispatchHandler(last30daysGames())}>
 							<span className='icon'>
 								<FontAwesomeIcon icon={faStar} size='sm' />
 							</span>
@@ -58,7 +93,9 @@ const Aside = () => {
 						</Link>
 					</li>
 					<li>
-						<Link to={`/thisWeek/`} className={setActiveClass('thisWeek')}>
+						<Link to={`/thisWeek/`}
+							className={setActiveClass('thisWeek')}
+							onClick={() => dispatchHandler(thisWeekGames())}>
 							<span className='icon'>
 								<FontAwesomeIcon icon={faFire} size='sm' />
 							</span>
@@ -66,7 +103,9 @@ const Aside = () => {
 						</Link>
 					</li>
 					<li>
-						<Link to={`/nextWeek/`} className={setActiveClass('nextWeek')}>
+						<Link to={`/nextWeek/`}
+							className={setActiveClass('nextWeek')}
+							onClick={() => dispatchHandler(nextWeekGames())}>
 							<span className='icon'>
 								<FontAwesomeIcon icon={faFastForward} size='sm' />
 							</span>

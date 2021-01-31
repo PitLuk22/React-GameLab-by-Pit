@@ -1,25 +1,104 @@
 import axios from 'axios';
 import {
+	trendingGamesUrl,
 	popularGamesUrl,
 	upcomingGamesUrl,
 	newGamesUrl,
+	allTimeUrl,
+	thisWeekUrl,
+	nextWeekUrl,
+	previousMonthUrl,
 	gameDetailsUrl,
 	gameScreenshotsUrl,
 	searchGamesUrl
 } from '../services';
 
-const loadAllGames = () => async (dispatch) => {
+const trendingGames = () => async (dispatch) => {
 
-	const popularGamesData = await axios.get(popularGamesUrl());
-	const upcomingGamesData = await axios.get(upcomingGamesUrl());
-	const newGamesData = await axios.get(newGamesUrl());
+	const gamesData = await axios.get(trendingGamesUrl());
+	console.log(gamesData);
+	dispatch({
+		type: 'FETCH_TRENDING_GAMES',
+		payload: {
+			games: gamesData.data.results
+		}
+	})
+}
+const allTimeGames = () => async (dispatch) => {
+
+	const gamesData = await axios.get(allTimeUrl());
 
 	dispatch({
-		type: 'FETCH_GAMES',
+		type: 'FETCH_ALL_GAMES',
 		payload: {
-			popular: popularGamesData.data.results,
-			upcoming: upcomingGamesData.data.results,
-			newGames: newGamesData.data.results
+			games: gamesData.data.results
+		}
+	})
+}
+const popularGames = () => async (dispatch) => {
+
+	const gamesData = await axios.get(popularGamesUrl());
+
+	dispatch({
+		type: 'FETCH_POPULAR_GAMES',
+		payload: {
+			games: gamesData.data.results
+		}
+	})
+}
+const upcomingGames = () => async (dispatch) => {
+
+	const gamesData = await axios.get(upcomingGamesUrl());
+
+	dispatch({
+		type: 'FETCH_UPCOMING_GAMES',
+		payload: {
+			games: gamesData.data.results
+		}
+	})
+}
+const newGames = () => async (dispatch) => {
+
+	const gamesData = await axios.get(newGamesUrl());
+
+	dispatch({
+		type: 'FETCH_NEW_GAMES',
+		payload: {
+			games: gamesData.data.results
+		}
+	})
+}
+
+const thisWeekGames = () => async (dispatch) => {
+
+	const gamesData = await axios.get(thisWeekUrl());
+
+	dispatch({
+		type: 'FETCH_THIS_WEEK_GAMES',
+		payload: {
+			games: gamesData.data.results
+		}
+	})
+}
+const nextWeekGames = () => async (dispatch) => {
+
+	const gamesData = await axios.get(nextWeekUrl());
+
+	dispatch({
+		type: 'FETCH_NEXT_WEEK_GAMES',
+		payload: {
+			games: gamesData.data.results
+		}
+	})
+}
+const last30daysGames = () => async (dispatch) => {
+
+	const gamesData = await axios.get(previousMonthUrl());
+
+	dispatch({
+		type: 'FETCH_LAST_30_DAYS_GAMES',
+		payload: {
+			games: gamesData.data.results
 		}
 	})
 }
@@ -62,17 +141,24 @@ const isLoadingGameDetails = () => {
 		type: 'LOADING'
 	}
 }
-const isLoadingAllGames = () => {
+const isLoadingGames = () => {
 	return {
 		type: 'FETCH_GAMES_LOADING'
 	}
 }
 
 export {
-	loadAllGames,
+	trendingGames,
+	allTimeGames,
 	getGameDetails,
 	isLoadingGameDetails,
-	isLoadingAllGames,
+	isLoadingGames,
 	getSearchedGames,
-	deleteSearched
+	deleteSearched,
+	last30daysGames,
+	nextWeekGames,
+	thisWeekGames,
+	newGames,
+	upcomingGames,
+	popularGames
 };
