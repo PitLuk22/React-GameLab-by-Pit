@@ -1,24 +1,80 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 // Style
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFire, faMeteor, faChartLine, faTrophy, faStar, faFastForward } from '@fortawesome/free-solid-svg-icons';
 
 const Aside = () => {
+	const location = useLocation();
+
+	const setActiveClass = (section) => {
+		const path = location.pathname.split('/')[1];
+		return section === path ? 'active' : '';
+	}
 
 	return (
 		<S.Aside>
 
-			<S.Links>
-				<li>
-					<Link to={`/popular/`}>Popular games</Link>
-				</li>
-				<li>
-					<Link to={`/upcoming/`}>Upcoming games</Link>
-				</li>
-				<li>
-					<Link to={`/newGames/`}>New games</Link>
-				</li>
-			</S.Links>
+			<S.Menu>
+				<span className='title'>Top games</span>
+				<S.Links>
+					<li>
+						<Link to={`/popular/`} className={setActiveClass('popular')}>
+							<span className='icon'>
+								<FontAwesomeIcon icon={faTrophy} size='sm' />
+							</span>
+							<span className='label'>Popular</span>
+						</Link>
+					</li>
+					<li>
+						<Link to={`/upcoming/`} className={setActiveClass('upcoming')}>
+							<span className='icon'>
+								<FontAwesomeIcon icon={faMeteor} size='sm' />
+							</span>
+							<span className='label'>Upcoming</span>
+						</Link>
+					</li>
+					<li>
+						<Link to={`/newGames/`} className={setActiveClass('newGames')}>
+							<span className='icon'>
+								<FontAwesomeIcon icon={faChartLine} size='sm' />
+							</span>
+							<span className='label'>New games</span>
+						</Link>
+					</li>
+				</S.Links>
+			</S.Menu>
+
+			<S.Menu>
+				<span className='title'>New Releases</span>
+				<S.Links>
+					<li>
+						<Link to={`/last30days/`} className={setActiveClass('last30days')}>
+							<span className='icon'>
+								<FontAwesomeIcon icon={faStar} size='sm' />
+							</span>
+							<span className='label'>Last 30 days</span>
+						</Link>
+					</li>
+					<li>
+						<Link to={`/thisWeek/`} className={setActiveClass('thisWeek')}>
+							<span className='icon'>
+								<FontAwesomeIcon icon={faFire} size='sm' />
+							</span>
+							<span className='label'>This week</span>
+						</Link>
+					</li>
+					<li>
+						<Link to={`/nextWeek/`} className={setActiveClass('nextWeek')}>
+							<span className='icon'>
+								<FontAwesomeIcon icon={faFastForward} size='sm' />
+							</span>
+							<span className='label'>Next week</span>
+						</Link>
+					</li>
+				</S.Links>
+			</S.Menu>
 
 		</S.Aside>
 	)
@@ -33,13 +89,53 @@ S.Aside = styled.aside`
 	left: 0;
 	width: 15rem;
 	height: 100vh;
-	padding-top: 1rem;
+	padding: 2rem 0 0 3rem;
+`;
+S.Menu = styled.div`
+	margin-bottom: 2.5rem;
+	.title {
+		display: block;
+		font-size: 1.4rem;
+		font-weight: 700;
+		margin-bottom: 1rem;
+	}
 `;
 S.Links = styled.ul`
-	padding: 0 3rem;
 	font-size: 1.5rem;
 	li {
-		padding-bottom: 1.5rem;
+		margin-bottom: .8rem;
 		list-style-type: none;
+		
+		&:hover .icon {
+			background-color: #fff;
+			color: #2D2D2D;
+		}
+		.active .icon{
+			background-color: #fff;
+			color: #2D2D2D;
+		}
+		a{
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			text-decoration: none;
+			color: #fff;
+			.icon {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				background-color: #202020;
+				border-radius: .4rem;
+				margin-right: 1rem;
+				width: 2.3rem;
+				height: 2.3rem;
+				transition: all .15s ease;
+			}
+			.label {
+				font-size: 1.1rem;
+				font-weight:400;
+			}
+		}
+		
 	}
 `;

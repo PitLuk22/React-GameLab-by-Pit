@@ -55,7 +55,9 @@ const Home = () => {
 								<div>Start page</div>
 							</Route>
 							<Route path='/searched/'>
-								{searched.length ? <GameList games={searched} title={`Searched:`} searchedName={searchRequest} /> : <div>Nothing has been found</div>}
+								{searched.length
+									? <GameList games={searched} title={`Searched:`} searchedName={searchRequest} />
+									: <div>Nothing has been found</div>}
 							</Route>
 							<Route path='/popular/'>
 								{popular.length ? <GameList games={popular} title={'Popular games in 2020'} /> : null}
