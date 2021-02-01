@@ -32,7 +32,7 @@ const Carousel = ({ game, screenshots }) => {
 	const video = () => {
 		if (game.clip && game.clip.video) {
 			return (
-				<SwiperSlide className='video-slide' key={1488}>
+				<SwiperSlide className='video-slide' key={69420}>
 					<YouTube
 						videoId={game.clip.video}
 						onPlay={() => setIsPlaying(true)}
@@ -62,7 +62,7 @@ const Carousel = ({ game, screenshots }) => {
 	// Images for main Slider
 	const images = screenshots
 		.filter(img => img.width / img.height > 1.6 && img.width / img.height < 1.8)
-		.map(img => <SwiperSlide key={uuidv4()}><img width={'100%'} src={resizeImage(img.image, 1280)} alt={`screenshot ${img.id}`} /></SwiperSlide>)
+		.map(img => <SwiperSlide key={uuidv4()}><img width={'100%'} src={resizeImage(img.image, 640)} alt={`screenshot ${img.id}`} /></SwiperSlide>)
 
 	// Images for Thumbs
 	const thumbs = screenshots
@@ -86,6 +86,7 @@ const Carousel = ({ game, screenshots }) => {
 			</Swiper>
 			<Swiper
 				id='thumbs'
+				lazy={true}
 				autoHeight={true}
 				spaceBetween={15}
 				slidesPerView={3}

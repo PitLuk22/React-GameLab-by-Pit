@@ -10,13 +10,14 @@ import {
 	previousMonthUrl,
 	gameDetailsUrl,
 	gameScreenshotsUrl,
-	searchGamesUrl
+	searchGamesUrl,
+	genreGamesUrl
 } from '../services';
 
 const trendingGames = () => async (dispatch) => {
 
 	const gamesData = await axios.get(trendingGamesUrl());
-	console.log(gamesData);
+
 	dispatch({
 		type: 'FETCH_TRENDING_GAMES',
 		payload: {
@@ -102,6 +103,17 @@ const last30daysGames = () => async (dispatch) => {
 		}
 	})
 }
+const genreGames = (genre) => async (dispatch) => {
+
+	const gamesData = await axios.get(genreGamesUrl(genre));
+
+	dispatch({
+		type: 'FETCH_GENRE_GAMES',
+		payload: {
+			games: gamesData.data.results
+		}
+	})
+}
 
 const getGameDetails = (id) => async (dispatch) => {
 
@@ -160,5 +172,6 @@ export {
 	thisWeekGames,
 	newGames,
 	upcomingGames,
-	popularGames
+	popularGames,
+	genreGames
 };

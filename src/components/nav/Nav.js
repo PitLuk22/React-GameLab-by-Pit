@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { isLoadingGames, getSearchedGames, deleteSearched } from '../../actions';
+import { isLoadingGames, getSearchedGames } from '../../actions';
 import { useHistory } from 'react-router-dom';
 //Redux
 import { useDispatch } from 'react-redux';
@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
-const Nav = ({ setSearchRequest }) => {
+const Nav = () => {
 
 	const [search, setSearch] = useState('');
 
@@ -22,19 +22,17 @@ const Nav = ({ setSearchRequest }) => {
 	}
 	const sendRequest = (e) => {
 		e.preventDefault();
-		history.push('/searched/');
-		dispatch(isLoadingGames());
-		dispatch(getSearchedGames(search));
-		setSearchRequest(search)
-		setSearch('')
+		if (search) {
+			history.push(`/searched/${search}/`);
+			dispatch(isLoadingGames());
+			dispatch(getSearchedGames(search));
+			setSearch('')
+		}
 	}
-	const deleteSearchedGames = () => {
-		dispatch(deleteSearched())
-		history.push('/');
-	}
+
 	return (
 		<S.Navigation>
-			<h1 onClick={() => deleteSearchedGames()}>Pit's GameLab</h1>
+			<h1>Pit's GameLab</h1>
 			<S.Form onSubmit={sendRequest}>
 				<div className="input__area">
 					<S.Input value={search} onInput={searchHandler} type="text" name="search" placeholder='Search games' />

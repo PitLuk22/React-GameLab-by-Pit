@@ -11,11 +11,12 @@ const GameList = ({ searchedName, games, title }) => {
 	const styledContainer = {
 		paddingTop: '2rem'
 	}
+
 	return (
 		<motion.div>
 			<S.Title variants={fadeIn} initial="hidden" animate='show' exit='exit'>
 				<span>{title}</span>
-				{searchedName && <div style={{ fontSize: '1.2rem', color: '#fff', wordWrap: 'break-word' }}>{searchedName.slice(0, 1).toUpperCase() + searchedName.slice(1)}</div>}
+				{searchedName && <span>{searchedName}</span>}
 			</S.Title>
 			<ResponsiveMasonry
 				as={motion.div}
@@ -34,15 +35,20 @@ export default GameList;
 
 const S = {};
 S.Title = styled(motion.h2)`
-	color: #FFAD32;
-	border: 4px solid #FFAD32;
-	border-radius: 30px;
 	display: flex;
-	justify-content: flex-start;
+	justify-content: center;
 	align-items: center;
 	span {
-		display: block;
+		color: #fff;
+		border-bottom: 4px solid #ffb907;
 		margin-right: 2rem;
+		text-align: center;
+		text-transform: capitalize;
+		&:nth-child(2) {
+			border-bottom: none;
+			word-wrap: break-word;
+			
+		}
 	}
 `;
 

@@ -26,7 +26,14 @@ const GameDetails = ({ id }) => {
 	const closeCardDetails = (e) => {
 		if (e.target.dataset.close) {
 			const arrFromLocation = history.location.pathname.split('/');
-			const currentSection = arrFromLocation[1] === 'game' ? '/' : `/${arrFromLocation[1]}/`;
+			let currentSection;
+			if (arrFromLocation[1] === 'game') {
+				currentSection = '/';
+			} else if (arrFromLocation[1] === 'searched') {
+				currentSection = `/${arrFromLocation[1]}/${arrFromLocation[2]}/`
+			} else {
+				currentSection = `/${arrFromLocation[1]}/`;
+			}
 			history.push(`${currentSection}`)
 		}
 	};
@@ -52,7 +59,7 @@ const GameDetails = ({ id }) => {
 				<S.Overlay onClick={(e) => closeCardDetails(e)} data-close>
 					<S.Window
 						layoutId={id}
-						background_image={game.background_image ? resizeImage(game.background_image, 1280) : resizeImage(notFoundImg, 1280)}>
+						background_image={game.background_image ? resizeImage(game.background_image, 640) : resizeImage(notFoundImg, 640)}>
 						<S.FieldForImage layoutId={`image ${id}`} />
 						<S.Wrapper>
 							<div className="title">

@@ -4,7 +4,7 @@ const base_url = 'https://api.rawg.io/api/';
 
 // PATHES
 export const trendingGamesUrl = () => {
-	return `${base_url}games?dates=${previousMonthDate},${currentDate}&ordering=-rating,-metacritic&page_size=10`;
+	return `${base_url}games?dates=${previousMonthDate},${currentDate}&ordering=-release,-metacritic&page_size=10`;
 }
 export const popularGamesUrl = () => {
 	return `${base_url}games?dates=${lastDate},${currentDate}&ordering=-metacritic&page_size=10`;
@@ -26,6 +26,10 @@ export const nextWeekUrl = () => {
 }
 export const previousMonthUrl = () => {
 	return `${base_url}games?dates=${previousMonthDate},${currentDate}&ordering=-released&page_size=10`;
+}
+
+export const genreGamesUrl = (genre) => {
+	return `${base_url}games?dates=${lastDate},${currentDate}&genres=${genre}&ordering=-metacritic&page_size=10`;
 }
 
 export const gameDetailsUrl = (gameId) => {

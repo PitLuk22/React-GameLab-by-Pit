@@ -43,12 +43,13 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 
 	// Set overflow for body
 	useEffect(() => {
-		if (location.pathname.includes('game')) {
+		if (location.pathname.includes('/game/')) {
 			document.body.style.overflow = 'hidden'
 		} else {
 			document.body.style.overflow = 'auto'
 		}
 	}, [location])
+
 
 	// Get selected game 
 	const gameDetailsHandler = (id) => {
@@ -117,9 +118,9 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 				<div className="descr">
 
 					<S.LineDetails>
-						<motion.div layoutId={`platforms ${id}`} className="platforms">
+						{platforms && <motion.div layoutId={`platforms ${id}`} className="platforms">
 							{platformIcons(platforms).map((item, index) => <FontAwesomeIcon key={index} icon={item} />)}
-						</motion.div>
+						</motion.div>}
 						<motion.div
 							layoutId={`stars ${id}`}
 							className="metacritic"
@@ -299,7 +300,7 @@ S.ExtraList = styled.div`
 		border-bottom-left-radius: .8rem;
 		border-bottom-right-radius: .8rem;
 		box-shadow: 0 12px 5px 5px rgba(0,0,0, .2);
-		z-index: 2;
+		z-index: 1;
 		li {
 			display: flex;
 			justify-content: space-between;
