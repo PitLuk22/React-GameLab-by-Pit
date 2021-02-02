@@ -2,17 +2,9 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import {
-	popularGames,
-	upcomingGames,
-	newGames,
-	allTimeGames,
-	last30daysGames,
-	thisWeekGames,
-	nextWeekGames,
+	fetchGames,
 	isLoadingGames,
 	deleteSearched,
-	trendingGames,
-	genreGames
 } from '../../actions';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 // Style
@@ -38,35 +30,42 @@ const Aside = () => {
 	const [genres, setGenres] = useState([
 		{
 			genre: 'action',
+			path: 'action',
 			img: action
 		},
 		{
 			genre: 'shooter',
+			path: 'shooter',
 			img: shooter
 		},
 		{
 			genre: 'strategy',
+			path: 'strategy',
 			img: strategy
 		},
 		{
 			genre: 'adventure',
+			path: 'adventure',
 			img: adventure
 		},
 		{
 			genre: 'racing',
+			path: 'racing',
 			img: racing
 		},
 		{
 			genre: 'RPG',
-			extraPath: 'role-playing-games-rpg',
+			path: 'role-playing-games-rpg',
 			img: rpg
 		},
 		{
 			genre: 'sports',
+			path: 'sports',
 			img: sports
 		},
 		{
 			genre: 'indie',
+			path: 'indie',
 			img: indie
 		}
 	])
@@ -81,20 +80,16 @@ const Aside = () => {
 		return section === path ? 'active' : '';
 	}
 
-	const dispatchHandler = (action) => {
+	const dispatchHandler = (path) => {
 		dispatch(isLoadingGames())
-		if (typeof action === 'string') {
-			dispatch(genreGames(action))
-		} else {
-			dispatch(action)
-		}
+		dispatch(fetchGames(path))
 	}
 
-	const deleteSearchedGames = () => {
+	const deleteSearchedGames = (path) => {
 		dispatch(deleteSearched())
 		history.push('/');
 		dispatch(isLoadingGames());
-		dispatch(trendingGames());
+		dispatch(fetchGames(path));
 	}
 
 	return (
@@ -105,7 +100,7 @@ const Aside = () => {
 					<li>
 						<S.Link to={`/`}
 							className={setActiveClass('')}
-							onClick={deleteSearchedGames}>
+							onClick={() => deleteSearchedGames('')}>
 							<span className='icon'>
 								<FontAwesomeIcon icon={faHome} size='sm' />
 							</span>
@@ -121,7 +116,7 @@ const Aside = () => {
 					<li>
 						<S.Link to={`/popular/`}
 							className={setActiveClass('popular')}
-							onClick={() => dispatchHandler(popularGames())}>
+							onClick={() => dispatchHandler('popular')}>
 							<span className='icon'>
 								<FontAwesomeIcon icon={faTrophy} size='sm' />
 							</span>
@@ -131,7 +126,7 @@ const Aside = () => {
 					<li>
 						<S.Link to={`/allTime/`}
 							className={setActiveClass('allTime')}
-							onClick={() => dispatchHandler(allTimeGames())}>
+							onClick={() => dispatchHandler('allTime')}>
 							<span className='icon'>
 								<FontAwesomeIcon icon={faCrown} size='sm' />
 							</span>
@@ -141,7 +136,7 @@ const Aside = () => {
 					<li>
 						<S.Link to={`/newGames/`}
 							className={setActiveClass('newGames')}
-							onClick={() => dispatchHandler(newGames())}>
+							onClick={() => dispatchHandler('newGames')}>
 							<span className='icon'>
 								<FontAwesomeIcon icon={faChartLine} size='sm' />
 							</span>
@@ -157,7 +152,7 @@ const Aside = () => {
 					<li>
 						<S.Link to={`/upcoming/`}
 							className={setActiveClass('upcoming')}
-							onClick={() => dispatchHandler(upcomingGames())}>
+							onClick={() => dispatchHandler('upcoming')}>
 							<span className='icon'>
 								<FontAwesomeIcon icon={faMeteor} size='sm' />
 							</span>
@@ -167,7 +162,7 @@ const Aside = () => {
 					<li>
 						<S.Link to={`/last30days/`}
 							className={setActiveClass('last30days')}
-							onClick={() => dispatchHandler(last30daysGames())}>
+							onClick={() => dispatchHandler('last30days')}>
 							<span className='icon'>
 								<FontAwesomeIcon icon={faStar} size='sm' />
 							</span>
@@ -177,7 +172,7 @@ const Aside = () => {
 					<li>
 						<S.Link to={`/thisWeek/`}
 							className={setActiveClass('thisWeek')}
-							onClick={() => dispatchHandler(thisWeekGames())}>
+							onClick={() => dispatchHandler('thisWeek')}>
 							<span className='icon'>
 								<FontAwesomeIcon icon={faFire} size='sm' />
 							</span>
@@ -187,7 +182,7 @@ const Aside = () => {
 					<li>
 						<S.Link to={`/nextWeek/`}
 							className={setActiveClass('nextWeek')}
-							onClick={() => dispatchHandler(nextWeekGames())}>
+							onClick={() => dispatchHandler('nextWeek')}>
 							<span className='icon'>
 								<FontAwesomeIcon icon={faFastForward} size='sm' />
 							</span>
@@ -200,12 +195,12 @@ const Aside = () => {
 			<S.Menu>
 				<span className='title'>Genres</span>
 				<S.Links>
-					{numberOfGenres().map(({ genre, extraPath, img }) => {
+					{numberOfGenres().map(({ genre, path, img }) => {
 						return (
 							<li key={uuidv4()}>
-								<S.Link to={`/${extraPath || genre}/`}
-									className={`genres ${setActiveClass(extraPath || genre)}`}
-									onClick={() => dispatchHandler(extraPath || genre)}>
+								<S.Link to={`/${path}/`}
+									className={`genres ${setActiveClass(path)}`}
+									onClick={() => dispatchHandler(path)}>
 									<span className='icon'>
 										<img src={img} alt={genre} />
 									</span>

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { trendingGames, getGameDetails, isLoadingGames, getSearchedGames } from '../../actions';
+import React, { useEffect } from 'react'
+import { getGameDetails, isLoadingGames, getSearchedGames } from '../../actions';
+import { fetchGames } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import GameList from '../pages';
 import Aside from '../aside';
@@ -7,7 +8,6 @@ import GameDetails from '../gameDetails';
 import Nav from '../nav';
 import { Switch, Route, useLocation } from 'react-router-dom';
 import Spinner from '../spinner';
-import getCertainAction from '../../services/getActionAfterReload';
 //Styles
 import styled from 'styled-components';
 import { AnimatePresence, AnimateSharedLayout } from 'framer-motion';
@@ -25,14 +25,11 @@ const Home = () => {
 		dispatch(isLoadingGames());
 
 		// get current game section 
-		if (location.pathname === '/' || currentSection === 'game') {
-			dispatch(trendingGames());
-		}
-		else if (location.pathname.includes('searched')) {
+		if (location.pathname.includes('searched')) {
 			const searchedName = location.pathname.split('/')[2];
 			dispatch(getSearchedGames(searchedName));
 		} else {
-			dispatch(getCertainAction(currentSection))
+			dispatch(fetchGames(currentSection))
 		}
 
 		// if gameDetails should be shown after refresh 

@@ -20,7 +20,7 @@ const gamesReducer = (state = initState, action) => {
 				trending: action.payload.games,
 				loading: false
 			};
-		case 'FETCH_ALL_GAMES':
+		case 'FETCH_ALLTIME_GAMES':
 			return {
 				...state,
 				allTime: action.payload.games,

@@ -7,119 +7,120 @@ import {
 	allTimeUrl,
 	thisWeekUrl,
 	nextWeekUrl,
-	previousMonthUrl,
 	gameDetailsUrl,
 	gameScreenshotsUrl,
 	searchGamesUrl,
+	previousMonthUrl,
 	genreGamesUrl
 } from '../services';
 
-const trendingGames = () => async (dispatch) => {
+const fetchGames = (path) => async (dispatch) => {
 
-	const gamesData = await axios.get(trendingGamesUrl());
+	const res = getServiceUrl(path);
+	console.log(res);
+	const gamesData = await axios.get(res.url);
 
 	dispatch({
-		type: 'FETCH_TRENDING_GAMES',
+		type: res.type,
 		payload: {
 			games: gamesData.data.results
 		}
 	})
 }
-const allTimeGames = () => async (dispatch) => {
+// const allTimeGames = () => async (dispatch) => {
 
-	const gamesData = await axios.get(allTimeUrl());
+// 	const gamesData = await axios.get(allTimeUrl());
 
-	dispatch({
-		type: 'FETCH_ALL_GAMES',
-		payload: {
-			games: gamesData.data.results
-		}
-	})
-}
-const popularGames = () => async (dispatch) => {
+// 	dispatch({
+// 		type: 'FETCH_ALL_GAMES',
+// 		payload: {
+// 			games: gamesData.data.results
+// 		}
+// 	})
+// }
+// const popularGames = () => async (dispatch) => {
 
-	const gamesData = await axios.get(popularGamesUrl());
+// 	const gamesData = await axios.get(popularGamesUrl());
 
-	dispatch({
-		type: 'FETCH_POPULAR_GAMES',
-		payload: {
-			games: gamesData.data.results
-		}
-	})
-}
-const upcomingGames = () => async (dispatch) => {
+// 	dispatch({
+// 		type: 'FETCH_POPULAR_GAMES',
+// 		payload: {
+// 			games: gamesData.data.results
+// 		}
+// 	})
+// }
+// const upcomingGames = () => async (dispatch) => {
 
-	const gamesData = await axios.get(upcomingGamesUrl());
+// 	const gamesData = await axios.get(upcomingGamesUrl());
 
-	dispatch({
-		type: 'FETCH_UPCOMING_GAMES',
-		payload: {
-			games: gamesData.data.results
-		}
-	})
-}
-const newGames = () => async (dispatch) => {
+// 	dispatch({
+// 		type: 'FETCH_UPCOMING_GAMES',
+// 		payload: {
+// 			games: gamesData.data.results
+// 		}
+// 	})
+// }
+// const newGames = () => async (dispatch) => {
 
-	const gamesData = await axios.get(newGamesUrl());
+// 	const gamesData = await axios.get(newGamesUrl());
 
-	dispatch({
-		type: 'FETCH_NEW_GAMES',
-		payload: {
-			games: gamesData.data.results
-		}
-	})
-}
+// 	dispatch({
+// 		type: 'FETCH_NEW_GAMES',
+// 		payload: {
+// 			games: gamesData.data.results
+// 		}
+// 	})
+// }
 
-const thisWeekGames = () => async (dispatch) => {
+// const thisWeekGames = () => async (dispatch) => {
 
-	const gamesData = await axios.get(thisWeekUrl());
+// 	const gamesData = await axios.get(thisWeekUrl());
 
-	dispatch({
-		type: 'FETCH_THIS_WEEK_GAMES',
-		payload: {
-			games: gamesData.data.results
-		}
-	})
-}
-const nextWeekGames = () => async (dispatch) => {
+// 	dispatch({
+// 		type: 'FETCH_THIS_WEEK_GAMES',
+// 		payload: {
+// 			games: gamesData.data.results
+// 		}
+// 	})
+// }
+// const nextWeekGames = () => async (dispatch) => {
 
-	const gamesData = await axios.get(nextWeekUrl());
+// 	const gamesData = await axios.get(nextWeekUrl());
 
-	dispatch({
-		type: 'FETCH_NEXT_WEEK_GAMES',
-		payload: {
-			games: gamesData.data.results
-		}
-	})
-}
-const last30daysGames = () => async (dispatch) => {
+// 	dispatch({
+// 		type: 'FETCH_NEXT_WEEK_GAMES',
+// 		payload: {
+// 			games: gamesData.data.results
+// 		}
+// 	})
+// }
+// const last30daysGames = () => async (dispatch) => {
 
-	const gamesData = await axios.get(previousMonthUrl());
+// 	const gamesData = await axios.get(previousMonthUrl());
 
-	dispatch({
-		type: 'FETCH_LAST_30_DAYS_GAMES',
-		payload: {
-			games: gamesData.data.results
-		}
-	})
-}
-const genreGames = (genre) => async (dispatch) => {
+// 	dispatch({
+// 		type: 'FETCH_LAST_30_DAYS_GAMES',
+// 		payload: {
+// 			games: gamesData.data.results
+// 		}
+// 	})
+// }
+// const genreGames = (genre) => async (dispatch) => {
 
-	const gamesData = await axios.get(genreGamesUrl(genre));
+// 	const gamesData = await axios.get(genreGamesUrl(genre));
 
-	dispatch({
-		type: 'FETCH_GENRE_GAMES',
-		payload: {
-			games: gamesData.data.results
-		}
-	})
-}
+// 	dispatch({
+// 		type: 'FETCH_GENRE_GAMES',
+// 		payload: {
+// 			games: gamesData.data.results
+// 		}
+// 	})
+// }
 
 const getGameDetails = (id) => async (dispatch) => {
 
 	const gameData = await axios.get(gameDetailsUrl(id));
 	const screenshotsData = await axios.get(gameScreenshotsUrl(id));
-
 
 	dispatch({
 		type: 'GET_DETAILS',
@@ -159,19 +160,106 @@ const isLoadingGames = () => {
 	}
 }
 
+const getServiceUrl = (path) => {
+
+	switch (path) {
+		case '':
+			return {
+				type: 'FETCH_TRENDING_GAMES',
+				url: trendingGamesUrl()
+			}
+		case 'popular':
+			return {
+				type: 'FETCH_POPULAR_GAMES',
+				url: popularGamesUrl()
+			}
+		case 'upcoming':
+			return {
+				type: 'FETCH_UPCOMING_GAMES',
+				url: upcomingGamesUrl()
+			}
+		case 'newGames':
+			return {
+				type: 'FETCH_NEW_GAMES',
+				url: newGamesUrl()
+			};
+		case 'allTime':
+			return {
+				type: 'FETCH_ALLTIME_GAMES',
+				url: allTimeUrl()
+			};
+		case 'last30days':
+			return {
+				type: 'FETCH_LAST_30_DAYS_GAMES',
+				url: previousMonthUrl()
+			}
+		case 'nextWeek':
+			return {
+				type: 'FETCH_NEXT_WEEK_GAMES',
+				url: nextWeekUrl()
+			}
+		case 'thisWeek':
+			return {
+				type: 'FETCH_THIS_WEEK_GAMES',
+				url: thisWeekUrl()
+			}
+		case 'action':
+			return {
+				type: 'FETCH_GENRE_GAMES',
+				url: genreGamesUrl(path)
+			}
+		case 'adventure':
+			return {
+				type: 'FETCH_GENRE_GAMES',
+				url: genreGamesUrl(path)
+			}
+		case 'strategy':
+			return {
+				type: 'FETCH_GENRE_GAMES',
+				url: genreGamesUrl(path)
+			}
+		case 'sports':
+			return {
+				type: 'FETCH_GENRE_GAMES',
+				url: genreGamesUrl(path)
+			}
+		case 'racing':
+			return {
+				type: 'FETCH_GENRE_GAMES',
+				url: genreGamesUrl(path)
+			}
+		case 'indie':
+			return {
+				type: 'FETCH_GENRE_GAMES',
+				url: genreGamesUrl(path)
+			}
+		case 'shooter':
+			return {
+				type: 'FETCH_GENRE_GAMES',
+				url: genreGamesUrl(path)
+			}
+		case 'role-playing-games-rpg':
+			return {
+				type: 'FETCH_GENRE_GAMES',
+				url: genreGamesUrl(path)
+			}
+	}
+}
+
 export {
-	trendingGames,
-	allTimeGames,
+	fetchGames,
+	// trendingGames,
+	// allTimeGames,
 	getGameDetails,
 	isLoadingGameDetails,
 	isLoadingGames,
 	getSearchedGames,
 	deleteSearched,
-	last30daysGames,
-	nextWeekGames,
-	thisWeekGames,
-	newGames,
-	upcomingGames,
-	popularGames,
-	genreGames
+	// last30daysGames,
+	// nextWeekGames,
+	// thisWeekGames,
+	// newGames,
+	// upcomingGames,
+	// popularGames,
+	// genreGames
 };
