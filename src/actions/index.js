@@ -17,7 +17,7 @@ import {
 const fetchGames = (path) => async (dispatch) => {
 
 	const res = getServiceUrl(path);
-	console.log(res);
+
 	const gamesData = await axios.get(res.url);
 
 	dispatch({
@@ -27,95 +27,6 @@ const fetchGames = (path) => async (dispatch) => {
 		}
 	})
 }
-// const allTimeGames = () => async (dispatch) => {
-
-// 	const gamesData = await axios.get(allTimeUrl());
-
-// 	dispatch({
-// 		type: 'FETCH_ALL_GAMES',
-// 		payload: {
-// 			games: gamesData.data.results
-// 		}
-// 	})
-// }
-// const popularGames = () => async (dispatch) => {
-
-// 	const gamesData = await axios.get(popularGamesUrl());
-
-// 	dispatch({
-// 		type: 'FETCH_POPULAR_GAMES',
-// 		payload: {
-// 			games: gamesData.data.results
-// 		}
-// 	})
-// }
-// const upcomingGames = () => async (dispatch) => {
-
-// 	const gamesData = await axios.get(upcomingGamesUrl());
-
-// 	dispatch({
-// 		type: 'FETCH_UPCOMING_GAMES',
-// 		payload: {
-// 			games: gamesData.data.results
-// 		}
-// 	})
-// }
-// const newGames = () => async (dispatch) => {
-
-// 	const gamesData = await axios.get(newGamesUrl());
-
-// 	dispatch({
-// 		type: 'FETCH_NEW_GAMES',
-// 		payload: {
-// 			games: gamesData.data.results
-// 		}
-// 	})
-// }
-
-// const thisWeekGames = () => async (dispatch) => {
-
-// 	const gamesData = await axios.get(thisWeekUrl());
-
-// 	dispatch({
-// 		type: 'FETCH_THIS_WEEK_GAMES',
-// 		payload: {
-// 			games: gamesData.data.results
-// 		}
-// 	})
-// }
-// const nextWeekGames = () => async (dispatch) => {
-
-// 	const gamesData = await axios.get(nextWeekUrl());
-
-// 	dispatch({
-// 		type: 'FETCH_NEXT_WEEK_GAMES',
-// 		payload: {
-// 			games: gamesData.data.results
-// 		}
-// 	})
-// }
-// const last30daysGames = () => async (dispatch) => {
-
-// 	const gamesData = await axios.get(previousMonthUrl());
-
-// 	dispatch({
-// 		type: 'FETCH_LAST_30_DAYS_GAMES',
-// 		payload: {
-// 			games: gamesData.data.results
-// 		}
-// 	})
-// }
-// const genreGames = (genre) => async (dispatch) => {
-
-// 	const gamesData = await axios.get(genreGamesUrl(genre));
-
-// 	dispatch({
-// 		type: 'FETCH_GENRE_GAMES',
-// 		payload: {
-// 			games: gamesData.data.results
-// 		}
-// 	})
-// }
 
 const getGameDetails = (id) => async (dispatch) => {
 
@@ -143,6 +54,17 @@ const getSearchedGames = (gameName) => async (dispatch) => {
 	})
 }
 
+const instantSearchGames = (gameName) => async (dispatch) => {
+	const searchedGamesData = await axios.get(searchGamesUrl(gameName));
+
+	dispatch({
+		type: 'INSTANT_SEARCH_GAMES',
+		payload: {
+			searchedGames: searchedGamesData.data.results
+		}
+	})
+}
+
 const deleteSearched = () => {
 	return {
 		type: 'DELETE_SEARCH'
@@ -157,6 +79,11 @@ const isLoadingGameDetails = () => {
 const isLoadingGames = () => {
 	return {
 		type: 'FETCH_GAMES_LOADING'
+	}
+}
+const isLoadingInstantSearch = () => {
+	return {
+		type: 'INSTANT_SEARCH_LOADING'
 	}
 }
 
@@ -248,18 +175,11 @@ const getServiceUrl = (path) => {
 
 export {
 	fetchGames,
-	// trendingGames,
-	// allTimeGames,
 	getGameDetails,
 	isLoadingGameDetails,
 	isLoadingGames,
+	isLoadingInstantSearch,
 	getSearchedGames,
+	instantSearchGames,
 	deleteSearched,
-	// last30daysGames,
-	// nextWeekGames,
-	// thisWeekGames,
-	// newGames,
-	// upcomingGames,
-	// popularGames,
-	// genreGames
 };

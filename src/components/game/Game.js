@@ -89,7 +89,7 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 				<S.Media
 					onMouseEnter={showVideo}
 					onMouseLeave={hideVideo}>
-					{checkLoadingItem(location, loading) && <Spinner color='rgba(0, 0, 0, 0.7)' />}
+					{checkLoadingItem(location, loading) && <Spinner pos='absolute' color='rgba(0, 0, 0, 0.7)' />}
 					{clip && <motion.div
 						variants={gameCardAnimation}
 						animate={controls}

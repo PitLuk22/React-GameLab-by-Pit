@@ -1,9 +1,9 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
-const Spinner = ({ color }) => {
+const Spinner = ({ pos, color }) => {
 	return (
-		<S.Spinner color={color}>
+		<S.Spinner pos={pos} color={color}>
 			<div className="spinner">
 				<div className="circle">
 					<div>
@@ -27,7 +27,7 @@ const animation = keyframes`
 
 const S = {};
 S.Spinner = styled.div`
-	position: absolute;
+	position: ${props => props.pos};
 	width: 100%;
 	height: 180px;
 	display: flex;

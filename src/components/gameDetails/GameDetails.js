@@ -59,14 +59,15 @@ const GameDetails = ({ id }) => {
 				<S.Overlay onClick={(e) => closeCardDetails(e)} data-close>
 					<S.Window
 						layoutId={id}
+						layoutId={`search ${id}`}
 						background_image={game.background_image ? resizeImage(game.background_image, 640) : resizeImage(notFoundImg, 640)}>
-						<S.FieldForImage layoutId={`image ${id}`} />
+						<S.FieldForImage layoutId={`image ${id}`} layoutId={`search image ${id}`} />
 						<S.Wrapper>
 							<div className="title">
-								<motion.h3 layoutId={`title ${id}`} className="name" >{game.name}</motion.h3>
+								<motion.h3 layoutId={`title ${id}`} layoutId={`search title ${id}`} className="name" >{game.name}</motion.h3>
 
 								<div className="main-details">
-									<motion.div layoutId={`platforms ${id}`} className="paltform-icons">Available on:
+									<motion.div layoutId={`platforms ${id}`} layoutId={`search platforms ${id}`} className="paltform-icons">Available on:
 										{platformIcons(game.platforms).map((item, index) => <FontAwesomeIcon key={index} icon={item} />)}
 									</motion.div>
 									<S.Flex layoutId={`stars ${id}`}>
