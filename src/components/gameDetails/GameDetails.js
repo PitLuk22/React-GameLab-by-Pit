@@ -56,18 +56,17 @@ const GameDetails = ({ id }) => {
 	return (
 		<>
 			{ !loading && <motion.div>
-				<S.Overlay onClick={(e) => closeCardDetails(e)} data-close>
+				<S.Overlay onClick={(e) => closeCardDetails(e)} data-close data-search>
 					<S.Window
 						layoutId={id}
-						layoutId={`search ${id}`}
 						background_image={game.background_image ? resizeImage(game.background_image, 640) : resizeImage(notFoundImg, 640)}>
-						<S.FieldForImage layoutId={`image ${id}`} layoutId={`search image ${id}`} />
+						<S.FieldForImage layoutId={`image ${id}`} />
 						<S.Wrapper>
 							<div className="title">
-								<motion.h3 layoutId={`title ${id}`} layoutId={`search title ${id}`} className="name" >{game.name}</motion.h3>
+								<motion.h3 layoutId={`title ${id}`} className="name" >{game.name}</motion.h3>
 
 								<div className="main-details">
-									<motion.div layoutId={`platforms ${id}`} layoutId={`search platforms ${id}`} className="paltform-icons">Available on:
+									<motion.div layoutId={`platforms ${id}`} className="paltform-icons">Available on:
 										{platformIcons(game.platforms).map((item, index) => <FontAwesomeIcon key={index} icon={item} />)}
 									</motion.div>
 									<S.Flex layoutId={`stars ${id}`}>
@@ -81,44 +80,45 @@ const GameDetails = ({ id }) => {
 
 							{screenshots.length && <Carousel game={game} screenshots={screenshots} />}
 
-							<S.About >
-								<h4>About</h4>
-								<p>{game.description_raw}</p>
-							</S.About>
+							{game.description_raw || game.description ?
+								<S.About >
+									<h4>About</h4>
+									{game.description_raw ? <p>{game.description_raw}</p> : <p dangerouslySetInnerHTML={{ __html: game.description }} />}
+								</S.About> : null}
 							<S.Info>
-								{game.platforms.length && <div className="details-block">
+								{game.platforms.length ? <div className="details-block">
 									<S.Subtitle>Platforms</S.Subtitle>
 									<S.Data>{game.platforms.map(item => item.platform.name).join(', ')}</S.Data>
-								</div>}
-								{game.rating !== 0 && <div className="details-block">
+								</div> : null}
+								{game.rating !== 0 ? <div className="details-block">
 									<S.Subtitle>Rating</S.Subtitle>
 									<S.Data>{game.rating}</S.Data>
-								</div>}
-								{game.metacritic && <div className="details-block">
+								</div> : null}
+								{game.metacritic ? <div className="details-block">
 									<S.Subtitle>Metascore</S.Subtitle>
 									<S.Data >
 										<div className='metacritic' style={metacriticColor(game.metacritic)}>
 											{game.metacritic}
 										</div>
 									</S.Data>
-								</div>}
-								{game.genres.length && <div className="details-block">
+								</div> : null}
+								{game.genres.length ? <div className="details-block">
 									<S.Subtitle>Genre</S.Subtitle>
 									<S.Data>{game.genres.map(genre => genre.name).join(', ')}</S.Data>
-								</div>}
-								{game.released && <div className="details-block">
+								</div> : null}
+								{game.released ? <div className="details-block">
 									<S.Subtitle>Released date</S.Subtitle>
 									<S.Data dangerouslySetInnerHTML={{ __html: setGameCartDate(game.released) }}></S.Data>
-								</div>}
-								{game.developers.length && <div className="details-block">
+								</div> : null}
+								{game.developers.length ? <div className="details-block">
 									<S.Subtitle>Developer</S.Subtitle>
 									<S.Data>{game.developers.map(item => item.name).join(', ')}</S.Data>
-								</div>}
-								{game.publishers.length && <div className="details-block">
+								</div> : null}
+								{game.publishers.length ? <div className="details-block">
 									<S.Subtitle>Publisher</S.Subtitle>
 									<S.Data>{game.publishers.map(item => item.name).join(', ')}</S.Data>
-								</div>}
-								{game.website && <div className="details-block website">
+								</div> : null}
+								{game.website ? <div className="details-block website">
 									<S.Subtitle>Website</S.Subtitle>
 									<a
 										href={game.website}
@@ -127,11 +127,11 @@ const GameDetails = ({ id }) => {
 										className="website">
 										{game.website}
 									</a>
-								</div>}
-								{game.tags.length && <div className="details-block details-block__tags">
+								</div> : null}
+								{game.tags.length ? <div className="details-block details-block__tags">
 									<S.Subtitle>Tags</S.Subtitle>
 									<S.Data>{game.tags.map(item => item.name.slice(0, 1).toUpperCase() + item.name.slice(1)).join(', ')}</S.Data>
-								</div>}
+								</div> : null}
 							</S.Info>
 
 						</S.Wrapper>
@@ -156,7 +156,7 @@ S.Overlay = styled(motion.div)`
 	background-color: rgba(0,0,0, .5);
 	padding: 2rem 0;
 	overflow-y: scroll;
-	z-index: 5;
+	z-index: 10;
 	cursor: pointer;
 	box-shadow: 0px -100px 50px 50px rgba(0,0,0, .5) ;
 	backdrop-filter: blur(10px);

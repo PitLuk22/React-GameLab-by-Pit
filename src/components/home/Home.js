@@ -15,106 +15,102 @@ import { AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 const Home = () => {
 
 	const [isShowSuggestions, setIsShowSuggestions] = useState(false);
-
+	const [toggleGrid, setToggleGrid] = useState('small');
 
 	const location = useLocation();
 	const arrFromLocation = location.pathname.split('/');
 	const currentSection = arrFromLocation[1];
 	const pathId = +arrFromLocation[arrFromLocation.length - 1];
+	console.log(currentSection);
 
 	const dispatch = useDispatch();
 
 	useEffect(() => {
 		dispatch(isLoadingGames());
 
-		// get current game section 
-		if (location.pathname.includes('searched')) {
+		// show current game section 
+		if (currentSection === 'searched') {
 			const searchedName = location.pathname.split('/')[2];
 			dispatch(getSearchedGames(searchedName));
+		} else if (currentSection === 'game') {
+			dispatch(fetchGames(''))
 		} else {
 			dispatch(fetchGames(currentSection))
 		}
 
 		// if gameDetails should be shown after refresh 
-		if (game.platforms.length === 0 && pathId !== 0) {
+		if (Object.keys(game).length === 1 && pathId !== 0) {
 			dispatch(getGameDetails(pathId))
 		}
 	}, [])
 
+	const { games, details: { game } } = useSelector(state => state)
 	const {
-		games: {
-			trending,
-			allTime,
-			popular,
-			upcoming,
-			newGames,
-			last30days,
-			thisWeek,
-			nextWeek,
-			searched,
-			genre,
-			loading
-		},
-		details: {
-			game
+		trending,
+		allTime,
+		popular,
+		upcoming,
+		newGames,
+		last30days,
+		thisWeek,
+		nextWeek,
+		searched,
+		genre,
+		loading
+	} = games;
+	// data-search attribute responsible for Suggestions block
+	// if a block has data-search att and we click on it, we don't close Suggestion block, else we close Suggestion
+	const closeSuggestions = (e) => {
+		if (isShowSuggestions && !e.target.closest('[data-search]')) {
+			setIsShowSuggestions(false)
 		}
-	} = useSelector(state => state)
+	}
 
 	return (
-		<>
+		<div onClick={closeSuggestions}>
 			<AnimateSharedLayout type='crossfade'>
-				<Nav isShowSuggestions={isShowSuggestions} setIsShowSuggestions={setIsShowSuggestions} />
+				<Nav toggle={toggleGrid} setToggle={setToggleGrid} isShowSuggestions={isShowSuggestions} setIsShowSuggestions={setIsShowSuggestions} />
 				<S.Main >
-					<Aside />
+					<Aside games={games} />
 					<S.Content>
-						{loading
-							? <Spinner pos='static' color='rgba(255,255,255, .4)' />
-							:
-
-							<>
-								<AnimatePresence>
-									{pathId && <GameDetails id={pathId} />}
-								</AnimatePresence>
-								<Switch>
-									<Route path='/searched/'>
-										{searched.length
-											? <GameList games={searched} title={`Searched:`} searchedName={location.pathname.split('/')[2]} />
-											: <div>Nothing has been found</div>}
-									</Route>
-									<Route exact strict path={['/', '/game/:id']}>
-										{trending.length ? <GameList games={trending} title={'The best of new'} /> : null}
-									</Route>
-									<Route path='/popular/'>
-										{popular.length ? <GameList games={popular} title={'Popular games in 2020'} /> : null}
-									</Route>
-									<Route path='/upcoming/'>
-										{upcoming.length ? <GameList games={upcoming} title={'Upcoming games'} /> : null}
-									</Route>
-									<Route path='/newGames/'>
-										{newGames.length ? <GameList games={newGames} title={'New games'} /> : null}
-									</Route>
-									<Route path='/last30days/'>
-										{last30days.length ? <GameList games={last30days} title={'Last 30 days'} /> : null}
-									</Route>
-									<Route path='/thisWeek/'>
-										{thisWeek.length ? <GameList games={thisWeek} title={'This week'} /> : null}
-									</Route>
-									<Route path='/nextWeek/'>
-										{nextWeek.length ? <GameList games={nextWeek} title={'Next week'} /> : null}
-									</Route>
-									<Route path='/allTime/'>
-										{allTime.length ? <GameList games={allTime} title={'All time top'} /> : null}
-									</Route>
-									<Route path={['/action/', '/adventure/', '/shooter/', '/sports/', '/role-playing-games-rpg/', '/racing/', '/indie/', '/strategy/']}>
-										{genre.length ? <GameList games={genre} title={currentSection} /> : null}
-									</Route>
-								</Switch>
-
-							</>}
+						<AnimatePresence>
+							{pathId && <GameDetails id={pathId} />}
+						</AnimatePresence>
+						<Switch>
+							<Route path='/searched/'>
+								{searched.length
+									? <GameList toggle={toggleGrid} setToggle={setToggleGrid} games={searched} title={`Searched:`} searchedName={location.pathname.split('/')[2]} />
+									: <div>Nothing has been found</div>}
+							</Route>
+							<Route exact strict path={['/', '/game/:id']}>
+								<GameList toggle={toggleGrid} setToggle={setToggleGrid} games={trending} title={'The best of new'} loading={loading} />
+							</Route>
+							<Route path='/popular/'>
+								<GameList toggle={toggleGrid} setToggle={setToggleGrid} games={popular} title={'Popular games in 2020'} loading={loading} />
+							</Route>
+							<Route path='/upcoming/'>
+								<GameList toggle={toggleGrid} setToggle={setToggleGrid} games={upcoming} title={'Upcoming games'} loading={loading} />
+							</Route>
+							<Route path='/newGames/'>
+								<GameList toggle={toggleGrid} setToggle={setToggleGrid} games={newGames} title={'New games'} loading={loading} />
+							</Route>
+							<Route path='/thisWeek/'>
+								<GameList toggle={toggleGrid} setToggle={setToggleGrid} games={thisWeek} title={'This week'} loading={loading} />
+							</Route>
+							<Route path='/nextWeek/'>
+								<GameList toggle={toggleGrid} setToggle={setToggleGrid} games={nextWeek} title={'Next week'} loading={loading} />
+							</Route>
+							<Route path='/allTime/'>
+								<GameList toggle={toggleGrid} setToggle={setToggleGrid} games={allTime} title={'All time top'} loading={loading} />
+							</Route>
+							<Route path={['/action/', '/adventure/', '/shooter/', '/sports/', '/role-playing-games-rpg/', '/racing/', '/indie/', '/strategy/']}>
+								<GameList toggle={toggleGrid} setToggle={setToggleGrid} games={genre} title={currentSection} loading={loading} />
+							</Route>
+						</Switch>
 					</S.Content>
 				</S.Main>
 			</AnimateSharedLayout>
-		</>
+		</div>
 	)
 }
 
@@ -127,5 +123,4 @@ S.Main = styled.main`
 S.Content = styled.main`
 	position: relative;
 	flex: 1;
-	padding: 0 2rem 0 2rem;
 `;

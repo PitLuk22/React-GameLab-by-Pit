@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { isLoadingGames, getSearchedGames, instantSearchGames, isLoadingInstantSearch } from '../../actions';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,13 +12,19 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
-const Nav = ({ isShowSuggestions, setIsShowSuggestions }) => {
+import largeGridActive from '../../img/large-grid-active.svg';
+import largeGridNonActive from '../../img/large-grid-non-active.svg';
+import smallGridActive from '../../img/small-grid-active.svg';
+import smallGridNonActive from '../../img/small-grid-non-active.svg';
+
+const Nav = ({ toggle, setToggle, isShowSuggestions, setIsShowSuggestions }) => {
 
 	const [inputText, setInputText] = useState('');
+	const [isShowMore, setIsShowMore] = useState(false);
 
 	const history = useHistory();
 
-	const { searchedGames, loading } = useSelector(state => state.instantSearch);
+	const { count, searchedGames, loading } = useSelector(state => state.instantSearch);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -40,11 +46,11 @@ const Nav = ({ isShowSuggestions, setIsShowSuggestions }) => {
 			history.push(`/searched/${inputText}/`);
 			dispatch(isLoadingGames());
 			dispatch(getSearchedGames(inputText));
+			setIsShowSuggestions(false)
 		}
 	}
 
-	// TODO: 1) закрытие предложений только при нажатии вне предложений, либо при самостоятельном очищении ИНПУТА
-	//		2) При перезагрузке на выбранной игре сделать правильное поведение 
+	const searchedItems = isShowMore ? searchedGames : searchedGames.filter((_, i) => i < 5);
 
 	return (
 		<S.Navigation>
@@ -52,26 +58,68 @@ const Nav = ({ isShowSuggestions, setIsShowSuggestions }) => {
 			<S.SearchWrapper data-search>
 				<S.Form onSubmit={sendRequest} novalidate autocomplete="off">
 					<div className="input__area">
-						<S.Input data-search value={inputText} onInput={searchHandler} type="text" name="search" placeholder='Search games' autocomplete="off" />
+						<S.Input data-search value={inputText} onInput={searchHandler} type="text" name="search" placeholder='Search 500 601 games' autocomplete="off" />
 						<FontAwesomeIcon icon={faSearch} size='sm' />
 					</div>
 					<S.Btn name="search" >Search</S.Btn>
 				</S.Form>
-				{searchedGames.length && isShowSuggestions ? <S.Suggestions>
-					{loading
-						? <Spinner pos='static' color='rgba(255,255,255, .4)' />
-						: searchedGames.map(game => {
-							return <SearchedGame key={uuidv4()} {...game} />
-						})}
-				</S.Suggestions> : null}
+				{searchedGames.length && isShowSuggestions
+					? <S.Suggestions>
+						{loading
+							? <Spinner pos='static' color='rgba(255,255,255, .4)' />
+							: <>
+								<div className='title'>Games <span>{count}</span></div>
+
+								{searchedItems.map(game => {
+									return <SearchedGame key={uuidv4()} {...game} />
+								})}
+
+								{!isShowMore &&
+									<div className='show-more' onClick={() => setIsShowMore(!isShowMore)}>
+										<span>Show more results</span>
+									</div>}
+							</>}
+					</S.Suggestions> : null}
 			</S.SearchWrapper>
+			<S.Toggle>
+				<span>Dispaly options:</span>
+				<div className='options-tabs'>
+					<img
+						onClick={() => setToggle('small')}
+						src={toggle === 'small' ? smallGridActive : smallGridNonActive} alt="small" />
+					<img
+						onClick={() => setToggle('large')}
+						src={toggle === 'small' ? largeGridNonActive : largeGridActive} alt="large" />
+				</div>
+			</S.Toggle>
 		</S.Navigation>
 	)
 }
 
-export default Nav;
+export default memo(Nav);
 
 const S = {};
+
+S.Toggle = styled.div`
+	padding: 1rem;
+	font-size: .9rem;
+	color: grey;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	span {
+		margin-right: 1.5rem;
+	}
+	.options-tabs {
+		display: flex;
+		justify-content: space-between;
+		width: 100px;
+	}
+	img {
+		width: 45%;
+		cursor:pointer;
+	}
+`;
 S.Navigation = styled.div`
 	position: relative;
 	width: 100%;
@@ -85,7 +133,7 @@ S.Navigation = styled.div`
 `;
 S.SearchWrapper = styled.div`
 	position: relative;
-	width: 60%;
+	width: 50%;
 `;
 
 S.Suggestions = styled.div`
@@ -96,7 +144,32 @@ S.Suggestions = styled.div`
 	background-color: #0e0e0e;
 	border-radius: .8rem;
 	padding: 1.5rem; 
-	z-index: 4;
+	color: #fff;
+	z-index: 7;
+	.title {
+		font-size: 1.2rem;
+		border-bottom: 1px solid #a4a4a4;
+		padding-bottom: .5rem;
+		font-weight: bold;
+		span {
+			color: #a4a4a4;
+			font-weight: 200;
+		}
+	}
+	.show-more {
+		font-size: 1rem;
+		color: #8e8e8e;
+		border-top: 1px solid #a4a4a4;
+		padding-top: 1rem;
+		span {
+			transition: color .3s ease;
+			text-decoration: underline;
+			cursor: pointer;
+			&:hover {
+				color:#464646 ;
+			}
+		}
+	}
 `;
 S.Form = styled.form`
 	display: flex;

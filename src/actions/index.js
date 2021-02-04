@@ -60,7 +60,8 @@ const instantSearchGames = (gameName) => async (dispatch) => {
 	dispatch({
 		type: 'INSTANT_SEARCH_GAMES',
 		payload: {
-			searchedGames: searchedGamesData.data.results
+			searchedGames: searchedGamesData.data.results,
+			count: searchedGamesData.data.count
 		}
 	})
 }
@@ -115,11 +116,6 @@ const getServiceUrl = (path) => {
 				type: 'FETCH_ALLTIME_GAMES',
 				url: allTimeUrl()
 			};
-		case 'last30days':
-			return {
-				type: 'FETCH_LAST_30_DAYS_GAMES',
-				url: previousMonthUrl()
-			}
 		case 'nextWeek':
 			return {
 				type: 'FETCH_NEXT_WEEK_GAMES',
@@ -170,6 +166,8 @@ const getServiceUrl = (path) => {
 				type: 'FETCH_GENRE_GAMES',
 				url: genreGamesUrl(path)
 			}
+		default:
+			return;
 	}
 }
 

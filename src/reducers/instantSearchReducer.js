@@ -1,5 +1,6 @@
 const initialState = {
 	searchedGames: [],
+	count: '',
 	loading: false
 }
 
@@ -9,6 +10,7 @@ const instantSearchReducer = (state = initialState, action) => {
 			return {
 				...state,
 				searchedGames: action.payload.searchedGames,
+				count: action.payload.count,
 				loading: false
 			}
 		case 'INSTANT_SEARCH_LOADING':

@@ -6,7 +6,6 @@ const initState = {
 	upcoming: [],
 	nextWeek: [],
 	thisWeek: [],
-	last30days: [],
 	searched: [],
 	genre: [],
 	loading: false
@@ -54,12 +53,6 @@ const gamesReducer = (state = initState, action) => {
 			return {
 				...state,
 				thisWeek: action.payload.games,
-				loading: false
-			};
-		case 'FETCH_LAST_30_DAYS_GAMES':
-			return {
-				...state,
-				last30days: action.payload.games,
 				loading: false
 			};
 		case 'FETCH_GENRE_GAMES':

@@ -24,9 +24,6 @@ export const thisWeekUrl = () => {
 export const nextWeekUrl = () => {
 	return `${base_url}games?dates=${currentDate},${nextWeekDate}&ordering=-released&page_size=10`;
 }
-export const previousMonthUrl = () => {
-	return `${base_url}games?dates=${previousMonthDate},${currentDate}&ordering=-released&page_size=10`;
-}
 
 export const genreGamesUrl = (genre) => {
 	return `${base_url}games?dates=${lastDate},${currentDate}&genres=${genre}&ordering=-metacritic&page_size=10`;

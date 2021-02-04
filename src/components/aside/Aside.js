@@ -4,14 +4,13 @@ import { v4 as uuidv4 } from 'uuid';
 import {
 	fetchGames,
 	isLoadingGames,
-	deleteSearched,
 } from '../../actions';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 // Style
 import styled from 'styled-components';
 // Images
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFire, faMeteor, faChartLine, faTrophy, faStar, faFastForward, faCrown, faHome, faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { faFire, faMeteor, faChartLine, faTrophy, faFastForward, faCrown, faHome, faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import action from '../../img/action.png';
 import strategy from '../../img/strategy.png';
 import shooter from '../../img/shooter.png';
@@ -21,7 +20,7 @@ import adventure from '../../img/adventure.png';
 import racing from '../../img/racing.png';
 import indie from '../../img/indie.png';
 
-const Aside = () => {
+const Aside = ({ games }) => {
 	const location = useLocation();
 	const history = useHistory();
 	const dispatch = useDispatch();
@@ -81,15 +80,10 @@ const Aside = () => {
 	}
 
 	const dispatchHandler = (path) => {
-		dispatch(isLoadingGames())
-		dispatch(fetchGames(path))
-	}
-
-	const deleteSearchedGames = (path) => {
-		dispatch(deleteSearched())
-		history.push('/');
-		dispatch(isLoadingGames());
-		dispatch(fetchGames(path));
+		if (!games[path].length) {
+			dispatch(isLoadingGames())
+			dispatch(fetchGames(path === 'trending' ? '' : path))
+		}
 	}
 
 	return (
@@ -100,7 +94,7 @@ const Aside = () => {
 					<li>
 						<S.Link to={`/`}
 							className={setActiveClass('')}
-							onClick={() => deleteSearchedGames('')}>
+							onClick={() => dispatchHandler('trending')}>
 							<span className='icon'>
 								<FontAwesomeIcon icon={faHome} size='sm' />
 							</span>
@@ -157,16 +151,6 @@ const Aside = () => {
 								<FontAwesomeIcon icon={faMeteor} size='sm' />
 							</span>
 							<span className='label'>Upcoming</span>
-						</S.Link>
-					</li>
-					<li>
-						<S.Link to={`/last30days/`}
-							className={setActiveClass('last30days')}
-							onClick={() => dispatchHandler('last30days')}>
-							<span className='icon'>
-								<FontAwesomeIcon icon={faStar} size='sm' />
-							</span>
-							<span className='label'>Last 30 days</span>
 						</S.Link>
 					</li>
 					<li>

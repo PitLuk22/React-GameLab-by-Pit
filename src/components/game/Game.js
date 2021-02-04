@@ -20,7 +20,7 @@ import { fadeIn, gameCardAnimation } from '../../animations';
 import '../../../node_modules/react-modal-video/scss/modal-video.scss';
 import ModalVideo from 'react-modal-video';
 
-const Game = ({ id, name, background_image, platforms, metacritic, released, genres, ratings_count, clip }) => {
+const Game = ({ toggle, id, name, background_image, platforms, metacritic, released, genres, ratings_count, clip }) => {
 
 	const controls = useAnimation()
 
@@ -87,6 +87,7 @@ const Game = ({ id, name, background_image, platforms, metacritic, released, gen
 					videoId={clip.video}
 					onClose={() => setOpen(false)} />}
 				<S.Media
+					toggle={toggle}
 					onMouseEnter={showVideo}
 					onMouseLeave={hideVideo}>
 					{checkLoadingItem(location, loading) && <Spinner pos='absolute' color='rgba(0, 0, 0, 0.7)' />}
@@ -204,7 +205,7 @@ S.Game = styled(motion.div)`
 S.Media = styled(motion.div)`
 	position: relative;
 	width: 100%;
-	height: 180px;
+	height: ${props => props.toggle === 'small' ? '180px' : '400px'};
 	overflow: hidden;
 	&:hover .play-icon {
 		opacity: 0;
@@ -290,6 +291,7 @@ S.LineDetails = styled.div`
 
 S.ExtraList = styled.div`
 	position: relative;
+	z-index: 5;
 	ul{
 		position: absolute;
 		width: 100%;

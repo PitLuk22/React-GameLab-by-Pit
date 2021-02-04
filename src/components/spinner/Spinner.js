@@ -1,9 +1,9 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
-const Spinner = ({ pos, color }) => {
+const Spinner = ({ pos, color, size = 'big' }) => {
 	return (
-		<S.Spinner pos={pos} color={color}>
+		<S.Spinner pos={pos} color={color} size={size}>
 			<div className="spinner">
 				<div className="circle">
 					<div>
@@ -29,30 +29,30 @@ const S = {};
 S.Spinner = styled.div`
 	position: ${props => props.pos};
 	width: 100%;
-	height: 180px;
+	height: ${props => props.size === 'big' ? '180px' : '50px'};
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	z-index: 4;
 	.spinner {
-		width: 200px;
-		height: 200px;
+		width:${props => props.size === 'big' ? '200px' : '30px'};
+		height: ${props => props.size === 'big' ? '200px' : '30px'};
 		display: inline - block;
 		overflow: hidden;
 		background: rgba(NaN, NaN, NaN, 0);
 	}
 	.circle div {
 	position: absolute;
-	width: 60px;
-	height: 60px;
-	border: 10px solid ${props => props.color};
+	width: ${props => props.size === 'big' ? '60px' : '20px'};
+	height: ${props => props.size === 'big' ? '60px' : '20px'};
+	border: ${props => props.size === 'big' ? '10px' : '5px'} solid ${props => props.color};
 	border-top-color: transparent;
 	border-radius: 50%;
 	}
 	.circle div {
 	animation: ${animation} 1s linear infinite;
-	top: 100px;
-	left: 100px
+	top: ${props => props.size === 'big' ? '100px' : '50%'} ;
+	left: ${props => props.size === 'big' ? '100px' : '50%'} ;
 	}
 	.circle {
 	width: 100%;
@@ -61,6 +61,9 @@ S.Spinner = styled.div`
 	transform: translateZ(0) scale(1);
 	backface-visibility: hidden;
 	transform-origin: 0 0;
+	top: 50%;
+	/* left: 50%; */
+	transform: translateY(-50%);
 	}
 	.circle div { 
 		box-sizing: content-box; 
