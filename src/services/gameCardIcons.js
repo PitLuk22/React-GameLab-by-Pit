@@ -7,11 +7,11 @@ const platformIcons = (platforms) => {
 const setPlatformIcon = (name) => {
 	if (name.includes('xbox')) {
 		return faXbox;
-	} else if (name.includes('playstation')) {
+	} else if (name.includes('playstation') || name.includes('ps-vita')) {
 		return faPlaystation;
 	} else if (name.includes('pc')) {
 		return faSteam;
-	} else if (name.includes('nintendo')) {
+	} else if (name.includes('nintendo') || name.includes('dreamcast') || name.includes('wii') || name.includes('gamecube')) {
 		return faGamepad;
 	} else if (name.includes('linux')) {
 		return faLinux;
@@ -23,6 +23,8 @@ const setPlatformIcon = (name) => {
 		return faMobileAlt;
 	} else if (name.includes('android')) {
 		return faAndroid;
+	} else {
+		return;
 	}
 }
 

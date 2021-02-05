@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useHistory, useLocation } from 'react-router-dom';
 import { isLoadingGameDetails, getGameDetails } from '../../actions';
@@ -12,7 +13,7 @@ import resizeImage from '../../services/resizeImage';
 // Animation
 import { motion } from 'framer-motion';
 
-const searchedGame = ({ id, name, background_image, platforms }) => {
+const SearchedGame = ({ id, name, background_image, platforms }) => {
 
 	const { loading } = useSelector(state => state.details);
 	const dispatch = useDispatch();
@@ -49,7 +50,7 @@ const searchedGame = ({ id, name, background_image, platforms }) => {
 	)
 }
 
-export default searchedGame;
+export default SearchedGame;
 
 const S = {};
 S.GameLink = styled(motion.div)`
@@ -90,3 +91,13 @@ S.GameLink = styled(motion.div)`
 		}
 	}
 `;
+
+// PropTypes 
+SearchedGame.propTypes = {
+	game: PropTypes.shape({
+		id: PropTypes.number,
+		name: PropTypes.string,
+		background_image: PropTypes.string,
+		platforms: PropTypes.array,
+	})
+}

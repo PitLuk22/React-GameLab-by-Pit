@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled, { keyframes } from 'styled-components';
 
-const Spinner = ({ pos, color, size = 'big' }) => {
+const Spinner = ({ pos, color, size }) => {
 	return (
 		<S.Spinner pos={pos} color={color} size={size}>
 			<div className="spinner">
@@ -69,3 +70,13 @@ S.Spinner = styled.div`
 		box-sizing: content-box; 
 	}	
 `;
+
+// PropTypes 
+Spinner.propTypes = {
+	pos: PropTypes.string,
+	color: PropTypes.string,
+	size: PropTypes.string
+}
+Spinner.defaultProps = {
+	size: 'big'
+}

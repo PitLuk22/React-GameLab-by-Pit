@@ -7,7 +7,6 @@ import Aside from '../aside';
 import GameDetails from '../gameDetails';
 import Nav from '../nav';
 import { Switch, Route, useLocation } from 'react-router-dom';
-import Spinner from '../spinner';
 //Styles
 import styled from 'styled-components';
 import { AnimatePresence, AnimateSharedLayout } from 'framer-motion';
@@ -21,7 +20,6 @@ const Home = () => {
 	const arrFromLocation = location.pathname.split('/');
 	const currentSection = arrFromLocation[1];
 	const pathId = +arrFromLocation[arrFromLocation.length - 1];
-	console.log(currentSection);
 
 	const dispatch = useDispatch();
 
@@ -51,7 +49,6 @@ const Home = () => {
 		popular,
 		upcoming,
 		newGames,
-		last30days,
 		thisWeek,
 		nextWeek,
 		searched,
@@ -78,9 +75,7 @@ const Home = () => {
 						</AnimatePresence>
 						<Switch>
 							<Route path='/searched/'>
-								{searched.length
-									? <GameList toggle={toggleGrid} setToggle={setToggleGrid} games={searched} title={`Searched:`} searchedName={location.pathname.split('/')[2]} />
-									: <div>Nothing has been found</div>}
+								<GameList toggle={toggleGrid} setToggle={setToggleGrid} games={searched} title={`Searched:`} searchedName={location.pathname.split('/')[2]} loading={loading} />
 							</Route>
 							<Route exact strict path={['/', '/game/:id']}>
 								<GameList toggle={toggleGrid} setToggle={setToggleGrid} games={trending} title={'The best of new'} loading={loading} />

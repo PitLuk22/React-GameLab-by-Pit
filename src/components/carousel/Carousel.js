@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import YouTube from 'react-youtube';
 // Slider
 import SwiperCore, { Navigation, Pagination, Thumbs } from 'swiper';
@@ -192,3 +193,14 @@ S.Slider = styled.div`
 		}
 	}
 `;
+
+// PropTypes
+
+Carousel.propTypes = {
+	game: PropTypes.shape({
+		clip: PropTypes.shape({
+			clip: PropTypes.string,
+			video: PropTypes.string,
+		})
+	})
+}

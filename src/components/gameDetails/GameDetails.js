@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 // Style
@@ -13,6 +14,7 @@ import { setGameCartDate } from '../../services/gameCardDate';
 import platformIcons from '../../services/gameCardIcons';
 import metacriticColor from '../../services/gameMetascore';
 import resizeImage from '../../services/resizeImage';
+import gameStores from '../../services/gameStores';
 // Components
 import Carousel from '../carousel';
 
@@ -132,6 +134,19 @@ const GameDetails = ({ id }) => {
 									<S.Subtitle>Tags</S.Subtitle>
 									<S.Data>{game.tags.map(item => item.name.slice(0, 1).toUpperCase() + item.name.slice(1)).join(', ')}</S.Data>
 								</div> : null}
+								{game.stores.length ? <div className="details-block details-block__tags">
+									<S.Subtitle>Where to buy</S.Subtitle>
+									<S.Data>
+										{game.stores.map(({ url, store: { name } }, index) => {
+											return (
+												<S.Stores key={index} href={url} target='_blank'>
+													{name}
+													<span>{gameStores(name)}</span>
+												</S.Stores>
+											)
+										})}
+									</S.Data>
+								</div> : null}
 							</S.Info>
 
 						</S.Wrapper>
@@ -231,6 +246,7 @@ S.Data = styled.div`
 	font-size: 1rem;
 	margin-bottom: 1rem;
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: flex-start;
 	line-height: 1.7rem;
 	.metacritic {
@@ -297,3 +313,44 @@ S.Window = styled(motion.div)`
 		}
 	}
 `;
+S.Stores = styled.a`
+	text-decoration: none;
+	width: 12rem;
+	height: 2.5rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #262626;
+	border-radius: 6px;
+	transition: all .3s ease;
+	color: #787878; 
+	margin: 0 1rem 1rem 0;
+	outline: none;
+	&:hover {
+		color: #000;
+		background-color: #fff;
+		svg {
+			rect {
+				stroke: #000;
+			}
+			g {
+				opacity: 1;
+			}
+			path {
+				fill: #000;
+				opacity: 1;
+			}
+		}
+	}
+	svg {
+		display: block;
+		margin-left: 1rem;
+		width: 1rem;
+	}
+`;
+
+// PropTypes
+
+GameDetails.propTypes = {
+	id: PropTypes.number,
+}

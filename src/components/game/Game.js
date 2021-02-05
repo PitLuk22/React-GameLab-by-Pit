@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { getGameDetails, isLoadingGameDetails } from '../../actions';
@@ -344,3 +345,21 @@ S.Link = styled(motion.a)`
 		font-size: 1.2rem;
 	}	
 `;
+
+// PropTypes
+
+Game.propTypes = {
+	toggle: PropTypes.string,
+	id: PropTypes.number,
+	name: PropTypes.string,
+	background_image: PropTypes.string,
+	platforms: PropTypes.arrayOf(PropTypes.object),
+	metacritic: PropTypes.number,
+	released: PropTypes.string,
+	genres: PropTypes.arrayOf(PropTypes.object),
+	ratings_count: PropTypes.number,
+	clip: PropTypes.shape({
+		clip: PropTypes.string,
+		video: PropTypes.string
+	})
+}

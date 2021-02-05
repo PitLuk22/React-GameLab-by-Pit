@@ -10,7 +10,6 @@ import {
 	gameDetailsUrl,
 	gameScreenshotsUrl,
 	searchGamesUrl,
-	previousMonthUrl,
 	genreGamesUrl
 } from '../services';
 

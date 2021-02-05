@@ -1,21 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import Game from '../game';
 import Spinner from '../spinner';
 
 import styled from 'styled-components';
-import { fadeIn } from '../../animations';
 
-
-
-const GameList = ({ toggle, setToggle, searchedName, games, title, loading }) => {
+const GameList = ({ toggle, searchedName, games, title, loading }) => {
 
 	const styledContainer = {
 		paddingTop: '2rem',
 		padding: toggle === 'small' ? '2rem' : '2rem 15rem'
 	}
 	const grid = toggle === 'small' ? { 350: 1, 600: 1, 800: 2, 1000: 3, 1300: 4 } : { 350: 1 };
+
 	return (
 		<motion.div>
 			<S.Title >
@@ -25,7 +24,7 @@ const GameList = ({ toggle, setToggle, searchedName, games, title, loading }) =>
 			</S.Title>
 			{loading
 				? <Spinner pos='static' color='rgba(255,255,255, .4)' />
-				: <ResponsiveMasonry
+				: games.length ? <ResponsiveMasonry
 					as={motion.div}
 					columnsCountBreakPoints={grid}
 					style={styledContainer}>
@@ -35,11 +34,12 @@ const GameList = ({ toggle, setToggle, searchedName, games, title, loading }) =>
 							return <Game key={game.id} toggle={toggle} {...game} />
 						})}
 					</Masonry>
-				</ResponsiveMasonry>
+				</ResponsiveMasonry> : <S.NotFound>Sorry but we couldn't find the game you need <span role='img' aria-label='sad'>😢</span> </S.NotFound>
 			}
 		</motion.div>
 	)
 }
+
 export default GameList;
 
 const S = {};
@@ -62,4 +62,19 @@ S.Title = styled(motion.div)`
 		word-wrap: break-word;
 	}
 `;
+S.NotFound = styled.div`
+	font-family: 'Audiowide', cursive;
+	text-align: center;
+	margin-top: 3rem;
+	font-size: 2rem;
+`;
 
+// PropTypes 
+
+GameList.propTypes = {
+	toggle: PropTypes.string,
+	searchedName: PropTypes.string,
+	games: PropTypes.array,
+	title: PropTypes.string.isRequired,
+	loading: PropTypes.bool.isRequired,
+}

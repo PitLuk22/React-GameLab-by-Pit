@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import {
 	fetchGames,
 	isLoadingGames,
 } from '../../actions';
-import { Link, useLocation, useHistory } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 // Style
 import styled from 'styled-components';
 // Images
@@ -22,11 +23,10 @@ import indie from '../../img/indie.png';
 
 const Aside = ({ games }) => {
 	const location = useLocation();
-	const history = useHistory();
 	const dispatch = useDispatch();
 
 	const [isShowGenres, setIsShowGenres] = useState(false);
-	const [genres, setGenres] = useState([
+	const genres = [
 		{
 			genre: 'action',
 			path: 'action',
@@ -67,8 +67,9 @@ const Aside = ({ games }) => {
 			path: 'indie',
 			img: indie
 		}
-	])
+	];
 
+	// Show or Hide genres
 	const numberOfGenres = () => {
 		const currentGenresArr = isShowGenres ? genres : genres.filter((item, i) => i < 4);
 		return currentGenresArr;
@@ -79,11 +80,18 @@ const Aside = ({ games }) => {
 		return section === path ? 'active' : '';
 	}
 
+	//dispatch Games sections
 	const dispatchHandler = (path) => {
 		if (!games[path].length) {
 			dispatch(isLoadingGames())
 			dispatch(fetchGames(path === 'trending' ? '' : path))
 		}
+	}
+
+	// dispatch Genres
+	const dispatchHandlerGenres = (path) => {
+		dispatch(isLoadingGames())
+		dispatch(fetchGames(path))
 	}
 
 	return (
@@ -184,7 +192,7 @@ const Aside = ({ games }) => {
 							<li key={uuidv4()}>
 								<S.Link to={`/${path}/`}
 									className={`genres ${setActiveClass(path)}`}
-									onClick={() => dispatchHandler(path)}>
+									onClick={() => dispatchHandlerGenres(path)}>
 									<span className='icon'>
 										<img src={img} alt={genre} />
 									</span>
@@ -194,12 +202,12 @@ const Aside = ({ games }) => {
 						)
 					})}
 					<li>
-						<S.Link onClick={() => setIsShowGenres(!isShowGenres)}>
+						<S.ShowMore onClick={() => setIsShowGenres(!isShowGenres)}>
 							<span className='icon'>
 								<FontAwesomeIcon icon={isShowGenres ? faArrowUp : faArrowDown} size='sm' />
 							</span>
 							<span className='label label-grey'>{isShowGenres ? 'Hide' : 'Show all'}</span>
-						</S.Link>
+						</S.ShowMore>
 					</li>
 				</S.Links>
 			</S.Menu>
@@ -281,3 +289,43 @@ S.Link = styled(Link)`
 		text-transform: capitalize;
 	}
 `;
+S.ShowMore = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	text-decoration: none;
+	color: #fff;
+	outline: none;
+	.icon {
+		overflow: hidden;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: #202020;
+		border-radius: .4rem;
+		margin-right: 1rem;
+		width: 2.3rem;
+		height: 2.3rem;
+		transition: all .15s ease;
+		img {
+			width: 100%;
+			height: auto;
+		}
+	}
+	.label {
+		font-size: 1.1rem;
+		font-weight:400;
+		&-grey {
+			color: #676767;
+		}
+	}
+	.genre {
+		text-transform: capitalize;
+	}
+`;
+
+// PropTypes
+
+Aside.propTypes = {
+	games: PropTypes.object
+}

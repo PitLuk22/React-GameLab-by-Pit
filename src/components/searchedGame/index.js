@@ -1,2 +1,2 @@
-import SearchedGame from './searchedGame';
+import SearchedGame from './SearchedGame';
 export default SearchedGame;

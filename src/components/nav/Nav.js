@@ -1,4 +1,5 @@
 import React, { useEffect, useState, memo } from 'react';
+import PropTypes from 'prop-types';
 import { isLoadingGames, getSearchedGames, instantSearchGames, isLoadingInstantSearch } from '../../actions';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,11 +12,6 @@ import styled from 'styled-components';
 // Icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-
-import largeGridActive from '../../img/large-grid-active.svg';
-import largeGridNonActive from '../../img/large-grid-non-active.svg';
-import smallGridActive from '../../img/small-grid-active.svg';
-import smallGridNonActive from '../../img/small-grid-non-active.svg';
 
 const Nav = ({ toggle, setToggle, isShowSuggestions, setIsShowSuggestions }) => {
 
@@ -82,14 +78,14 @@ const Nav = ({ toggle, setToggle, isShowSuggestions, setIsShowSuggestions }) => 
 					</S.Suggestions> : null}
 			</S.SearchWrapper>
 			<S.Toggle>
-				<span>Dispaly options:</span>
+				<div>Dispaly options:</div>
 				<div className='options-tabs'>
-					<img
-						onClick={() => setToggle('small')}
-						src={toggle === 'small' ? smallGridActive : smallGridNonActive} alt="small" />
-					<img
-						onClick={() => setToggle('large')}
-						src={toggle === 'small' ? largeGridNonActive : largeGridActive} alt="large" />
+					<span onClick={() => setToggle('small')}>
+						<svg fill={toggle === 'small' ? '#bababa' : '#313131'} viewBox="0 0 24 24"><path d="m6 0h-5c-.552 0-1 .448-1 1v5c0 .552.448 1 1 1h5c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1z" /><path d="m6 8.5h-5c-.552 0-1 .448-1 1v5c0 .552.448 1 1 1h5c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1z" /><path d="m15.5 14.5v-5c0-.552-.448-1-1-1h-5c-.552 0-1 .448-1 1v5c0 .552.448 1 1 1h5c.552 0 1-.448 1-1z" /><path d="m15.5 6v-5c0-.552-.448-1-1-1h-5c-.552 0-1 .448-1 1v5c0 .552.448 1 1 1h5c.552 0 1-.448 1-1z" /><path d="m23 0h-5c-.552 0-1 .448-1 1v5c0 .552.448 1 1 1h5c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1z" /><path d="m18 15.5h5c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1h-5c-.552 0-1 .448-1 1v5c0 .552.448 1 1 1z" /><path d="m18 24h5c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1h-5c-.552 0-1 .448-1 1v5c0 .552.448 1 1 1z" /><path d="m0 18v5c0 .552.448 1 1 1h5c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1h-5c-.552 0-1 .448-1 1z" /><path d="m8.5 18v5c0 .552.448 1 1 1h5c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1h-5c-.552 0-1 .448-1 1z" /></svg>
+					</span>
+					<span onClick={() => setToggle('large')}>
+						<svg fill={toggle === 'large' ? '#bababa' : '#313131'} viewBox="0 0 24 24"><path d="m0 23c0 .552.448 1 1 1h22c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1h-22c-.552 0-1 .448-1 1z" /><path d="m23 0h-22c-.552 0-1 .448-1 1v5c0 .552.448 1 1 1h22c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1z" /><path d="m1 15.5h22c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1h-22c-.552 0-1 .448-1 1v5c0 .552.448 1 1 1z" /></svg>
+					</span>
 				</div>
 			</S.Toggle>
 		</S.Navigation>
@@ -101,23 +97,26 @@ export default memo(Nav);
 const S = {};
 
 S.Toggle = styled.div`
-	padding: 1rem;
+	padding: 0 1rem;
 	font-size: .9rem;
 	color: grey;
 	display: flex;
-	justify-content: center;
+	justify-content: flex-end;
 	align-items: center;
-	span {
-		margin-right: 1.5rem;
-	}
 	.options-tabs {
 		display: flex;
-		justify-content: space-between;
 		width: 100px;
 	}
-	img {
-		width: 45%;
+	span {
+		margin-left: 1rem;
 		cursor:pointer;
+		&:hover svg {
+			fill :#797979;
+		}
+		svg {
+			transition: all .3s ease;
+			width: 100%;
+		}
 	}
 `;
 S.Navigation = styled.div`
@@ -145,6 +144,7 @@ S.Suggestions = styled.div`
 	border-radius: .8rem;
 	padding: 1.5rem; 
 	color: #fff;
+	box-shadow: 0px 5px 13px rgba(0,0,0, .5);
 	z-index: 7;
 	.title {
 		font-size: 1.2rem;
@@ -231,3 +231,12 @@ S.Btn = styled.button`
 		background-color: #FFAD32;
 	}
 `;
+
+// PropTypes
+
+Nav.propTypes = {
+	toggle: PropTypes.string.isRequired,
+	setToggle: PropTypes.func.isRequired,
+	isShowSuggestions: PropTypes.bool.isRequired,
+	setIsShowSuggestions: PropTypes.func.isRequired
+}
