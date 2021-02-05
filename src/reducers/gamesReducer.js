@@ -8,7 +8,7 @@ const initState = {
 	thisWeek: [],
 	searched: [],
 	genre: [],
-	loading: false
+	loading: false,
 }
 
 const gamesReducer = (state = initState, action) => {

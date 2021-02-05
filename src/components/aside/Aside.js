@@ -21,7 +21,7 @@ import adventure from '../../img/adventure.png';
 import racing from '../../img/racing.png';
 import indie from '../../img/indie.png';
 
-const Aside = ({ games }) => {
+const Aside = ({ games, toggleAside }) => {
 	const location = useLocation();
 	const dispatch = useDispatch();
 
@@ -95,7 +95,7 @@ const Aside = ({ games }) => {
 	}
 
 	return (
-		<S.Aside>
+		<S.Aside toggleAside={toggleAside}>
 
 			<S.Menu>
 				<S.Links>
@@ -223,6 +223,14 @@ S.Aside = styled.aside`
 	width: 15rem;
 	height: 100vh;
 	padding: 2rem 0 0 3rem;
+	transition: all .3s ease;
+	@media(max-width: 576px) {
+		position: fixed;
+		transform: ${props => props.toggleAside ? 'translateX(0)' : 'translateX(-100%)'};
+		z-index: 100;
+		overflow-y: scroll;
+		top: 0;
+	}
 `;
 S.Menu = styled.div`
 	margin-bottom: 2rem;

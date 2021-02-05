@@ -9,14 +9,10 @@ import styled from 'styled-components';
 
 const GameList = ({ toggle, searchedName, games, title, loading }) => {
 
-	const styledContainer = {
-		paddingTop: '2rem',
-		padding: toggle === 'small' ? '2rem' : '2rem 15rem'
-	}
-	const grid = toggle === 'small' ? { 350: 1, 600: 1, 800: 2, 1000: 3, 1300: 4 } : { 350: 1 };
+	const grid = toggle === 'small' ? { 600: 1, 768: 2, 1000: 3, 1300: 4 } : { 350: 1 };
 
 	return (
-		<motion.div>
+		<S.Section toggle={toggle}>
 			<S.Title >
 				<h2 className='title'>{title}</h2>
 				{searchedName && <h2 className='title-searched'>{searchedName}</h2>}
@@ -26,8 +22,8 @@ const GameList = ({ toggle, searchedName, games, title, loading }) => {
 				? <Spinner pos='static' color='rgba(255,255,255, .4)' />
 				: games.length ? <ResponsiveMasonry
 					as={motion.div}
-					columnsCountBreakPoints={grid}
-					style={styledContainer}>
+					className='games-grid'
+					columnsCountBreakPoints={grid}>
 					<Masonry
 						gutter='1.5rem'>
 						{games.map(game => {
@@ -36,13 +32,24 @@ const GameList = ({ toggle, searchedName, games, title, loading }) => {
 					</Masonry>
 				</ResponsiveMasonry> : <S.NotFound>Sorry but we couldn't find the game you need <span role='img' aria-label='sad'>😢</span> </S.NotFound>
 			}
-		</motion.div>
+		</S.Section>
 	)
 }
 
 export default GameList;
 
 const S = {};
+S.Section = styled.div`
+	.games-grid {
+		padding: ${props => props.toggle === 'small' ? '2rem 3rem 2rem 2rem' : '2rem 15rem'};
+		@media(max-width: 1200px) {
+			padding: ${props => props.toggle === 'small' ? '2rem 3rem 2rem 2rem' : '2rem 7rem'};
+		}
+		@media(max-width: 992px) {
+			padding: ${props => props.toggle === 'small' ? '2rem' : '2rem 3rem'};
+		}
+	}
+`;
 S.Title = styled(motion.div)`
 	position: relative;
 	display: flex;

@@ -8,12 +8,13 @@ import Spinner from '../spinner';
 //Redux
 import { useSelector, useDispatch } from 'react-redux';
 // Style
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 // Icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import logo from '../../img/Logo_circle.png';
 
-const Nav = ({ toggle, setToggle, isShowSuggestions, setIsShowSuggestions }) => {
+const Nav = ({ toggle, setToggle, isShowSuggestions, setIsShowSuggestions, toggleAside, setToggleAside }) => {
 
 	const [inputText, setInputText] = useState('');
 	const [isShowMore, setIsShowMore] = useState(false);
@@ -50,7 +51,7 @@ const Nav = ({ toggle, setToggle, isShowSuggestions, setIsShowSuggestions }) => 
 
 	return (
 		<S.Navigation>
-			<h1>Pit's GameLab</h1>
+			{document.documentElement.scrollWidth > 1100 ? <h1>Pit's GameLab</h1> : <S.Logo onClick={() => setToggleAside(!toggleAside)}><h1>P</h1><img src={logo} alt="logo" /></S.Logo>}
 			<S.SearchWrapper data-search>
 				<S.Form onSubmit={sendRequest} novalidate autocomplete="off">
 					<div className="input__area">
@@ -78,7 +79,7 @@ const Nav = ({ toggle, setToggle, isShowSuggestions, setIsShowSuggestions }) => 
 					</S.Suggestions> : null}
 			</S.SearchWrapper>
 			<S.Toggle>
-				<div>Dispaly options:</div>
+				<div className='options-title'>Dispaly options:</div>
 				<div className='options-tabs'>
 					<span onClick={() => setToggle('small')}>
 						<svg fill={toggle === 'small' ? '#bababa' : '#313131'} viewBox="0 0 24 24"><path d="m6 0h-5c-.552 0-1 .448-1 1v5c0 .552.448 1 1 1h5c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1z" /><path d="m6 8.5h-5c-.552 0-1 .448-1 1v5c0 .552.448 1 1 1h5c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1z" /><path d="m15.5 14.5v-5c0-.552-.448-1-1-1h-5c-.552 0-1 .448-1 1v5c0 .552.448 1 1 1h5c.552 0 1-.448 1-1z" /><path d="m15.5 6v-5c0-.552-.448-1-1-1h-5c-.552 0-1 .448-1 1v5c0 .552.448 1 1 1h5c.552 0 1-.448 1-1z" /><path d="m23 0h-5c-.552 0-1 .448-1 1v5c0 .552.448 1 1 1h5c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1z" /><path d="m18 15.5h5c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1h-5c-.552 0-1 .448-1 1v5c0 .552.448 1 1 1z" /><path d="m18 24h5c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1h-5c-.552 0-1 .448-1 1v5c0 .552.448 1 1 1z" /><path d="m0 18v5c0 .552.448 1 1 1h5c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1h-5c-.552 0-1 .448-1 1z" /><path d="m8.5 18v5c0 .552.448 1 1 1h5c.552 0 1-.448 1-1v-5c0-.552-.448-1-1-1h-5c-.552 0-1 .448-1 1z" /></svg>
@@ -95,30 +96,6 @@ const Nav = ({ toggle, setToggle, isShowSuggestions, setIsShowSuggestions }) => 
 export default memo(Nav);
 
 const S = {};
-
-S.Toggle = styled.div`
-	padding: 0 1rem;
-	font-size: .9rem;
-	color: grey;
-	display: flex;
-	justify-content: flex-end;
-	align-items: center;
-	.options-tabs {
-		display: flex;
-		width: 100px;
-	}
-	span {
-		margin-left: 1rem;
-		cursor:pointer;
-		&:hover svg {
-			fill :#797979;
-		}
-		svg {
-			transition: all .3s ease;
-			width: 100%;
-		}
-	}
-`;
 S.Navigation = styled.div`
 	position: relative;
 	width: 100%;
@@ -127,12 +104,65 @@ S.Navigation = styled.div`
 	justify-content: space-between;
 	align-items: center;
 	color: #FFAD32;
-	padding: 0 2rem 0 3rem;
+	padding: 0 3rem;
 	margin: 1rem 0;
+	h1 {
+		padding-right: 1rem;
+		@media (max-width: 1220px) {
+			font-size: 2rem;
+ 		}
+		@media (max-width: 1000px) {
+			display: none;
+		}
+	}
+	@media (max-width: 768px) {
+		flex-direction: row-reverse;
+	}
 `;
+const rotateAnim = keyframes`
+	0% {
+		transform: rotateZ(0deg);
+	}
+	100% {
+		transform: rotateZ(360deg);
+	}
+`;
+S.Logo = styled.div`
+	position: relative;
+	min-width: 60px;
+	max-width: 60px;
+	h1 {
+		position: absolute;
+		font-size: 2.5rem;
+		padding: 0;
+		display: block;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		color: #fff; 
+	}
+	img {
+		width: 100%;
+		height: auto;
+		animation: ${rotateAnim} 4s infinite linear;
+	} 
+`;
+
 S.SearchWrapper = styled.div`
 	position: relative;
 	width: 50%;
+	padding: 0 1rem;
+	@media (max-width: 1100px) {
+		width: 45%;		
+ 	}
+	@media (max-width: 1000px) {
+		width: 60%;
+ 	}
+	@media (max-width: 768px) {
+		width: 100%;
+		margin-right: 1rem;
+		padding: 0;
+	}
 `;
 
 S.Suggestions = styled.div`
@@ -173,7 +203,7 @@ S.Suggestions = styled.div`
 `;
 S.Form = styled.form`
 	display: flex;
-	width: 100%;
+	max-width: 100%;
 	border-radius: .8rem;
 	overflow: hidden;
 	box-shadow: 0 0 5px 5px rgba(0,0,0, .2);
@@ -215,6 +245,9 @@ S.Input = styled.input`
 	&:hover + svg {
 		color: #313131;
 	}
+	@media (max-width: 768px) {
+		font-size: .8rem;
+	}
 `;
 S.Btn = styled.button`
 	padding: .8rem 1.5rem;
@@ -229,6 +262,40 @@ S.Btn = styled.button`
 	&:hover {
 		color: #313131;
 		background-color: #FFAD32;
+	}
+	@media (max-width: 768px) {
+		font-size: .8rem;
+	}
+`;
+S.Toggle = styled.div`
+	min-width: 13rem;
+	font-size: .9rem;
+	color: grey;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	padding-left: 1rem;
+	word-wrap: normal;
+	.options-tabs {
+		display: flex;
+		width: 100px;
+	}
+	span {
+		margin-left: 1rem;
+		cursor:pointer;
+		&:hover svg {
+			fill :#797979;
+		}
+		svg {
+			transition: all .3s ease;
+			width: 100%;
+		}
+	}
+	@media (max-width: 1100px) {
+		padding: 0;
+	}
+	@media (max-width: 768px) {
+		display: none;
 	}
 `;
 

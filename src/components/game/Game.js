@@ -89,6 +89,8 @@ const Game = ({ toggle, id, name, background_image, platforms, metacritic, relea
 					onClose={() => setOpen(false)} />}
 				<S.Media
 					toggle={toggle}
+					onTouchStart={showVideo}
+					onTouchEnd={hideVideo}
 					onMouseEnter={showVideo}
 					onMouseLeave={hideVideo}>
 					{checkLoadingItem(location, loading) && <Spinner pos='absolute' color='rgba(0, 0, 0, 0.7)' />}
@@ -254,6 +256,9 @@ S.Media = styled(motion.div)`
 		object-fit: cover;
 		border-top-left-radius: .8rem;
 		border-top-right-radius: .8rem;
+	}
+	@media(max-width: 768px) {
+		height: 250px
 	}
 `;
 

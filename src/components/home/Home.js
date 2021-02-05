@@ -15,6 +15,11 @@ const Home = () => {
 
 	const [isShowSuggestions, setIsShowSuggestions] = useState(false);
 	const [toggleGrid, setToggleGrid] = useState('small');
+	const [toggleAside, setToggleAside] = useState(false);
+
+	if (toggleGrid !== 'small' && window.innerWidth < 768) {
+		setToggleGrid('small')
+	}
 
 	const location = useLocation();
 	const arrFromLocation = location.pathname.split('/');
@@ -66,9 +71,17 @@ const Home = () => {
 	return (
 		<div onClick={closeSuggestions}>
 			<AnimateSharedLayout type='crossfade'>
-				<Nav toggle={toggleGrid} setToggle={setToggleGrid} isShowSuggestions={isShowSuggestions} setIsShowSuggestions={setIsShowSuggestions} />
+				<Nav
+					toggle={toggleGrid}
+					setToggle={setToggleGrid}
+					isShowSuggestions={isShowSuggestions}
+					setIsShowSuggestions={setIsShowSuggestions}
+					toggleAside={toggleAside}
+					setToggleAside={setToggleAside} />
 				<S.Main >
-					<Aside games={games} />
+					<Aside
+						games={games}
+						toggleAside={toggleAside} />
 					<S.Content>
 						<AnimatePresence>
 							{pathId && <GameDetails id={pathId} />}
