@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as fullStar, faStarHalfAlt as halfStar, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faStar as emptyStar } from '@fortawesome/free-regular-svg-icons';
 import notFoundImg from '../../img/notFound.jpg';
+import { shiftIn } from '../../animations';
 // Services
 import { setGameCartDate } from '../../services/gameCardDate';
 import platformIcons from '../../services/gameCardIcons';
@@ -68,7 +69,7 @@ const GameDetails = ({ id }) => {
 		<>
 			{ !loading && <motion.div>
 				<S.Overlay onClick={(e) => closeCardDetails(e)} data-close data-search>
-					<S.CloseButton onClick={(e) => closeCardDetails(e)} data-close >
+					<S.CloseButton onClick={(e) => closeCardDetails(e)} data-close variants={shiftIn} initial='hidden' animate='show' exit='exit' >
 						<FontAwesomeIcon icon={faTimes} size='2x' />
 					</S.CloseButton>
 					<S.Window
@@ -189,7 +190,7 @@ S.Overlay = styled(motion.div)`
 	box-shadow: 0px -100px 50px 50px rgba(0,0,0, .5) ;
 	backdrop-filter: blur(10px);
 `;
-S.CloseButton = styled.div`
+S.CloseButton = styled(motion.div)`
 	display: none;
 	@media(max-width: 576px) {
 		position: fixed;

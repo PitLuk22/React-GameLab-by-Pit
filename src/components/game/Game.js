@@ -80,8 +80,6 @@ const Game = ({ toggle, id, name, background_image, platforms, metacritic, relea
 					onClose={() => setOpen(false)} />}
 				<S.Media
 					toggle={toggle}
-					onTouchStart={showVideo}
-					onTouchEnd={hideVideo}
 					onMouseEnter={showVideo}
 					onMouseLeave={hideVideo}>
 					{checkLoadingItem(location, loading) && <Spinner pos='absolute' color='rgba(0, 0, 0, 0.7)' />}
