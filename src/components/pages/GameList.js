@@ -15,8 +15,7 @@ const GameList = ({ toggle, searchedName, games, title, loading }) => {
 		<S.Section toggle={toggle}>
 			<S.Title >
 				<h2 className='title'>{title}</h2>
-				{searchedName && <h2 className='title-searched'>{searchedName}</h2>}
-
+				{searchedName && <h4 className='title-searched'>{searchedName}</h4>}
 			</S.Title>
 			{loading
 				? <Spinner pos='static' color='rgba(255,255,255, .4)' />
@@ -30,7 +29,7 @@ const GameList = ({ toggle, searchedName, games, title, loading }) => {
 							return <Game key={game.id} toggle={toggle} {...game} />
 						})}
 					</Masonry>
-				</ResponsiveMasonry> : <S.NotFound>Sorry but we couldn't find the game you need <span role='img' aria-label='sad'>😢</span> </S.NotFound>
+				</ResponsiveMasonry> : <S.NotFound>Sorry but we couldn't find the game you need <span role='img' aria-label='sad'>😢</span></S.NotFound>
 			}
 		</S.Section>
 	)
@@ -59,7 +58,6 @@ S.Title = styled(motion.div)`
 	.title, .searched-title {
 		color: #fff;
 		border-bottom: 4px solid #ffb907;
-		margin-right: 1.3rem;
 		text-align: center;
 		text-transform: capitalize;
 	}
@@ -67,6 +65,15 @@ S.Title = styled(motion.div)`
 		border-bottom: none;
 		text-transform: capitalize;
 		word-wrap: break-word;
+		margin-left: 1rem;
+	}
+	@media(max-width: 768px) {
+		flex-direction: column;
+		text-align: center;
+		.title {
+			padding: .5rem;
+		}
+		
 	}
 `;
 S.NotFound = styled.div`

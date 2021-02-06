@@ -4,7 +4,9 @@ import { faXbox, faPlaystation, faAppStore, faSteam, faGooglePay } from '@fortaw
 
 const gameStores = (name) => {
 	switch (name) {
-		case 'Xbox Store' || 'Xbox 360 Store':
+		case 'Xbox Store':
+			return <FontAwesomeIcon icon={faXbox} />
+		case 'Xbox 360 Store':
 			return <FontAwesomeIcon icon={faXbox} />
 		case 'PlayStation Store':
 			return <FontAwesomeIcon icon={faPlaystation} />

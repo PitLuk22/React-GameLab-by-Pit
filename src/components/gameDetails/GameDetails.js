@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 // Style
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar as fullStar, faStarHalfAlt as halfStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar as fullStar, faStarHalfAlt as halfStar, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faStar as emptyStar } from '@fortawesome/free-regular-svg-icons';
 import notFoundImg from '../../img/notFound.jpg';
 // Services
@@ -21,8 +21,17 @@ import Carousel from '../carousel';
 
 const GameDetails = ({ id }) => {
 	const history = useHistory();
-
+	const location = useLocation();
 	const { game, screenshots, loading } = useSelector(state => state.details);
+
+	// Set overflow for body
+	useEffect(() => {
+		if (location.pathname.includes('/game/')) {
+			document.body.style.overflow = 'hidden'
+		} else {
+			document.body.style.overflow = 'auto'
+		}
+	}, [location])
 
 	// CLose gameDetails card
 	const closeCardDetails = (e) => {
@@ -59,6 +68,9 @@ const GameDetails = ({ id }) => {
 		<>
 			{ !loading && <motion.div>
 				<S.Overlay onClick={(e) => closeCardDetails(e)} data-close data-search>
+					<S.CloseButton onClick={(e) => closeCardDetails(e)} data-close >
+						<FontAwesomeIcon icon={faTimes} size='2x' />
+					</S.CloseButton>
 					<S.Window
 						layoutId={id}
 						background_image={game.background_image ? resizeImage(game.background_image, 640) : resizeImage(notFoundImg, 640)}>
@@ -82,73 +94,74 @@ const GameDetails = ({ id }) => {
 
 							{screenshots.length && <Carousel game={game} screenshots={screenshots} />}
 
-							{game.description_raw || game.description ?
-								<S.About >
-									<h4>About</h4>
-									{game.description_raw ? <p>{game.description_raw}</p> : <p dangerouslySetInnerHTML={{ __html: game.description }} />}
-								</S.About> : null}
-							<S.Info>
-								{game.platforms.length ? <div className="details-block">
-									<S.Subtitle>Platforms</S.Subtitle>
-									<S.Data>{game.platforms.map(item => item.platform.name).join(', ')}</S.Data>
-								</div> : null}
-								{game.rating !== 0 ? <div className="details-block">
-									<S.Subtitle>Rating</S.Subtitle>
-									<S.Data>{game.rating}</S.Data>
-								</div> : null}
-								{game.metacritic ? <div className="details-block">
-									<S.Subtitle>Metascore</S.Subtitle>
-									<S.Data >
-										<div className='metacritic' style={metacriticColor(game.metacritic)}>
-											{game.metacritic}
-										</div>
-									</S.Data>
-								</div> : null}
-								{game.genres.length ? <div className="details-block">
-									<S.Subtitle>Genre</S.Subtitle>
-									<S.Data>{game.genres.map(genre => genre.name).join(', ')}</S.Data>
-								</div> : null}
-								{game.released ? <div className="details-block">
-									<S.Subtitle>Released date</S.Subtitle>
-									<S.Data dangerouslySetInnerHTML={{ __html: setGameCartDate(game.released) }}></S.Data>
-								</div> : null}
-								{game.developers.length ? <div className="details-block">
-									<S.Subtitle>Developer</S.Subtitle>
-									<S.Data>{game.developers.map(item => item.name).join(', ')}</S.Data>
-								</div> : null}
-								{game.publishers.length ? <div className="details-block">
-									<S.Subtitle>Publisher</S.Subtitle>
-									<S.Data>{game.publishers.map(item => item.name).join(', ')}</S.Data>
-								</div> : null}
-								{game.website ? <div className="details-block website">
-									<S.Subtitle>Website</S.Subtitle>
-									<a
-										href={game.website}
-										target='_blank'
-										rel="noopener noreferrer"
-										className="website">
-										{game.website}
-									</a>
-								</div> : null}
-								{game.tags.length ? <div className="details-block details-block__tags">
-									<S.Subtitle>Tags</S.Subtitle>
-									<S.Data>{game.tags.map(item => item.name.slice(0, 1).toUpperCase() + item.name.slice(1)).join(', ')}</S.Data>
-								</div> : null}
-								{game.stores.length ? <div className="details-block details-block__tags">
-									<S.Subtitle>Where to buy</S.Subtitle>
-									<S.Data>
-										{game.stores.map(({ url, store: { name } }, index) => {
-											return (
-												<S.Stores key={index} href={url} target='_blank'>
-													{name}
-													<span>{gameStores(name)}</span>
-												</S.Stores>
-											)
-										})}
-									</S.Data>
-								</div> : null}
-							</S.Info>
-
+							<S.WrapperInfoGame>
+								{game.description_raw || game.description ?
+									<S.About >
+										<h4>About</h4>
+										{game.description_raw ? <p>{game.description_raw}</p> : <p dangerouslySetInnerHTML={{ __html: game.description }} />}
+									</S.About> : null}
+								<S.Info>
+									{game.platforms.length ? <div className="details-block">
+										<S.Subtitle>Platforms</S.Subtitle>
+										<S.Data>{game.platforms.map(item => item.platform.name).join(', ')}</S.Data>
+									</div> : null}
+									{game.rating !== 0 ? <div className="details-block">
+										<S.Subtitle>Rating</S.Subtitle>
+										<S.Data>{game.rating}</S.Data>
+									</div> : null}
+									{game.metacritic ? <div className="details-block">
+										<S.Subtitle>Metascore</S.Subtitle>
+										<S.Data >
+											<div className='metacritic' style={metacriticColor(game.metacritic)}>
+												{game.metacritic}
+											</div>
+										</S.Data>
+									</div> : null}
+									{game.genres.length ? <div className="details-block">
+										<S.Subtitle>Genre</S.Subtitle>
+										<S.Data>{game.genres.map(genre => genre.name).join(', ')}</S.Data>
+									</div> : null}
+									{game.released ? <div className="details-block">
+										<S.Subtitle>Released date</S.Subtitle>
+										<S.Data dangerouslySetInnerHTML={{ __html: setGameCartDate(game.released) }}></S.Data>
+									</div> : null}
+									{game.developers.length ? <div className="details-block">
+										<S.Subtitle>Developer</S.Subtitle>
+										<S.Data>{game.developers.map(item => item.name).join(', ')}</S.Data>
+									</div> : null}
+									{game.publishers.length ? <div className="details-block">
+										<S.Subtitle>Publisher</S.Subtitle>
+										<S.Data>{game.publishers.map(item => item.name).join(', ')}</S.Data>
+									</div> : null}
+									{game.website ? <div className="details-block website">
+										<S.Subtitle>Website</S.Subtitle>
+										<a
+											href={game.website}
+											target='_blank'
+											rel="noopener noreferrer"
+											className="website">
+											{game.website}
+										</a>
+									</div> : null}
+									{game.tags.length ? <div className="details-block details-block__tags">
+										<S.Subtitle>Tags</S.Subtitle>
+										<S.Data>{game.tags.map(item => item.name.slice(0, 1).toUpperCase() + item.name.slice(1)).join(', ')}</S.Data>
+									</div> : null}
+									{game.stores.length ? <div className="details-block details-block__tags">
+										<S.Subtitle>Where to buy</S.Subtitle>
+										<S.Data>
+											{game.stores.map(({ url, store: { name } }, index) => {
+												return (
+													<S.Stores key={index} href={url} target='_blank'>
+														{name}
+														<span>{gameStores(name)}</span>
+													</S.Stores>
+												)
+											})}
+										</S.Data>
+									</div> : null}
+								</S.Info>
+							</S.WrapperInfoGame>
 						</S.Wrapper>
 					</S.Window>
 				</S.Overlay >
@@ -175,6 +188,25 @@ S.Overlay = styled(motion.div)`
 	cursor: pointer;
 	box-shadow: 0px -100px 50px 50px rgba(0,0,0, .5) ;
 	backdrop-filter: blur(10px);
+`;
+S.CloseButton = styled.div`
+	display: none;
+	@media(max-width: 576px) {
+		position: fixed;
+		display: block;
+		top: 20%;
+		right: -14px;
+		width: 4rem;
+		background-color: #4d4d4d;
+		z-index: 11;
+		padding: .6rem 0 .6rem .5rem;
+		border-radius: .8rem;
+		color: black;
+		font-size: 1.2rem;
+		svg {
+			pointer-events: none;
+		}
+	}
 `;
 S.FieldForImage = styled(motion.div)`
 	position: absolute;
@@ -207,16 +239,37 @@ S.Wrapper = styled(motion.div)`
 	z-index: 10;
 `;
 S.About = styled.div`
-	padding: 1rem 7rem;
+	padding: 1rem 0;
 	text-align: left;
 	p {
 		margin-bottom: 1rem;
 		line-height: 2rem;
 	}
 `;
+S.WrapperInfoGame = styled.div`
+	padding: 1rem 7rem;
+	@media(max-width: 1100px) {
+		padding: 1rem 6rem;
+		p {
+			font-size: 1rem;
+		}
+	}
+	@media(max-width: 992px) {
+		padding: 1rem 4rem;		
+		p {
+			font-size: .8rem;	
+		}
+	}
+	@media(max-width: 768px) {
+		padding: 1rem 3rem;
+	}
+	@media(max-width: 576px) {
+		padding: 1rem;
+	}
+`;
 S.Info = styled.div`
 	background-color:#151515;
-	padding: 0 7rem 2rem 7rem;
+	padding: 0 0rem 2rem 0rem;
 	border-radius: 1rem;
 	display: flex;
 	flex-wrap: wrap;
@@ -224,7 +277,7 @@ S.Info = styled.div`
 	align-items: flex-start;
 	.details-block {
 		font-size: 1rem;
-		width: 30%;
+		width: 200px;
 		padding: 0 2rem 0 0;
 		&__tags {
 			width: 100%;
@@ -237,10 +290,25 @@ S.Info = styled.div`
 			color: #fff;
 		}
 	}
+	@media(max-width: 768px) {
+		padding: 0;
+	}
+	@media(max-width: 576px) {
+		.details-block {
+			width: 100%;
+			padding: 0 .8rem 0 0;
+		}
+	}
 `;
 S.Subtitle = styled.div`
 	color: #434343;
 	padding: 1rem 0;
+	@media(max-width: 992px) {
+		font-size: .7rem;
+	}
+	@media(max-width: 576px) {
+		padding: .5rem 0;
+	}
 `;
 S.Data = styled.div`
 	font-size: 1rem;
@@ -254,6 +322,16 @@ S.Data = styled.div`
 		font-size: 1rem;
 		border-radius: .4rem;
 		font-weight: bold;
+	}
+	@media(max-width: 992px) {
+		font-size: .8rem;
+		.metacritic {
+			font-size: .8rem;
+			padding: .1rem .2rem;
+		}
+	}
+	@media(max-width: 576px) {
+		margin-bottom: .8rem;
 	}
 `;
 S.Window = styled(motion.div)`
@@ -295,12 +373,10 @@ S.Window = styled(motion.div)`
 		justify-content: space-between;
 		flex-direction: column;
 		text-align: center;
-		padding: 2rem 0;
-		margin: 0 7rem;
+		padding: 2rem 7rem;
 		font-size: 2rem;
 		.name {
 			margin-bottom: 2rem;
-			font-size: 2rem;
 		}
 		.main-details{ 
 			font-size: 1.5rem;
@@ -309,6 +385,51 @@ S.Window = styled(motion.div)`
 			align-items: center;
 			svg {
 				margin: 0 .5rem;
+			}
+		}
+	}
+	@media(max-width: 1100px) {
+		.title {
+			padding: 2rem 6rem;
+			font-size: 1.5rem;
+			.main-details {
+				font-size:1rem;
+			}
+		}
+	}
+	@media(max-width: 992px) {
+		padding-bottom: 0;
+		.title {
+			padding: 2rem 4rem;
+		}
+	}
+	@media(max-width: 768px) {
+		background-size: 100% 30rem;
+		padding-bottom: 0;
+		.title {
+			padding: 0 3rem 2rem 3rem;
+			.main-details {
+				flex-direction: column;
+				.paltform-icons {
+					margin-bottom: 1rem;
+				}
+			}
+		}
+	}
+	@media(max-width: 576px) {
+		width: 90%;
+		background-size: 100% 15rem;
+		padding-bottom: 1rem;
+		&::after {
+			top: 20rem;
+		}
+		.title {
+			padding: 1rem;
+			.main-details {
+				flex-direction: column;
+				.paltform-icons {
+					margin-bottom: 1rem;
+				}
 			}
 		}
 	}

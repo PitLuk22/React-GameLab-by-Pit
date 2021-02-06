@@ -60,8 +60,9 @@ const Home = () => {
 		genre,
 		loading
 	} = games;
+
 	// data-search attribute responsible for Suggestions block
-	// if a block has data-search att and we click on it, we don't close Suggestion block, else we close Suggestion
+	// if the block has data-search att and we click on it, we don't close Suggestion block, else we close Suggestion
 	const closeSuggestions = (e) => {
 		if (isShowSuggestions && !e.target.closest('[data-search]')) {
 			setIsShowSuggestions(false)
@@ -81,7 +82,8 @@ const Home = () => {
 				<S.Main >
 					<Aside
 						games={games}
-						toggleAside={toggleAside} />
+						toggleAside={toggleAside}
+						setToggleAside={setToggleAside} />
 					<S.Content>
 						<AnimatePresence>
 							{pathId && <GameDetails id={pathId} />}
@@ -131,4 +133,7 @@ S.Main = styled.main`
 S.Content = styled.main`
 	position: relative;
 	flex: 1;
+	@media(max-width: 576px) {
+		margin-top: 151px;
+	}
 `;

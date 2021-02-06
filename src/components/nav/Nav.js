@@ -36,6 +36,9 @@ const Nav = ({ toggle, setToggle, isShowSuggestions, setIsShowSuggestions, toggl
 
 	const searchHandler = (e) => {
 		setInputText(e.target.value)
+		if (e.target.value === '') {
+			setIsShowMore(false)
+		}
 	}
 	const sendRequest = (e) => {
 		e.preventDefault();
@@ -55,7 +58,7 @@ const Nav = ({ toggle, setToggle, isShowSuggestions, setIsShowSuggestions, toggl
 			<S.SearchWrapper data-search>
 				<S.Form onSubmit={sendRequest} novalidate autocomplete="off">
 					<div className="input__area">
-						<S.Input data-search value={inputText} onInput={searchHandler} type="text" name="search" placeholder='Search 500 601 games' autocomplete="off" />
+						<S.Input data-search value={inputText} onInput={searchHandler} onFocus={() => setToggleAside(false)} type="text" name="search" placeholder='Search 500 601 games' autocomplete="off" />
 						<FontAwesomeIcon icon={faSearch} size='sm' />
 					</div>
 					<S.Btn name="search" >Search</S.Btn>
@@ -118,6 +121,20 @@ S.Navigation = styled.div`
 	@media (max-width: 768px) {
 		flex-direction: row-reverse;
 	}
+	@media(max-width: 576px) {
+		position: fixed;
+		flex-direction: column;
+		top: 0;
+		left: 0;
+		height: auto;
+		z-index: 10;
+		background-color: #151515;
+		margin: 0;
+		padding: 1rem 1rem;
+	}
+	@media(max-width: 320px) {
+
+	}
 `;
 const rotateAnim = keyframes`
 	0% {
@@ -131,6 +148,8 @@ S.Logo = styled.div`
 	position: relative;
 	min-width: 60px;
 	max-width: 60px;
+	z-index: 3;
+	cursor: pointer;
 	h1 {
 		position: absolute;
 		font-size: 2.5rem;
@@ -146,6 +165,9 @@ S.Logo = styled.div`
 		height: auto;
 		animation: ${rotateAnim} 4s infinite linear;
 	} 
+	@media(max-width: 576px) {
+		margin-bottom: 1rem;
+	}
 `;
 
 S.SearchWrapper = styled.div`
@@ -162,6 +184,9 @@ S.SearchWrapper = styled.div`
 		width: 100%;
 		margin-right: 1rem;
 		padding: 0;
+	}
+	@media (max-width: 576px) {
+		margin-right: 0;
 	}
 `;
 
@@ -209,7 +234,7 @@ S.Form = styled.form`
 	box-shadow: 0 0 5px 5px rgba(0,0,0, .2);
 	.input__area {
 		position: relative;
-		width: 100%;
+		width: 102%;
 		display: flex;
 		align-items: center;
 		svg {
@@ -248,6 +273,10 @@ S.Input = styled.input`
 	@media (max-width: 768px) {
 		font-size: .8rem;
 	}
+	@media (max-width: 576px) {
+		padding: .5rem 1rem .5rem 2.5rem;
+		font-size: .8rem;
+	}
 `;
 S.Btn = styled.button`
 	padding: .8rem 1.5rem;
@@ -265,6 +294,9 @@ S.Btn = styled.button`
 	}
 	@media (max-width: 768px) {
 		font-size: .8rem;
+	}
+	@media (max-width: 576px) {
+		padding: .5rem .8rem;
 	}
 `;
 S.Toggle = styled.div`

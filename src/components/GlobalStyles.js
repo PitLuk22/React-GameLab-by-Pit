@@ -8,7 +8,7 @@ const GlobalStyles = createGlobalStyle`
 	}
 	body {
 		background-color:#151515 ;
-		font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Open Sans,Helvetica Neue,sans-serif;
+		font-family: -apple-system,Roboto,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Open Sans,Helvetica Neue,sans-serif;
 		color: #fff;
 		aside {
 			background-color:#151515 ;
@@ -36,6 +36,15 @@ const GlobalStyles = createGlobalStyle`
 		p {
 			font-size: 1.2rem;
 			line-height: 200%;
+		}
+		@media(max-width: 576px) {
+			h1, h2 {
+				font-size: 2rem;
+			}
+			h4 {
+				font-size: 1.5rem;
+			}
+
 		}
 	}
 `;

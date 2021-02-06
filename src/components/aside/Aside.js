@@ -9,6 +9,8 @@ import {
 import { Link, useLocation } from 'react-router-dom';
 // Style
 import styled from 'styled-components';
+import { fadeIn } from '../../animations';
+import { motion } from 'framer-motion';
 // Images
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFire, faMeteor, faChartLine, faTrophy, faFastForward, faCrown, faHome, faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
@@ -21,7 +23,7 @@ import adventure from '../../img/adventure.png';
 import racing from '../../img/racing.png';
 import indie from '../../img/indie.png';
 
-const Aside = ({ games, toggleAside }) => {
+const Aside = ({ games, toggleAside, setToggleAside }) => {
 	const location = useLocation();
 	const dispatch = useDispatch();
 
@@ -69,6 +71,12 @@ const Aside = ({ games, toggleAside }) => {
 		}
 	];
 
+	if (toggleAside) {
+		document.body.style.overflow = 'hidden';
+	} else if (!toggleAside && !location.pathname.includes('/game/')) {
+		document.body.style.overflow = 'auto';
+	}
+
 	// Show or Hide genres
 	const numberOfGenres = () => {
 		const currentGenresArr = isShowGenres ? genres : genres.filter((item, i) => i < 4);
@@ -95,141 +103,166 @@ const Aside = ({ games, toggleAside }) => {
 	}
 
 	return (
-		<S.Aside toggleAside={toggleAside}>
+		<>
+			{toggleAside && <S.Overlay variants={fadeIn} initial='hidden' animate='show' onClick={() => setToggleAside(false)} />}
+			<S.Aside toggleAside={toggleAside}>
+				<S.Wrapper>
 
-			<S.Menu>
-				<S.Links>
-					<li>
-						<S.Link to={`/`}
-							className={setActiveClass('')}
-							onClick={() => dispatchHandler('trending')}>
-							<span className='icon'>
-								<FontAwesomeIcon icon={faHome} size='sm' />
-							</span>
-							<span className='label'>Home</span>
-						</S.Link>
-					</li>
-				</S.Links>
-			</S.Menu>
-
-			<S.Menu>
-				<span className='title'>Top games</span>
-				<S.Links>
-					<li>
-						<S.Link to={`/popular/`}
-							className={setActiveClass('popular')}
-							onClick={() => dispatchHandler('popular')}>
-							<span className='icon'>
-								<FontAwesomeIcon icon={faTrophy} size='sm' />
-							</span>
-							<span className='label'>Popular</span>
-						</S.Link>
-					</li>
-					<li>
-						<S.Link to={`/allTime/`}
-							className={setActiveClass('allTime')}
-							onClick={() => dispatchHandler('allTime')}>
-							<span className='icon'>
-								<FontAwesomeIcon icon={faCrown} size='sm' />
-							</span>
-							<span className='label'>All time top</span>
-						</S.Link>
-					</li>
-					<li>
-						<S.Link to={`/newGames/`}
-							className={setActiveClass('newGames')}
-							onClick={() => dispatchHandler('newGames')}>
-							<span className='icon'>
-								<FontAwesomeIcon icon={faChartLine} size='sm' />
-							</span>
-							<span className='label'>New games</span>
-						</S.Link>
-					</li>
-				</S.Links>
-			</S.Menu>
-
-			<S.Menu>
-				<span className='title'>New Releases</span>
-				<S.Links>
-					<li>
-						<S.Link to={`/upcoming/`}
-							className={setActiveClass('upcoming')}
-							onClick={() => dispatchHandler('upcoming')}>
-							<span className='icon'>
-								<FontAwesomeIcon icon={faMeteor} size='sm' />
-							</span>
-							<span className='label'>Upcoming</span>
-						</S.Link>
-					</li>
-					<li>
-						<S.Link to={`/thisWeek/`}
-							className={setActiveClass('thisWeek')}
-							onClick={() => dispatchHandler('thisWeek')}>
-							<span className='icon'>
-								<FontAwesomeIcon icon={faFire} size='sm' />
-							</span>
-							<span className='label'>This week</span>
-						</S.Link>
-					</li>
-					<li>
-						<S.Link to={`/nextWeek/`}
-							className={setActiveClass('nextWeek')}
-							onClick={() => dispatchHandler('nextWeek')}>
-							<span className='icon'>
-								<FontAwesomeIcon icon={faFastForward} size='sm' />
-							</span>
-							<span className='label'>Next week</span>
-						</S.Link>
-					</li>
-				</S.Links>
-			</S.Menu>
-
-			<S.Menu>
-				<span className='title'>Genres</span>
-				<S.Links>
-					{numberOfGenres().map(({ genre, path, img }) => {
-						return (
-							<li key={uuidv4()}>
-								<S.Link to={`/${path}/`}
-									className={`genres ${setActiveClass(path)}`}
-									onClick={() => dispatchHandlerGenres(path)}>
+					<S.Menu>
+						<S.Links>
+							<li>
+								<S.Link to={`/`}
+									className={setActiveClass('')}
+									onClick={() => dispatchHandler('trending')}>
 									<span className='icon'>
-										<img src={img} alt={genre} />
+										<FontAwesomeIcon icon={faHome} size='sm' />
 									</span>
-									<span className='label genre'>{genre}</span>
+									<span className='label'>Home</span>
 								</S.Link>
 							</li>
-						)
-					})}
-					<li>
-						<S.ShowMore onClick={() => setIsShowGenres(!isShowGenres)}>
-							<span className='icon'>
-								<FontAwesomeIcon icon={isShowGenres ? faArrowUp : faArrowDown} size='sm' />
-							</span>
-							<span className='label label-grey'>{isShowGenres ? 'Hide' : 'Show all'}</span>
-						</S.ShowMore>
-					</li>
-				</S.Links>
-			</S.Menu>
+						</S.Links>
+					</S.Menu>
 
-		</S.Aside>
+					<S.Menu>
+						<span className='title'>Top games</span>
+						<S.Links>
+							<li>
+								<S.Link to={`/popular/`}
+									className={setActiveClass('popular')}
+									onClick={() => dispatchHandler('popular')}>
+									<span className='icon'>
+										<FontAwesomeIcon icon={faTrophy} size='sm' />
+									</span>
+									<span className='label'>Popular</span>
+								</S.Link>
+							</li>
+							<li>
+								<S.Link to={`/allTime/`}
+									className={setActiveClass('allTime')}
+									onClick={() => dispatchHandler('allTime')}>
+									<span className='icon'>
+										<FontAwesomeIcon icon={faCrown} size='sm' />
+									</span>
+									<span className='label'>All time top</span>
+								</S.Link>
+							</li>
+							<li>
+								<S.Link to={`/newGames/`}
+									className={setActiveClass('newGames')}
+									onClick={() => dispatchHandler('newGames')}>
+									<span className='icon'>
+										<FontAwesomeIcon icon={faChartLine} size='sm' />
+									</span>
+									<span className='label'>New games</span>
+								</S.Link>
+							</li>
+						</S.Links>
+					</S.Menu>
+
+					<S.Menu>
+						<span className='title'>New Releases</span>
+						<S.Links>
+							<li>
+								<S.Link to={`/upcoming/`}
+									className={setActiveClass('upcoming')}
+									onClick={() => dispatchHandler('upcoming')}>
+									<span className='icon'>
+										<FontAwesomeIcon icon={faMeteor} size='sm' />
+									</span>
+									<span className='label'>Upcoming</span>
+								</S.Link>
+							</li>
+							<li>
+								<S.Link to={`/thisWeek/`}
+									className={setActiveClass('thisWeek')}
+									onClick={() => dispatchHandler('thisWeek')}>
+									<span className='icon'>
+										<FontAwesomeIcon icon={faFire} size='sm' />
+									</span>
+									<span className='label'>This week</span>
+								</S.Link>
+							</li>
+							<li>
+								<S.Link to={`/nextWeek/`}
+									className={setActiveClass('nextWeek')}
+									onClick={() => dispatchHandler('nextWeek')}>
+									<span className='icon'>
+										<FontAwesomeIcon icon={faFastForward} size='sm' />
+									</span>
+									<span className='label'>Next week</span>
+								</S.Link>
+							</li>
+						</S.Links>
+					</S.Menu>
+
+					<S.Menu>
+						<span className='title'>Genres</span>
+						<S.Links>
+							{numberOfGenres().map(({ genre, path, img }) => {
+								return (
+									<li key={uuidv4()}>
+										<S.Link to={`/${path}/`}
+											className={`genres ${setActiveClass(path)}`}
+											onClick={() => dispatchHandlerGenres(path)}>
+											<span className='icon'>
+												<img src={img} alt={genre} />
+											</span>
+											<span className='label genre'>{genre}</span>
+										</S.Link>
+									</li>
+								)
+							})}
+							<li>
+								<S.ShowMore onClick={() => setIsShowGenres(!isShowGenres)}>
+									<span className='icon'>
+										<FontAwesomeIcon icon={isShowGenres ? faArrowUp : faArrowDown} size='sm' />
+									</span>
+									<span className='label label-grey'>{isShowGenres ? 'Hide' : 'Show all'}</span>
+								</S.ShowMore>
+							</li>
+						</S.Links>
+					</S.Menu>
+
+				</S.Wrapper>
+			</S.Aside>
+		</>
 	)
 }
 
 export default Aside;
 
 const S = {};
+S.Overlay = styled(motion.div)`
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: rgba(0,0,0, .6);
+	width: 100%;
+	height: 100%;
+	z-index: 2;
+	transition: all .3s ease;
+`;
 S.Aside = styled.aside`
 	width: 15rem;
-	height: 100vh;
+	height: 100%;
 	padding: 2rem 0 0 3rem;
 	transition: all .3s ease;
+	overflow: hidden;
 	@media(max-width: 576px) {
 		position: fixed;
 		transform: ${props => props.toggleAside ? 'translateX(0)' : 'translateX(-100%)'};
 		z-index: 100;
 		overflow-y: scroll;
-		top: 0;
+		top: 141px;
+		padding-top: 0;
+		height: calc(100vh - 141px);
+	}
+`;
+S.Wrapper = styled.div`
+	@media(max-width: 576px) {
+		padding: 1rem 0;
+		height: 100%;
+		overflow: auto;
 	}
 `;
 S.Menu = styled.div`

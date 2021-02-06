@@ -42,15 +42,6 @@ const Game = ({ toggle, id, name, background_image, platforms, metacritic, relea
 		}
 	}, [isPlaying])
 
-	// Set overflow for body
-	useEffect(() => {
-		if (location.pathname.includes('/game/')) {
-			document.body.style.overflow = 'hidden'
-		} else {
-			document.body.style.overflow = 'auto'
-		}
-	}, [location])
-
 
 	// Get selected game 
 	const gameDetailsHandler = (id) => {
