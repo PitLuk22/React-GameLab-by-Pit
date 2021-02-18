@@ -280,17 +280,18 @@ S.Info = styled.div`
 		font-size: 1rem;
 		width: 200px;
 		padding: 0 2rem 0 0;
+		margin-bottom: 1rem;
 		&__tags {
 			width: 100%;
 		}
 		.month {
 			padding: 0 .5rem 0 0;
 		}
-		.website {
+	}
+	.website {
 			width: 100%;
 			color: #fff;
 		}
-	}
 	@media(max-width: 768px) {
 		padding: 0;
 	}
@@ -313,7 +314,6 @@ S.Subtitle = styled.div`
 `;
 S.Data = styled.div`
 	font-size: 1rem;
-	margin-bottom: 1rem;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: flex-start;

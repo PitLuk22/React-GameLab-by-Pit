@@ -79,7 +79,7 @@ const Aside = ({ games, toggleAside, setToggleAside }) => {
 
 	// Show or Hide genres
 	const numberOfGenres = () => {
-		const currentGenresArr = isShowGenres ? genres : genres.filter((item, i) => i < 4);
+		const currentGenresArr = isShowGenres ? genres : genres.filter((_, i) => i < 4);
 		return currentGenresArr;
 	}
 
@@ -337,6 +337,7 @@ S.ShowMore = styled.div`
 	text-decoration: none;
 	color: #fff;
 	outline: none;
+	cursor: pointer;
 	.icon {
 		overflow: hidden;
 		display: flex;

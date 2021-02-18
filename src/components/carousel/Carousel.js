@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import YouTube from 'react-youtube';
 // Slider
@@ -16,8 +16,9 @@ import { faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { v4 as uuidv4 } from 'uuid';
 import resizeImage from '../../services/resizeImage';
 
-const Carousel = ({ game, screenshots }) => {
 
+const Carousel = ({ game, screenshots }) => {
+	const ref = useRef(null)
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [player, setPlayer] = useState(null);
 	const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -47,18 +48,6 @@ const Carousel = ({ game, screenshots }) => {
 		}
 	};
 
-	const videoCover = () => {
-		if (game.clip && game.clip.video) {
-			return (
-				<SwiperSlide className='youtube-thumb' key={uuidv4()}>
-					<FontAwesomeIcon icon={faYoutube} size='3x' color='#f00c' />
-					<img width={'100%'} src={resizeImage(`https://img.youtube.com/vi/${game.clip.video}/mqdefault.jpg`, 420)} alt={`screenshot ${1}-${'small'}`} />
-				</SwiperSlide>
-			)
-		} else {
-			return null;
-		}
-	};
 
 	// Images for main Slider
 	const images = screenshots
@@ -68,7 +57,25 @@ const Carousel = ({ game, screenshots }) => {
 	// Images for Thumbs
 	const thumbs = screenshots
 		.filter(img => img.width / img.height > 1.6 && img.width / img.height < 1.8)
-		.map(img => <SwiperSlide key={uuidv4()}><img width={'100%'} src={resizeImage(img.image, 420)} alt={`screenshot ${img.id}-${'small'}`} /></SwiperSlide>);
+		.map(img => <SwiperSlide key={uuidv4()}><img ref={ref} width={'100%'} src={resizeImage(img.image, 420)} alt={`screenshot ${img.id}-${'small'}`} /></SwiperSlide>);
+
+	// Video cover for thumbs
+	const videoCover = () => {
+		if (game.clip && game.clip.video) {
+			return (
+				<SwiperSlide className='youtube-thumb' key={uuidv4()}>
+					<FontAwesomeIcon icon={faYoutube} size='3x' color='#f00c' />
+					<img
+						width={'100%'}
+						height={ref.current ? ref.current.height : 'auto'}
+						src={resizeImage(`https://img.youtube.com/vi/${game.clip.video}/mqdefault.jpg`, 420)}
+						alt={`screenshot ${1}-${'small'}`} />
+				</SwiperSlide>
+			)
+		} else {
+			return null;
+		}
+	};
 
 	return (
 		<S.Slider isPlaying={isPlaying}>
