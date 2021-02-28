@@ -13,16 +13,18 @@ import {
 	genreGamesUrl
 } from '../services';
 
-const fetchGames = (path) => async (dispatch) => {
+const fetchGames = (path, nextUrl) => async (dispatch) => {
 
 	const res = getServiceUrl(path);
-
-	const gamesData = await axios.get(res.url);
+	const gamesData = nextUrl
+		? await axios.get(nextUrl)
+		: await axios.get(res.url);
 
 	dispatch({
 		type: res.type,
 		payload: {
-			games: gamesData.data.results
+			games: gamesData.data.results,
+			nextUrl: gamesData.data.next
 		}
 	})
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { getGameDetails, isLoadingGames, getSearchedGames } from '../../actions';
 import { fetchGames } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import { Switch, Route, useLocation } from 'react-router-dom';
 //Styles
 import styled from 'styled-components';
 import { AnimatePresence, AnimateSharedLayout } from 'framer-motion';
+
 
 const Home = () => {
 
@@ -93,7 +94,7 @@ const Home = () => {
 								<GameList toggle={toggleGrid} setToggle={setToggleGrid} games={searched} title={`Searched:`} searchedName={location.pathname.split('/')[2]} loading={loading} />
 							</Route>
 							<Route exact strict path={['/', '/game/:id']}>
-								<GameList toggle={toggleGrid} setToggle={setToggleGrid} games={trending} title={'The best of new'} loading={loading} />
+								<GameList currentSection={currentSection} toggle={toggleGrid} setToggle={setToggleGrid} games={trending} title={'The best of new'} loading={loading} />
 							</Route>
 							<Route path='/popular/'>
 								<GameList toggle={toggleGrid} setToggle={setToggleGrid} games={popular} title={'Popular games in 2020'} loading={loading} />

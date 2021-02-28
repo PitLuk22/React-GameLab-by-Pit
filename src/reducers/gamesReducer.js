@@ -8,6 +8,7 @@ const initState = {
 	thisWeek: [],
 	searched: [],
 	genre: [],
+	nextUrl: '',
 	loading: false,
 }
 
@@ -16,55 +17,64 @@ const gamesReducer = (state = initState, action) => {
 		case 'FETCH_TRENDING_GAMES':
 			return {
 				...state,
-				trending: action.payload.games,
+				trending: [...state.trending, ...action.payload.games],
+				nextUrl: action.payload.nextUrl,
 				loading: false
 			};
 		case 'FETCH_ALLTIME_GAMES':
 			return {
 				...state,
-				allTime: action.payload.games,
+				allTime: [...state.allTime, ...action.payload.games],
+				nextUrl: action.payload.nextUrl,
 				loading: false
 			};
 		case 'FETCH_POPULAR_GAMES':
 			return {
 				...state,
-				popular: action.payload.games,
+				popular: [...state.popular, ...action.payload.games],
+				nextUrl: action.payload.nextUrl,
 				loading: false
 			};
 		case 'FETCH_UPCOMING_GAMES':
 			return {
 				...state,
-				upcoming: action.payload.games,
+				upcoming: [...state.upcoming, ...action.payload.games],
+				nextUrl: action.payload.nextUrl,
 				loading: false
 			};
 		case 'FETCH_NEW_GAMES':
 			return {
 				...state,
-				newGames: action.payload.games,
+				newGames: [...state.newGames, ...action.payload.games],
+				nextUrl: action.payload.nextUrl,
 				loading: false
 			};
 		case 'FETCH_NEXT_WEEK_GAMES':
 			return {
 				...state,
-				nextWeek: action.payload.games,
+				nextWeek: [...state.nextWeek, ...action.payload.games],
+				nextUrl: action.payload.nextUrl,
 				loading: false
 			};
 		case 'FETCH_THIS_WEEK_GAMES':
 			return {
 				...state,
-				thisWeek: action.payload.games,
+				thisWeek: [...state.thisWeek, ...action.payload.games],
+				nextUrl: action.payload.nextUrl,
 				loading: false
 			};
 		case 'FETCH_GENRE_GAMES':
 			return {
 				...state,
-				genre: action.payload.games,
+				genre: [...state.genre, ...action.payload.games],
+				nextUrl: action.payload.nextUrl,
 				loading: false
 			};
 		case 'FETCH_SEARCH_GAMES':
 			return {
 				...state,
-				searched: action.payload.searchedGames,
+				searched: [...state.searched, ...action.payload.searchedGames],
+				nextUrl: action.payload.nextUrl,
 				loading: false
 			}
 		case 'FETCH_GAMES_LOADING':
