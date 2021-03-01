@@ -63,7 +63,6 @@ S.Spinner = styled.div`
 	backface-visibility: hidden;
 	transform-origin: 0 0;
 	top: 50%;
-	/* left: 50%; */
 	transform: translateY(-50%);
 	}
 	.circle div { 
