@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# Pit's Gamelab with React 
+<p>It's web application about computer games. The [Rawg.io](https://rawg.io/) site and their API was taken as the basis for creating Pit's Gamelab</p>
+<p>In this project I have worked with Reactjs, React Hooks, RESTfull API, Framer motion, React Routre Dom, Redux and Redux Thunk</p>
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
