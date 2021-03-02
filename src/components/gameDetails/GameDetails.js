@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -18,7 +18,6 @@ import resizeImage from '../../services/resizeImage';
 import gameStores from '../../services/gameStores';
 // Components
 import Carousel from '../carousel';
-
 
 const GameDetails = ({ id }) => {
 	const history = useHistory();

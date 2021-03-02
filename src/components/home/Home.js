@@ -11,7 +11,6 @@ import { Switch, Route, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 
-
 const Home = () => {
 
 	const [isShowSuggestions, setIsShowSuggestions] = useState(false);
